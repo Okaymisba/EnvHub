@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 interface ProjectDetailsProps {
   project: Project;
   onBack: () => void;
+  versions?: any[];
   loading: boolean;
 }
 
