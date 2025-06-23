@@ -188,8 +188,8 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     <div className="min-h-screen bg-gray-950">
       {/* Header */}
       <header className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div>
+          <div className="flex justify-between items-center h-16 p-4">
             <div className="flex items-center space-x-4">
               <Button
                 onClick={onBack}
@@ -198,7 +198,6 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 className="text-gray-400 hover:text-white hover:bg-gray-800"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
               </Button>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
