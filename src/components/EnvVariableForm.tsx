@@ -102,7 +102,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
             type="button"
             variant="outline"
             onClick={addEntry}
-            className="w-full border-gray-600 text-gray-300 hover:bg-gray-800"
+            className="w-full border-gray-600 text-black-300 hover:bg-gray-200"
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Another Variable

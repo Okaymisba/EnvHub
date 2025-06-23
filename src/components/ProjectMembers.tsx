@@ -170,6 +170,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="user@example.com"
                       className="bg-gray-800 border-gray-600 text-white text-sm h-8"
+                      autoComplete='off'
                     />
                   </div>
                   
@@ -193,6 +194,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       onChange={(e) => setAccessPassword(e.target.value)}
                       placeholder="Password for invited user"
                       className="bg-gray-800 border-gray-600 text-white text-sm h-8"
+                      autoComplete='new-password'
                     />
                   </div>
                   
@@ -204,6 +206,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       onChange={(e) => setProjectPassword(e.target.value)}
                       placeholder="Your project password"
                       className="bg-gray-800 border-gray-600 text-white text-sm h-8"
+                      autoComplete='new-password'
                     />
                   </div>
                   
