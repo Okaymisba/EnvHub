@@ -87,6 +87,15 @@ export class SupabaseService {
     return { ...data, version_count: 0 };
   }
 
+  static async deleteProject(projectId: string): Promise<void> {
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', projectId);
+
+    if (error) throw error;
+  }
+
   static async verifyProjectPassword(projectId: string, password: string): Promise<boolean> {
     const { data, error } = await supabase
       .from('projects')
@@ -145,6 +154,15 @@ export class SupabaseService {
     return this.getEnvVariables(projectId, latestVersion.id);
   }
 
+  static async deleteEnvVariable(variableId: string): Promise<void> {
+    const { error } = await supabase
+      .from('env_variables')
+      .delete()
+      .eq('id', variableId);
+
+    if (error) throw error;
+  }
+
   static async createEnvVersion(
     projectId: string, 
     envEntries: EnvEntry[], 
@@ -156,6 +174,9 @@ export class SupabaseService {
       throw new Error('Invalid project password');
     }
 
+    // Get existing variables to combine with new ones
+    const existingVariables = await this.getCurrentEnvVariables(projectId);
+    
     // Get the next version number
     const { data: existingVersions, error: countError } = await supabase
       .from('env_versions')
@@ -178,7 +199,7 @@ export class SupabaseService {
       .insert({
         project_id: projectId,
         version_number: nextVersionNumber,
-        variable_count: envEntries.length,
+        variable_count: existingVariables.length + envEntries.length,
         salt: dummyEncryption.salt,
         nonce: dummyEncryption.nonce,
         tag: dummyEncryption.tag
@@ -188,9 +209,29 @@ export class SupabaseService {
 
     if (versionError) throw versionError;
 
-    // Now create individual encrypted environment variables
+    // Decrypt existing variables and combine with new ones
+    const allEntries = [];
+    
+    // Add existing variables (decrypt and re-encrypt with new version)
+    for (const existingVar of existingVariables) {
+      try {
+        const decryptedValue = await this.decryptEnvValue(existingVar, password);
+        allEntries.push({
+          name: existingVar.env_name,
+          value: decryptedValue
+        });
+      } catch (error) {
+        console.error(`Failed to decrypt existing variable ${existingVar.env_name}:`, error);
+        // Skip this variable if it can't be decrypted
+      }
+    }
+    
+    // Add new entries
+    allEntries.push(...envEntries);
+
+    // Create individual encrypted environment variables
     const envVariables = await Promise.all(
-      envEntries.map(async (entry) => {
+      allEntries.map(async (entry) => {
         const encryptedValue = await CryptoUtils.encrypt(entry.value, password);
         return {
           project_id: projectId,
