@@ -155,7 +155,7 @@ const Index = () => {
 
   const handleCreateProject = async (name: string, password: string) => {
     try {
-      const newProject = await SupabaseService.createProject(name);
+      const newProject = await SupabaseService.createProject(name, password);
       await loadProjects();
       toast({
         title: 'Project created!',
@@ -174,66 +174,6 @@ const Index = () => {
   const handleProjectClick = async (project: Project) => {
     setCurrentProject(project);
     await loadVersions(project.id);
-  };
-
-  const handleUploadVersion = async (file: File, password: string) => {
-    if (!currentProject) return;
-    
-    try {
-      const content = await file.text();
-      const encryptedData = await CryptoUtils.encrypt(content, password);
-      await SupabaseService.createVersion(currentProject.id, encryptedData);
-      await loadVersions(currentProject.id);
-      await loadProjects(); // Refresh project counts
-      toast({
-        title: 'Version uploaded!',
-        description: 'Your .env file has been encrypted and stored securely'
-      });
-    } catch (error: any) {
-      console.error('Upload version error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to upload version. Check your password.',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleDownloadVersion = async (version: EnvVersion, password: string) => {
-    if (!currentProject) return;
-    
-    try {
-      const encryptedData = {
-        ciphertext: version.encrypted_data,
-        salt: version.salt,
-        nonce: version.nonce,
-        tag: version.tag
-      };
-      const decryptedContent = await CryptoUtils.decrypt(encryptedData, password);
-      
-      // Create and download file
-      const blob = new Blob([decryptedContent], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${currentProject.name}-v${version.version_number}.env`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      toast({
-        title: 'Downloaded!',
-        description: `Version ${version.version_number} decrypted and downloaded`
-      });
-    } catch (error: any) {
-      console.error('Download version error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to decrypt version. Check your password.',
-        variant: 'destructive'
-      });
-    }
   };
 
   if (initialLoading) {
@@ -262,10 +202,7 @@ const Index = () => {
     return (
       <ProjectDetails
         project={currentProject}
-        versions={versions}
         onBack={() => setCurrentProject(null)}
-        onUploadVersion={handleUploadVersion}
-        onDownloadVersion={handleDownloadVersion}
         loading={loading}
       />
     );
