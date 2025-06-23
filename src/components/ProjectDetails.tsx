@@ -1,20 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ArrowLeft, History, Eye, EyeOff, Copy, Plus, Settings, Trash2 } from 'lucide-react';
-import { Project, EnvVariable } from '@/types/project';
+import { Project, EnvVariable, ProjectRole } from '@/types/project';
 import { EnvVariableForm } from './EnvVariableForm';
 import { VersionHistory } from './VersionHistory';
 import { ProjectSettings } from './ProjectSettings';
+import { ProjectMembers } from './ProjectMembers';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProjectDetailsProps {
   project: Project;
   onBack: () => void;
-  versions?: any[];
   loading: boolean;
 }
 
@@ -26,6 +25,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   const [envVariables, setEnvVariables] = useState<EnvVariable[]>([]);
   const [versions, setVersions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState<ProjectRole | null>(null);
   const [revealedValues, setRevealedValues] = useState<Record<string, string>>({});
   const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -36,7 +36,17 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 
   useEffect(() => {
     loadProjectData();
+    loadUserRole();
   }, [project.id]);
+
+  const loadUserRole = async () => {
+    try {
+      const role = await SupabaseService.getCurrentUserRole(project.id);
+      setCurrentUserRole(role);
+    } catch (error) {
+      console.error('Failed to load user role:', error);
+    }
+  };
 
   const loadProjectData = async () => {
     setLoading(true);
@@ -61,15 +71,16 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 
   const handleSaveEnvVariables = async (entries: any[], password: string) => {
     try {
-      // Combine existing variables with new ones
-      const existingEntries = envVariables.map(envVar => ({
-        name: envVar.env_name,
-        value: '', // We don't have the decrypted value, so we'll need to handle this differently
-        id: envVar.id
-      }));
+      // Verify user has permission to modify variables
+      if (currentUserRole === 'user') {
+        toast({
+          title: 'Permission Denied',
+          description: 'Users can only view and decrypt variables, not modify them',
+          variant: 'destructive'
+        });
+        return;
+      }
 
-      // For now, we'll create a new version with only the new entries
-      // In a real implementation, you'd want to decrypt existing values with the password first
       await SupabaseService.createEnvVersion(project.id, entries, password);
       await loadProjectData();
       toast({
@@ -184,6 +195,8 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     }
   };
 
+  const canModify = currentUserRole === 'owner' || currentUserRole === 'admin';
+
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header */}
@@ -207,6 +220,12 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              {currentUserRole && (
+                <ProjectMembers 
+                  project={project} 
+                  currentUserRole={currentUserRole}
+                />
+              )}
               <Button
                 onClick={() => setIsVersionHistoryOpen(true)}
                 variant="outline"
@@ -293,14 +312,16 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                 <Eye className="h-3 w-3" />
                               </Button>
                             )}
-                            <Button
-                              onClick={() => setDeletePrompt({ variableId: envVar.id, isOpen: true })}
-                              size="sm"
-                              variant="ghost"
-                              className="text-red-400 hover:text-red-300 h-6 w-6 p-0"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
+                            {canModify && (
+                              <Button
+                                onClick={() => setDeletePrompt({ variableId: envVar.id, isOpen: true })}
+                                size="sm"
+                                variant="ghost"
+                                className="text-red-400 hover:text-red-300 h-6 w-6 p-0"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            )}
                           </div>
                         </div>
                         <div className="font-mono text-xs">
@@ -324,7 +345,29 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 
           {/* Add Variables Form - Right Side */}
           <div>
-            <EnvVariableForm onSave={handleSaveEnvVariables} loading={loading} />
+            {canModify ? (
+              <EnvVariableForm onSave={handleSaveEnvVariables} loading={loading} />
+            ) : (
+              <Card className="bg-gray-900 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Plus className="mr-2 h-5 w-5" />
+                    Add Environment Variables
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-3">
+                      <Eye className="mx-auto h-8 w-8 mb-2" />
+                      <p>Read-Only Access</p>
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      You have read-only access to this project. You can view and decrypt variables but cannot modify them.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 

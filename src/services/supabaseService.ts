@@ -1,6 +1,5 @@
-
 import { supabase } from '@/integrations/supabase/client';
-import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry } from '@/types/project';
+import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry, ProjectMember, ProjectInvitation, ProjectRole } from '@/types/project';
 import { PasswordUtils } from '@/utils/passwordUtils';
 import { CryptoUtils } from '@/utils/crypto';
 
@@ -106,6 +105,141 @@ export class SupabaseService {
     if (error || !data?.password_hash) throw new Error('Project not found or password not set');
 
     return await PasswordUtils.verifyPassword(password, data.password_hash);
+  }
+
+  // Project Members methods
+  static async getProjectMembers(projectId: string): Promise<ProjectMember[]> {
+    const { data, error } = await supabase
+      .from('project_members')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('role', { ascending: true }); // owners first, then admins, then users
+
+    if (error) throw error;
+
+    // Get emails for each member
+    const membersWithEmails = await Promise.all(
+      (data || []).map(async (member) => {
+        const { data: emailData } = await supabase.rpc('get_user_email', { 
+          user_uuid: member.user_id 
+        });
+        return {
+          ...member,
+          email: emailData || 'Unknown'
+        };
+      })
+    );
+
+    return membersWithEmails;
+  }
+
+  static async getCurrentUserRole(projectId: string): Promise<ProjectRole | null> {
+    const user = await this.getCurrentUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from('project_members')
+      .select('role')
+      .eq('project_id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (error) return null;
+    return data?.role || null;
+  }
+
+  static async inviteUserToProject(
+    projectId: string, 
+    email: string, 
+    role: ProjectRole,
+    accessPassword: string,
+    projectPassword: string
+  ): Promise<void> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Verify project password
+    const isValidPassword = await this.verifyProjectPassword(projectId, projectPassword);
+    if (!isValidPassword) {
+      throw new Error('Invalid project password');
+    }
+
+    // Check if user exists by email
+    const { data: existingUsers, error: userError } = await supabase
+      .from('project_members')
+      .select('user_id')
+      .eq('project_id', projectId);
+
+    if (userError) throw userError;
+
+    // Encrypt project password with the access password
+    const encryptedProjectPassword = await CryptoUtils.encrypt(projectPassword, accessPassword);
+    const accessPasswordHash = await PasswordUtils.hashPassword(accessPassword);
+
+    // Create invitation
+    const { error: inviteError } = await supabase
+      .from('project_invitations')
+      .insert({
+        project_id: projectId,
+        inviter_id: user.id,
+        invited_email: email,
+        role: role,
+        encrypted_project_password: `${encryptedProjectPassword.ciphertext}:${encryptedProjectPassword.salt}:${encryptedProjectPassword.nonce}:${encryptedProjectPassword.tag}`,
+        access_password_hash: accessPasswordHash
+      });
+
+    if (inviteError) throw inviteError;
+  }
+
+  static async verifyUserAccess(
+    projectId: string, 
+    accessPassword: string
+  ): Promise<{ success: boolean; projectPassword?: string }> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Check if user is a member
+    const { data: member, error } = await supabase
+      .from('project_members')
+      .select('*')
+      .eq('project_id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (error || !member) {
+      return { success: false };
+    }
+
+    // If user has encrypted project password, verify access password and decrypt
+    if (member.encrypted_project_password && member.access_password_hash) {
+      const isValidAccess = await PasswordUtils.verifyPassword(accessPassword, member.access_password_hash);
+      if (!isValidAccess) {
+        return { success: false };
+      }
+
+      // Decrypt project password
+      const parts = member.encrypted_project_password.split(':');
+      const encryptedData = {
+        ciphertext: parts[0],
+        salt: parts[1],
+        nonce: parts[2],
+        tag: parts[3]
+      };
+
+      try {
+        const projectPassword = await CryptoUtils.decrypt(encryptedData, accessPassword);
+        return { success: true, projectPassword };
+      } catch (error) {
+        return { success: false };
+      }
+    }
+
+    // Owner can use project password directly
+    if (member.role === 'owner') {
+      return { success: true };
+    }
+
+    return { success: false };
   }
 
   // Version methods
