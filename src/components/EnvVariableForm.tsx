@@ -64,6 +64,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
                     placeholder="API_KEY"
                     className="bg-gray-800 border-gray-600 text-white font-mono"
                     required
+                    autoComplete='off'
                   />
                 </div>
                 <div className="flex-1">
@@ -75,6 +76,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
                     type="password"
                     className="bg-gray-800 border-gray-600 text-white font-mono"
                     required
+                    autoComplete='new-password'
                   />
                 </div>
                 <Button
