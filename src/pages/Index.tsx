@@ -202,7 +202,6 @@ const Index = () => {
     return (
       <ProjectDetails
         project={currentProject}
-        versions={versions}
         onBack={() => setCurrentProject(null)}
         loading={loading}
       />
