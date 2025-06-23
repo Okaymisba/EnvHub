@@ -61,6 +61,11 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
                   <Input
                     value={entry.name}
                     onChange={(e) => updateEntry(entry.id!, 'name', e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key == ' ') {
+                        e.preventDefault();            
+                      }
+                    }}
                     placeholder="API_KEY"
                     className="bg-gray-800 border-gray-600 text-white font-mono"
                     required

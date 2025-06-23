@@ -282,7 +282,7 @@ export class SupabaseService {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${projectName}-v${version.version_number}.env.enc`;
+    a.download = `${projectName}-v${version.version_number}.env`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

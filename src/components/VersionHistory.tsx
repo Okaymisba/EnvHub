@@ -84,10 +84,10 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({
                       onClick={() => onDownloadVersion(version)}
                       size="sm"
                       variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                      className="bg-gray-900 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
                       <Download className="mr-1 h-3 w-3" />
-                      .env.enc
+                      .env
                     </Button>
                   </div>
                 </CardHeader>
