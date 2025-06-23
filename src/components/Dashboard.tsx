@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus, Calendar, File, LogOut } from 'lucide-react';
+import { Plus, Calendar, Database, LogOut, Shield } from 'lucide-react';
 import { Project } from '@/types/project';
 
 interface DashboardProps {
@@ -52,19 +52,22 @@ export const Dashboard: React.FC<DashboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-950">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">EnvHub</h1>
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <Shield className="h-5 w-5 text-white" />
+              </div>
+              <h1 className="text-xl font-semibold text-white">EnvHub</h1>
             </div>
             <Button
               onClick={onLogout}
               variant="ghost"
               size="sm"
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-400 hover:text-white hover:bg-gray-800"
             >
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
@@ -77,47 +80,49 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Your Projects</h2>
-            <p className="text-gray-600">Manage your secure environment variables</p>
+            <h2 className="text-3xl font-bold text-white mb-2">Your Projects</h2>
+            <p className="text-gray-400">Secure environment variable management</p>
           </div>
           
           <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
                 <Plus className="mr-2 h-4 w-4" />
-                New Project
+                New Repository
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-gray-900 border-gray-700">
               <DialogHeader>
-                <DialogTitle>Create New Project</DialogTitle>
-                <DialogDescription>
-                  Create a new project to store your encrypted environment variables.
+                <DialogTitle className="text-white">Create New Project</DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Create a secure repository for your environment variables
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleCreateProject} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="project-name">Project Name</Label>
+                  <Label htmlFor="project-name" className="text-white">Repository Name</Label>
                   <Input
                     id="project-name"
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
                     placeholder="my-awesome-project"
+                    className="bg-gray-800 border-gray-600 text-white placeholder:text-gray-500"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="project-password">Project Password</Label>
+                  <Label htmlFor="project-password" className="text-white">Master Password</Label>
                   <Input
                     id="project-password"
                     type="password"
                     value={projectPassword}
                     onChange={(e) => setProjectPassword(e.target.value)}
                     placeholder="Secure password for encryption"
+                    className="bg-gray-800 border-gray-600 text-white placeholder:text-gray-500"
                     required
                   />
                   <p className="text-xs text-gray-500">
-                    This password will be used to encrypt your environment variables. Keep it secure!
+                    🔒 This password encrypts all environment variables. Store it securely - it cannot be recovered!
                   </p>
                 </div>
                 <div className="flex justify-end space-x-2">
@@ -125,15 +130,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     type="button"
                     variant="ghost"
                     onClick={() => setIsCreateModalOpen(false)}
+                    className="text-gray-400 hover:text-white"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={creating}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-green-600 hover:bg-green-700"
                   >
-                    {creating ? 'Creating...' : 'Create Project'}
+                    {creating ? 'Creating...' : 'Create Repository'}
                   </Button>
                 </div>
               </form>
@@ -145,28 +151,30 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
+              <Card key={i} className="bg-gray-900 border-gray-700 animate-pulse">
                 <CardHeader>
-                  <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-5 bg-gray-700 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-700 rounded w-1/2"></div>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-700 rounded w-full"></div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-12">
-            <File className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-900 mb-2">No projects yet</h3>
-            <p className="text-gray-500 mb-6">Create your first project to start managing environment variables securely.</p>
+            <Database className="mx-auto h-16 w-16 text-gray-600 mb-4" />
+            <h3 className="text-xl font-medium text-white mb-2">No repositories yet</h3>
+            <p className="text-gray-400 mb-6 max-w-md mx-auto">
+              Create your first secure repository to start managing environment variables with end-to-end encryption.
+            </p>
             <Button
               onClick={() => setIsCreateModalOpen(true)}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-green-600 hover:bg-green-700"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Create Your First Project
+              Create Your First Repository
             </Button>
           </div>
         ) : (
@@ -174,11 +182,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="hover:shadow-md transition-shadow cursor-pointer border border-gray-200"
+                className="bg-gray-900 border-gray-700 hover:bg-gray-800 transition-all cursor-pointer hover:border-gray-600"
                 onClick={() => onProjectClick(project)}
               >
                 <CardHeader>
-                  <CardTitle className="text-gray-900 hover:text-blue-600 transition-colors">
+                  <CardTitle className="text-white hover:text-blue-400 transition-colors flex items-center">
+                    <Database className="mr-2 h-4 w-4" />
                     {project.name}
                   </CardTitle>
                   <CardDescription className="flex items-center text-gray-500">
@@ -188,10 +197,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-400">
                       {project.version_count || 0} versions
                     </span>
-                    <File className="h-4 w-4 text-gray-400" />
+                    <div className="flex items-center text-green-500 text-xs">
+                      <Shield className="h-3 w-3 mr-1" />
+                      Encrypted
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -9,35 +9,92 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      env_versions: {
+      env_variables: {
         Row: {
           created_at: string
-          encrypted_data: string
+          env_name: string
+          env_value_encrypted: string
           id: string
           nonce: string
           project_id: string
           salt: string
           tag: string
-          version_number: number
+          version_id: string
         }
         Insert: {
           created_at?: string
-          encrypted_data: string
+          env_name: string
+          env_value_encrypted: string
           id?: string
           nonce: string
           project_id: string
           salt: string
           tag: string
-          version_number: number
+          version_id: string
         }
         Update: {
           created_at?: string
-          encrypted_data?: string
+          env_name?: string
+          env_value_encrypted?: string
           id?: string
           nonce?: string
           project_id?: string
           salt?: string
           tag?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "env_variables_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "env_variables_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "env_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      env_versions: {
+        Row: {
+          created_at: string
+          env_name: string | null
+          env_value_encrypted: string | null
+          id: string
+          nonce: string
+          project_id: string
+          salt: string
+          tag: string
+          variable_count: number | null
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          env_name?: string | null
+          env_value_encrypted?: string | null
+          id?: string
+          nonce: string
+          project_id: string
+          salt: string
+          tag: string
+          variable_count?: number | null
+          version_number: number
+        }
+        Update: {
+          created_at?: string
+          env_name?: string | null
+          env_value_encrypted?: string | null
+          id?: string
+          nonce?: string
+          project_id?: string
+          salt?: string
+          tag?: string
+          variable_count?: number | null
           version_number?: number
         }
         Relationships: [
@@ -55,18 +112,21 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          password_hash: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           name: string
+          password_hash?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          password_hash?: string | null
           user_id?: string
         }
         Relationships: []

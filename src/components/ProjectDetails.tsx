@@ -1,234 +1,320 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ArrowLeft, Upload, Download, Calendar, File } from 'lucide-react';
-import { Project, EnvVersion } from '@/types/project';
+import { ArrowLeft, History, Eye, EyeOff, Copy, Plus } from 'lucide-react';
+import { Project, EnvVariable } from '@/types/project';
+import { EnvVariableForm } from './EnvVariableForm';
+import { VersionHistory } from './VersionHistory';
+import { SupabaseService } from '@/services/supabaseService';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProjectDetailsProps {
   project: Project;
-  versions: EnvVersion[];
   onBack: () => void;
-  onUploadVersion: (file: File, password: string) => Promise<void>;
-  onDownloadVersion: (version: EnvVersion, password: string) => Promise<void>;
   loading: boolean;
 }
 
 export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   project,
-  versions,
   onBack,
-  onUploadVersion,
-  onDownloadVersion,
-  loading
+  loading: initialLoading
 }) => {
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [password, setPassword] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [envVariables, setEnvVariables] = useState<EnvVariable[]>([]);
+  const [versions, setVersions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [revealedValues, setRevealedValues] = useState<Record<string, string>>({});
+  const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
+  const [passwordPrompt, setPasswordPrompt] = useState<{ variableId: string; isOpen: boolean }>({ variableId: '', isOpen: false });
+  const [tempPassword, setTempPassword] = useState('');
+  const { toast } = useToast();
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
+  useEffect(() => {
+    loadProjectData();
+  }, [project.id]);
 
-  const handleUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedFile || !password.trim()) return;
-
-    setUploading(true);
+  const loadProjectData = async () => {
+    setLoading(true);
     try {
-      await onUploadVersion(selectedFile, password);
-      setSelectedFile(null);
-      setPassword('');
-      setIsUploadModalOpen(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      const [envVars, versionHistory] = await Promise.all([
+        SupabaseService.getCurrentEnvVariables(project.id),
+        SupabaseService.getVersions(project.id)
+      ]);
+      setEnvVariables(envVars);
+      setVersions(versionHistory);
+    } catch (error) {
+      console.error('Load project data error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load project data',
+        variant: 'destructive'
+      });
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  const handleSaveEnvVariables = async (entries: any[], password: string) => {
+    try {
+      await SupabaseService.createEnvVersion(project.id, entries, password);
+      await loadProjectData();
+      toast({
+        title: 'Success!',
+        description: `Saved ${entries.length} environment variables securely`
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to save environment variables',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const handleRevealValue = async (variableId: string) => {
+    if (!tempPassword.trim()) {
+      toast({
+        title: 'Password Required',
+        description: 'Please enter your project password to decrypt the value',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      const variable = envVariables.find(v => v.id === variableId);
+      if (!variable) return;
+
+      const decryptedValue = await SupabaseService.decryptEnvValue(variable, tempPassword);
+      setRevealedValues(prev => ({ ...prev, [variableId]: decryptedValue }));
+      setPasswordPrompt({ variableId: '', isOpen: false });
+      setTempPassword('');
+      
+      toast({
+        title: 'Value decrypted',
+        description: 'Environment variable value revealed successfully'
+      });
+    } catch (error) {
+      toast({
+        title: 'Decryption failed',
+        description: 'Invalid password or corrupted data',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const hideValue = (variableId: string) => {
+    setRevealedValues(prev => {
+      const updated = { ...prev };
+      delete updated[variableId];
+      return updated;
     });
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: 'Copied!',
+      description: 'Value copied to clipboard'
+    });
+  };
+
+  const handleDownloadVersion = async (version: any) => {
+    try {
+      await SupabaseService.downloadVersionAsEncryptedFile(version, project.id, project.name);
+      toast({
+        title: 'Downloaded!',
+        description: `Version ${version.version_number} downloaded as encrypted file`
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to download version',
+        variant: 'destructive'
+      });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gray-950">
       {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+      <header className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <Button
                 onClick={onBack}
                 variant="ghost"
                 size="sm"
-                className="text-slate-400 hover:text-white"
+                className="text-gray-400 hover:text-white hover:bg-gray-800"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">E</span>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                  <span className="text-white font-mono text-sm">E</span>
+                </div>
+                <h1 className="text-xl font-semibold text-white">{project.name}</h1>
               </div>
-              <h1 className="text-xl font-bold text-white">{project.name}</h1>
             </div>
+            <Button
+              onClick={() => setIsVersionHistoryOpen(true)}
+              variant="outline"
+              size="sm"
+              className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+            >
+              <History className="mr-2 h-4 w-4" />
+              Version History
+            </Button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Add Variables Form */}
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">Environment Versions</h2>
-            <p className="text-slate-400">Manage encrypted .env file versions</p>
+            <EnvVariableForm onSave={handleSaveEnvVariables} loading={loading} />
           </div>
-          
-          <Dialog open={isUploadModalOpen} onOpenChange={setIsUploadModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700">
-                <Upload className="mr-2 h-4 w-4" />
-                Upload New Version
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-slate-800 border-slate-700">
-              <DialogHeader>
-                <DialogTitle className="text-white">Upload New .env Version</DialogTitle>
-                <DialogDescription className="text-slate-400">
-                  Upload a new .env file. It will be encrypted before storage.
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleUpload} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="env-file" className="text-white">.env File</Label>
-                  <Input
-                    id="env-file"
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".env,.txt"
-                    onChange={handleFileSelect}
-                    required
-                    className="bg-slate-700 border-slate-600 text-white file:bg-slate-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="upload-password" className="text-white">Project Password</Label>
-                  <Input
-                    id="upload-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter project password"
-                    required
-                    className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                  />
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setIsUploadModalOpen(false)}
-                    className="text-slate-400 hover:text-white"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={uploading || !selectedFile}
-                    className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700"
-                  >
-                    {uploading ? 'Uploading...' : 'Upload & Encrypt'}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+
+          {/* Current Variables */}
+          <div>
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  Environment Variables
+                  <span className="ml-2 px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-full">
+                    {envVariables.length}
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="space-y-3">
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="h-16 bg-gray-800 rounded animate-pulse"></div>
+                    ))}
+                  </div>
+                ) : envVariables.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Plus className="mx-auto h-8 w-8 text-gray-600 mb-3" />
+                    <p className="text-gray-400">No environment variables yet</p>
+                    <p className="text-gray-500 text-sm">Add your first variables using the form on the left</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {envVariables.map((envVar) => (
+                      <div key={envVar.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono text-sm text-green-400 font-medium">
+                            {envVar.env_name}
+                          </span>
+                          <div className="flex items-center space-x-2">
+                            {revealedValues[envVar.id] ? (
+                              <>
+                                <Button
+                                  onClick={() => copyToClipboard(revealedValues[envVar.id])}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-gray-400 hover:text-white h-6 w-6 p-0"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  onClick={() => hideValue(envVar.id)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-gray-400 hover:text-white h-6 w-6 p-0"
+                                >
+                                  <EyeOff className="h-3 w-3" />
+                                </Button>
+                              </>
+                            ) : (
+                              <Button
+                                onClick={() => setPasswordPrompt({ variableId: envVar.id, isOpen: true })}
+                                size="sm"
+                                variant="ghost"
+                                className="text-gray-400 hover:text-white h-6 w-6 p-0"
+                              >
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="font-mono text-xs">
+                          {revealedValues[envVar.id] ? (
+                            <span className="text-white bg-gray-900 px-2 py-1 rounded">
+                              {revealedValues[envVar.id]}
+                            </span>
+                          ) : (
+                            <span className="text-gray-500">
+                              Encrypted: {envVar.env_value_encrypted.substring(0, 32)}...
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        {/* Versions List */}
-        {loading ? (
-          <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <Card key={i} className="bg-slate-800/50 border-slate-700 animate-pulse">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-2">
-                      <div className="h-5 bg-slate-700 rounded w-24"></div>
-                      <div className="h-4 bg-slate-700 rounded w-32"></div>
-                    </div>
-                    <div className="h-9 bg-slate-700 rounded w-20"></div>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        ) : versions.length === 0 ? (
-          <div className="text-center py-12">
-            <File className="mx-auto h-12 w-12 text-slate-600 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No versions yet</h3>
-            <p className="text-slate-400 mb-6">Upload your first .env file to get started.</p>
-            <Button
-              onClick={() => setIsUploadModalOpen(true)}
-              className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700"
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              Upload First Version
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {versions.map((version) => (
-              <Card
-                key={version.id}
-                className="bg-slate-800/50 border-slate-700 hover:bg-slate-800/70 transition-colors"
-              >
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-white flex items-center">
-                        <File className="mr-2 h-4 w-4" />
-                        Version {version.version_number}
-                      </CardTitle>
-                      <CardDescription className="flex items-center text-slate-400">
-                        <Calendar className="mr-1 h-3 w-3" />
-                        {formatDate(version.created_at)}
-                      </CardDescription>
-                    </div>
+        {/* Password Prompt Modal */}
+        {passwordPrompt.isOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <Card className="bg-gray-900 border-gray-700 w-96">
+              <CardHeader>
+                <CardTitle className="text-white">Enter Project Password</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Input
+                    type="password"
+                    value={tempPassword}
+                    onChange={(e) => setTempPassword(e.target.value)}
+                    placeholder="Project password"
+                    className="bg-gray-800 border-gray-600 text-white"
+                    onKeyPress={(e) => e.key === 'Enter' && handleRevealValue(passwordPrompt.variableId)}
+                  />
+                  <div className="flex justify-end space-x-2">
                     <Button
+                      variant="ghost"
                       onClick={() => {
-                        const password = prompt('Enter project password to decrypt:');
-                        if (password) {
-                          onDownloadVersion(version, password);
-                        }
+                        setPasswordPrompt({ variableId: '', isOpen: false });
+                        setTempPassword('');
                       }}
-                      size="sm"
-                      variant="outline"
-                      className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+                      className="text-gray-400 hover:text-white"
                     >
-                      <Download className="mr-2 h-3 w-3" />
-                      Download
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => handleRevealValue(passwordPrompt.variableId)}
+                      className="bg-blue-600 hover:bg-blue-700"
+                      disabled={!tempPassword.trim()}
+                    >
+                      Reveal
                     </Button>
                   </div>
-                </CardHeader>
-              </Card>
-            ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
+
+        {/* Version History Modal */}
+        <VersionHistory
+          isOpen={isVersionHistoryOpen}
+          onClose={() => setIsVersionHistoryOpen(false)}
+          versions={versions}
+          project={project}
+          onDownloadVersion={handleDownloadVersion}
+          loading={loading}
+        />
       </main>
     </div>
   );

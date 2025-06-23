@@ -1,6 +1,8 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Project, EnvVersion, EncryptedPayload } from '@/types/project';
+import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry } from '@/types/project';
+import { PasswordUtils } from '@/utils/passwordUtils';
+import { CryptoUtils } from '@/utils/crypto';
 
 export class SupabaseService {
   // Auth methods
@@ -52,6 +54,7 @@ export class SupabaseService {
         name,
         created_at,
         user_id,
+        password_hash,
         env_versions(count)
       `)
       .order('created_at', { ascending: false });
@@ -64,21 +67,36 @@ export class SupabaseService {
     }));
   }
 
-  static async createProject(name: string): Promise<Project> {
+  static async createProject(name: string, password: string): Promise<Project> {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
+
+    const passwordHash = await PasswordUtils.hashPassword(password);
 
     const { data, error } = await supabase
       .from('projects')
       .insert({
         name,
-        user_id: user.id
+        user_id: user.id,
+        password_hash: passwordHash
       })
       .select()
       .single();
 
     if (error) throw error;
     return { ...data, version_count: 0 };
+  }
+
+  static async verifyProjectPassword(projectId: string, password: string): Promise<boolean> {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('password_hash')
+      .eq('id', projectId)
+      .single();
+
+    if (error || !data?.password_hash) throw new Error('Project not found or password not set');
+
+    return await PasswordUtils.verifyPassword(password, data.password_hash);
   }
 
   // Version methods
@@ -93,7 +111,51 @@ export class SupabaseService {
     return data || [];
   }
 
-  static async createVersion(projectId: string, encryptedData: EncryptedPayload): Promise<EnvVersion> {
+  // Environment variables methods
+  static async getEnvVariables(projectId: string, versionId?: string): Promise<EnvVariable[]> {
+    let query = supabase
+      .from('env_variables')
+      .select('*')
+      .eq('project_id', projectId);
+
+    if (versionId) {
+      query = query.eq('version_id', versionId);
+    }
+
+    const { data, error } = await query.order('env_name');
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  static async getCurrentEnvVariables(projectId: string): Promise<EnvVariable[]> {
+    // Get the latest version
+    const { data: latestVersion, error: versionError } = await supabase
+      .from('env_versions')
+      .select('id')
+      .eq('project_id', projectId)
+      .order('version_number', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (versionError || !latestVersion) {
+      return [];
+    }
+
+    return this.getEnvVariables(projectId, latestVersion.id);
+  }
+
+  static async createEnvVersion(
+    projectId: string, 
+    envEntries: EnvEntry[], 
+    password: string
+  ): Promise<EnvVersion> {
+    // Verify project password first
+    const isValidPassword = await this.verifyProjectPassword(projectId, password);
+    if (!isValidPassword) {
+      throw new Error('Invalid project password');
+    }
+
     // Get the next version number
     const { data: existingVersions, error: countError } = await supabase
       .from('env_versions')
@@ -108,20 +170,81 @@ export class SupabaseService {
       ? existingVersions[0].version_number + 1 
       : 1;
 
-    const { data, error } = await supabase
+    // Create version metadata with dummy encryption data (we'll store individual vars)
+    const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+    
+    const { data: version, error: versionError } = await supabase
       .from('env_versions')
       .insert({
         project_id: projectId,
         version_number: nextVersionNumber,
-        encrypted_data: encryptedData.ciphertext,
-        salt: encryptedData.salt,
-        nonce: encryptedData.nonce,
-        tag: encryptedData.tag
+        variable_count: envEntries.length,
+        salt: dummyEncryption.salt,
+        nonce: dummyEncryption.nonce,
+        tag: dummyEncryption.tag
       })
       .select()
       .single();
 
-    if (error) throw error;
-    return data;
+    if (versionError) throw versionError;
+
+    // Now create individual encrypted environment variables
+    const envVariables = await Promise.all(
+      envEntries.map(async (entry) => {
+        const encryptedValue = await CryptoUtils.encrypt(entry.value, password);
+        return {
+          project_id: projectId,
+          version_id: version.id,
+          env_name: entry.name,
+          env_value_encrypted: encryptedValue.ciphertext,
+          salt: encryptedValue.salt,
+          nonce: encryptedValue.nonce,
+          tag: encryptedValue.tag
+        };
+      })
+    );
+
+    const { error: variablesError } = await supabase
+      .from('env_variables')
+      .insert(envVariables);
+
+    if (variablesError) throw variablesError;
+
+    return version;
+  }
+
+  static async decryptEnvValue(envVariable: EnvVariable, password: string): Promise<string> {
+    const encryptedData = {
+      ciphertext: envVariable.env_value_encrypted,
+      salt: envVariable.salt,
+      nonce: envVariable.nonce,
+      tag: envVariable.tag
+    };
+    
+    return await CryptoUtils.decrypt(encryptedData, password);
+  }
+
+  static async downloadVersionAsEncryptedFile(version: EnvVersion, projectId: string, projectName: string): Promise<void> {
+    // Get all environment variables for this version
+    const envVariables = await this.getEnvVariables(projectId, version.id);
+    
+    // Create encrypted env file content
+    const encryptedContent = envVariables.map(envVar => {
+      return `${envVar.env_name}=${envVar.env_value_encrypted}:${envVar.salt}:${envVar.nonce}:${envVar.tag}`;
+    }).join('\n');
+    
+    // Add metadata header
+    const fileContent = `# EnvHub Encrypted File - Version ${version.version_number}\n# Project: ${projectName}\n# Created: ${version.created_at}\n# Variables: ${envVariables.length}\n\n${encryptedContent}`;
+    
+    // Create and download file
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName}-v${version.version_number}.env.enc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 }
