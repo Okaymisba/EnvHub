@@ -212,19 +212,17 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 onClick={() => setIsVersionHistoryOpen(true)}
                 variant="outline"
                 size="sm"
-                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+                className="bg-gray-900 border-none text-gray-300 hover:bg-gray-800 hover:text-white"
               >
                 <History className="mr-2 h-4 w-4" />
-                Version History
               </Button>
               <Button
                 onClick={() => setIsSettingsOpen(true)}
                 variant="outline"
                 size="sm"
-                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+                className=" bg-gray-900 border-none text-gray-300 hover:bg-gray-800 hover:text-white"
               >
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
+                <Settings className="mr-2 h-4 w-4" />                
               </Button>
             </div>
           </div>
