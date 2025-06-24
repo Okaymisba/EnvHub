@@ -53,7 +53,7 @@ export class SupabaseService {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    
+
     // Transform the data to match our Notification interface
     return (data || []).map(item => ({
       id: item.id,
@@ -138,10 +138,22 @@ export class SupabaseService {
 
     if (updateError) throw updateError;
 
-    // Mark notification as read
+    // 1. Fetch the notification
+    const { data: notification } = await supabase
+      .from('notifications')
+      .select('data')
+      .eq('data->>invitation_id', invitationId)
+      .single();
+
+    if (!notification) throw new Error('Notification not found');
+
+    // 2. Merge the accepted field
+    const newData = { ...(typeof notification.data === 'object' && notification.data !== null ? notification.data : {}), accepted: true };
+
+    // 3. Update only the accepted field
     await supabase
       .from('notifications')
-      .update({ read: true, data: {accepted: true} })
+      .update({ read: true, data: newData })
       .eq('data->>invitation_id', invitationId);
   }
 
@@ -154,10 +166,21 @@ export class SupabaseService {
 
     if (deleteError) throw deleteError;
 
+    const { data: notification } = await supabase
+      .from('notifications')
+      .select('data')
+      .eq('data->>invitation_id', invitationId)
+      .single();
+
+    if (!notification) throw new Error('Notification not found');
+
+    // 2. Merge the accepted field
+    const newData = { ...(typeof notification.data === 'object' && notification.data !== null ? notification.data : {}), rejected: true };
+
     // Mark related notification as read
     const { error: notifyError } = await supabase
       .from('notifications')
-      .update({ read: true, data: {rejected: true} })
+      .update({ read: true, data: newData })
       .eq('data->>invitation_id', invitationId);
 
     if (notifyError) console.error('Failed to mark notification as read:', notifyError);
