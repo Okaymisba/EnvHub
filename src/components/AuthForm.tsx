@@ -55,7 +55,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
             <Github className="mr-2 h-4 w-4" />
             Continue with Google
           </Button>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-slate-600" />
@@ -96,9 +96,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           </form>
 
           <Button
-            variant="ghost"
+            variant="link"
+            type="button"
             onClick={() => setIsLogin(!isLogin)}
-            className="w-full text-slate-400 hover:text-white"
+            className="w-full text-slate-400 hover:text-white underline underline-offset-2"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </Button>
