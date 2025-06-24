@@ -10,6 +10,8 @@ import { ProjectSettings } from './ProjectSettings';
 import { ProjectMembers } from './ProjectMembers';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
+import { PasswordUtils } from '@/utils/passwordUtils';
+import { CryptoUtils } from '@/utils/crypto';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -81,13 +83,50 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         return;
       }
 
-      await SupabaseService.createEnvVersion(project.id, entries, password);
-      await loadProjectData();
-      toast({
-        title: 'Success!',
-        description: `Added ${entries.length} new environment variables securely`
-      });
+      if (currentUserRole === 'admin') {
+        const currentUser = await SupabaseService.getCurrentUser();
+        const encryptedPassword = await SupabaseService.getEncryptedProjectPassword(project.id, currentUser.id);
+
+        if (!encryptedPassword) {
+          toast({
+            title: 'Error',
+            description: 'No encrypted project password found for your account.',
+            variant: 'destructive'
+          });
+          return;
+        }
+
+        const decryptedPassword = await CryptoUtils.decrypt(encryptedPassword, password);
+
+        if (!decryptedPassword) {
+          toast({
+            title: 'Invalid Password',
+            description: 'The provided password is incorrect',
+            variant: 'destructive'
+          });
+          return;
+        }
+
+        await SupabaseService.verifyProjectPassword(project.id, decryptedPassword);
+        await SupabaseService.createEnvVersion(project.id, entries, decryptedPassword);
+        await loadProjectData();
+        toast({
+          title: 'Success!',
+          description: `Added ${entries.length} new environment variables securely`
+        });
+      }
+
+      if (currentUserRole == 'owner') {
+
+        await SupabaseService.createEnvVersion(project.id, entries, password);
+        await loadProjectData();
+        toast({
+          title: 'Success!',
+          description: `Added ${entries.length} new environment variables securely`
+        });
+      }
     } catch (error: any) {
+      console.error('Save environment variables error:', error);
       toast({
         title: 'Error',
         description: error.message || 'Failed to save environment variables',
@@ -114,7 +153,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       setRevealedValues(prev => ({ ...prev, [variableId]: decryptedValue }));
       setPasswordPrompt({ variableId: '', isOpen: false });
       setTempPassword('');
-      
+
       toast({
         title: 'Value decrypted',
         description: 'Environment variable value revealed successfully'
@@ -149,7 +188,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       await loadProjectData();
       setDeletePrompt({ variableId: '', isOpen: false });
       setTempPassword('');
-      
+
       toast({
         title: 'Variable deleted',
         description: 'Environment variable has been removed successfully'
@@ -221,8 +260,8 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             </div>
             <div className="flex items-center space-x-3">
               {currentUserRole && (
-                <ProjectMembers 
-                  project={project} 
+                <ProjectMembers
+                  project={project}
                   currentUserRole={currentUserRole}
                 />
               )}
@@ -240,7 +279,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 size="sm"
                 className=" bg-gray-900 border-none text-gray-300 hover:bg-gray-800 hover:text-white"
               >
-                <Settings className="mr-2 h-4 w-4" />                
+                <Settings className="mr-2 h-4 w-4" />
               </Button>
             </div>
           </div>

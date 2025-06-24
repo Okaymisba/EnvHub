@@ -92,10 +92,10 @@ export class SupabaseService {
     const sharedProjects = await Promise.all(
       (data || []).map(async (member) => {
         const project = member.projects;
-        const { data: ownerEmail } = await supabase.rpc('get_user_email', { 
-          user_uuid: project.user_id 
+        const { data: ownerEmail } = await supabase.rpc('get_user_email', {
+          user_uuid: project.user_id
         });
-        
+
         return {
           id: project.id,
           name: project.name,
@@ -151,6 +151,36 @@ export class SupabaseService {
     return await PasswordUtils.verifyPassword(password, data.password_hash);
   }
 
+  static async getEncryptedProjectPassword(projectId: string, userId: string): Promise<EncryptedPayload | null> {
+    const { data, error } = await supabase
+      .from('project_members')
+      .select('encrypted_project_password, access_password_hash')
+      .eq('project_id', projectId)
+      .eq('user_id', userId)
+      .single();
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No member found, return null
+        return null;
+      }
+      throw error;
+    }
+    if (!data) return null;
+    if (!data.encrypted_project_password || !data.access_password_hash) {
+      return null;
+    }
+    const parts = data.encrypted_project_password.split(':');
+    if (parts.length !== 4) {
+      throw new Error('Invalid encrypted project password format');
+    }
+    return {
+      ciphertext: parts[0],
+      salt: parts[1],
+      nonce: parts[2],
+      tag: parts[3],
+    };
+  }
+
   // Project Members methods
   static async getProjectMembers(projectId: string): Promise<ProjectMember[]> {
     const { data, error } = await supabase
@@ -164,8 +194,8 @@ export class SupabaseService {
     // Get emails for each member
     const membersWithEmails = await Promise.all(
       (data || []).map(async (member) => {
-        const { data: emailData } = await supabase.rpc('get_user_email', { 
-          user_uuid: member.user_id 
+        const { data: emailData } = await supabase.rpc('get_user_email', {
+          user_uuid: member.user_id
         });
         return {
           ...member,
@@ -193,8 +223,8 @@ export class SupabaseService {
   }
 
   static async inviteUserToProject(
-    projectId: string, 
-    email: string, 
+    projectId: string,
+    email: string,
     role: ProjectRole,
     accessPassword: string,
     projectPassword: string
@@ -236,7 +266,7 @@ export class SupabaseService {
   }
 
   static async verifyUserAccess(
-    projectId: string, 
+    projectId: string,
     accessPassword: string
   ): Promise<{ success: boolean; projectPassword?: string }> {
     const user = await this.getCurrentUser();
@@ -342,8 +372,8 @@ export class SupabaseService {
   }
 
   static async createEnvVersion(
-    projectId: string, 
-    envEntries: EnvEntry[], 
+    projectId: string,
+    envEntries: EnvEntry[],
     password: string
   ): Promise<EnvVersion> {
     // Verify project password first
@@ -354,7 +384,7 @@ export class SupabaseService {
 
     // Get existing variables to combine with new ones
     const existingVariables = await this.getCurrentEnvVariables(projectId);
-    
+
     // Get the next version number
     const { data: existingVersions, error: countError } = await supabase
       .from('env_versions')
@@ -365,13 +395,13 @@ export class SupabaseService {
 
     if (countError) throw countError;
 
-    const nextVersionNumber = existingVersions?.length > 0 
-      ? existingVersions[0].version_number + 1 
+    const nextVersionNumber = existingVersions?.length > 0
+      ? existingVersions[0].version_number + 1
       : 1;
 
     // Create version metadata with dummy encryption data (we'll store individual vars)
     const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
-    
+
     const { data: version, error: versionError } = await supabase
       .from('env_versions')
       .insert({
@@ -389,7 +419,7 @@ export class SupabaseService {
 
     // Decrypt existing variables and combine with new ones
     const allEntries = [];
-    
+
     // Add existing variables (decrypt and re-encrypt with new version)
     for (const existingVar of existingVariables) {
       try {
@@ -403,7 +433,7 @@ export class SupabaseService {
         // Skip this variable if it can't be decrypted
       }
     }
-    
+
     // Add new entries
     allEntries.push(...envEntries);
 
@@ -439,22 +469,22 @@ export class SupabaseService {
       nonce: envVariable.nonce,
       tag: envVariable.tag
     };
-    
+
     return await CryptoUtils.decrypt(encryptedData, password);
   }
 
   static async downloadVersionAsEncryptedFile(version: EnvVersion, projectId: string, projectName: string): Promise<void> {
     // Get all environment variables for this version
     const envVariables = await this.getEnvVariables(projectId, version.id);
-    
+
     // Create encrypted env file content
     const encryptedContent = envVariables.map(envVar => {
       return `${envVar.env_name}=${envVar.env_value_encrypted}:${envVar.salt}:${envVar.nonce}:${envVar.tag}`;
     }).join('\n');
-    
+
     // Add metadata header
     const fileContent = `# EnvHub Encrypted File - Version ${version.version_number}\n# Project: ${projectName}\n# Created: ${version.created_at}\n# Variables: ${envVariables.length}\n\n${encryptedContent}`;
-    
+
     // Create and download file
     const blob = new Blob([fileContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
