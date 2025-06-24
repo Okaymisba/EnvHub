@@ -73,7 +73,6 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 
   const handleSaveEnvVariables = async (entries: any[], password: string) => {
     try {
-      // Verify user has permission to modify variables
       if (currentUserRole === 'user') {
         toast({
           title: 'Permission Denied',
@@ -82,41 +81,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         });
         return;
       }
-
-      if (currentUserRole === 'admin') {
-        const currentUser = await SupabaseService.getCurrentUser();
-        const encryptedPassword = await SupabaseService.getEncryptedProjectPassword(project.id, currentUser.id);
-
-        if (!encryptedPassword) {
-          toast({
-            title: 'Error',
-            description: 'No encrypted project password found for your account.',
-            variant: 'destructive'
-          });
-          return;
-        }
-
-        const decryptedPassword = await CryptoUtils.decrypt(encryptedPassword, password);
-
-        if (!decryptedPassword) {
-          toast({
-            title: 'Invalid Password',
-            description: 'The provided password is incorrect',
-            variant: 'destructive'
-          });
-          return;
-        }
-
-        await SupabaseService.verifyProjectPassword(project.id, decryptedPassword);
-        await SupabaseService.createEnvVersion(project.id, entries, decryptedPassword);
-        await loadProjectData();
-        toast({
-          title: 'Success!',
-          description: `Added ${entries.length} new environment variables securely`
-        });
-      }
-
-      if (currentUserRole == 'owner') {
+      if (currentUserRole == 'owner' || currentUserRole == 'admin') {
 
         await SupabaseService.createEnvVersion(project.id, entries, password);
         await loadProjectData();

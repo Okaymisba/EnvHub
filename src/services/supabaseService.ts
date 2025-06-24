@@ -56,6 +56,7 @@ export class SupabaseService {
         password_hash,
         env_versions(count)
       `)
+      .eq('user_id', (await this.getCurrentUser())?.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
