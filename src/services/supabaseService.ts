@@ -53,7 +53,25 @@ export class SupabaseService {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    
+    // Transform the data to match our Notification interface
+    return (data || []).map(item => ({
+      id: item.id,
+      user_id: item.user_id,
+      type: item.type,
+      title: item.title,
+      message: item.message,
+      data: item.data as {
+        invitation_id?: string;
+        project_id?: string;
+        project_name?: string;
+        inviter_email?: string;
+        role?: string;
+      },
+      read: item.read,
+      created_at: item.created_at,
+      updated_at: item.updated_at
+    }));
   }
 
   static async markNotificationAsRead(notificationId: string): Promise<void> {
