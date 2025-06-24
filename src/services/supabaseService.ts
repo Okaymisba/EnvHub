@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry, ProjectMember, ProjectInvitation, ProjectRole } from '@/types/project';
 import { Notification } from '@/types/notification';
@@ -87,7 +88,7 @@ export class SupabaseService {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
 
-    // Get invitation details
+    // Get invitation details - simplified query
     const { data: invitation, error: inviteError } = await supabase
       .from('project_invitations')
       .select('*')
@@ -101,13 +102,13 @@ export class SupabaseService {
       throw new Error('Invitation has expired');
     }
 
-    // Check if user is already a member
+    // Check if user is already a member - simplified query
     const { data: existingMember } = await supabase
       .from('project_members')
       .select('id')
       .eq('project_id', invitation.project_id)
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
 
     if (existingMember) {
       throw new Error('You are already a member of this project');
