@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -105,6 +104,11 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
               {getUserInitials()}
             </AvatarFallback>
           </Avatar>
+          {unreadCount > 0 && (
+            <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full px-1.5 h-5 min-w-[20px] flex items-center justify-center border-2 border-gray-950 z-10">
+              {unreadCount}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700" align="end">
