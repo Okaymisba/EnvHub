@@ -99,7 +99,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-10 w-10">
             <AvatarImage src={user?.user_metadata?.avatar_url} alt="Profile" />
             <AvatarFallback className="bg-blue-600 text-white text-xs">
               {getUserInitials()}
