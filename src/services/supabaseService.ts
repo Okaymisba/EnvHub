@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry, ProjectMember, ProjectInvitation, ProjectRole } from '@/types/project';
 import { Notification } from '@/types/notification';
@@ -68,6 +67,8 @@ export class SupabaseService {
         project_name?: string;
         inviter_email?: string;
         role?: string;
+        accepted?: boolean;
+        rejected?: boolean;
       },
       read: item.read,
       created_at: item.created_at,
@@ -137,13 +138,11 @@ export class SupabaseService {
 
     if (updateError) throw updateError;
 
-    // Mark related notification as read
-    const { error: notifyError } = await (supabase
+    // Mark notification as read
+    await supabase
       .from('notifications')
-      .update({ read: true }) as any)
-      .eq('data->invitation_id', invitationId);
-
-    if (notifyError) console.error('Failed to mark notification as read:', notifyError);
+      .update({ read: true, data: {accepted: true} })
+      .eq('data->>invitation_id', invitationId);
   }
 
   static async rejectInvitation(invitationId: string): Promise<void> {
@@ -156,10 +155,10 @@ export class SupabaseService {
     if (deleteError) throw deleteError;
 
     // Mark related notification as read
-    const { error: notifyError } = await (supabase
+    const { error: notifyError } = await supabase
       .from('notifications')
-      .update({ read: true }) as any)
-      .eq('data->invitation_id', invitationId);
+      .update({ read: true, data: {rejected: true} })
+      .eq('data->>invitation_id', invitationId);
 
     if (notifyError) console.error('Failed to mark notification as read:', notifyError);
   }

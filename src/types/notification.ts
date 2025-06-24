@@ -11,6 +11,8 @@ export interface Notification {
     project_name?: string;
     inviter_email?: string;
     role?: string;
+    accepted?: boolean;
+    rejected?: boolean;
   };
   read: boolean;
   created_at: string;

@@ -23,14 +23,12 @@ export const Inbox: React.FC<InboxProps> = ({
   const handleAccept = async (notification: Notification) => {
     if (notification.data?.invitation_id) {
       await onAcceptInvitation(notification.data.invitation_id);
-      onMarkAsRead();
     }
   };
 
   const handleReject = async (notification: Notification) => {
     if (notification.data?.invitation_id) {
       await onRejectInvitation(notification.data.invitation_id);
-      onMarkAsRead();
     }
   };
 
@@ -93,25 +91,33 @@ export const Inbox: React.FC<InboxProps> = ({
                   <p className="text-gray-300 mb-4">{notification.message}</p>
                   
                   {notification.type === 'project_invitation' && notification.data?.invitation_id && (
-                    <div className="flex space-x-3">
-                      <Button
-                        onClick={() => handleAccept(notification)}
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-white"
-                      >
-                        <Check className="mr-1 h-3 w-3" />
-                        Accept
-                      </Button>
-                      <Button
-                        onClick={() => handleReject(notification)}
-                        variant="outline"
-                        size="sm"
-                        className="border-gray-600 text-gray-300 hover:bg-gray-800"
-                      >
-                        <X className="mr-1 h-3 w-3" />
-                        Decline
-                      </Button>
-                    </div>
+                    <>
+                      {notification.data.accepted ? (
+                        <div className="mt-2 text-green-500 font-semibold">Invitation accepted</div>
+                      ) : notification.data.rejected ? (
+                        <div className="mt-2 text-red-500 font-semibold">Invitation declined</div>
+                      ) : (
+                        <div className="flex space-x-3">
+                          <Button
+                            onClick={() => handleAccept(notification)}
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <Check className="mr-1 h-3 w-3" />
+                            Accept
+                          </Button>
+                          <Button
+                            onClick={() => handleReject(notification)}
+                            variant="outline"
+                            size="sm"
+                            className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                          >
+                            <X className="mr-1 h-3 w-3" />
+                            Decline
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   )}
                   
                   {notification.data?.project_name && (
