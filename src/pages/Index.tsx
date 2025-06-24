@@ -12,6 +12,7 @@ const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [sharedProjects, setSharedProjects] = useState<(Project & { owner_email: string })[]>([]);
   const [versions, setVersions] = useState<EnvVersion[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -39,8 +40,12 @@ const Index = () => {
   const loadProjects = async () => {
     setLoading(true);
     try {
-      const projectsData = await SupabaseService.getProjects();
+      const [projectsData, sharedProjectsData] = await Promise.all([
+        SupabaseService.getProjects(),
+        SupabaseService.getSharedProjects()
+      ]);
       setProjects(projectsData);
+      setSharedProjects(sharedProjectsData);
     } catch (error) {
       console.error('Load projects error:', error);
       toast({
@@ -211,6 +216,7 @@ const Index = () => {
   return (
     <Dashboard
       projects={projects}
+      sharedProjects={sharedProjects}
       onCreateProject={handleCreateProject}
       onProjectClick={handleProjectClick}
       onLogout={handleLogout}

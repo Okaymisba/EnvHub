@@ -66,6 +66,50 @@ export class SupabaseService {
     }));
   }
 
+  static async getSharedProjects(): Promise<(Project & { owner_email: string })[]> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Get projects where the user is a member but not the owner
+    const { data, error } = await supabase
+      .from('project_members')
+      .select(`
+        project_id,
+        projects!inner(
+          id,
+          name,
+          created_at,
+          user_id,
+          env_versions(count)
+        )
+      `)
+      .eq('user_id', user.id)
+      .neq('role', 'owner');
+
+    if (error) throw error;
+
+    // Get owner emails for each project
+    const sharedProjects = await Promise.all(
+      (data || []).map(async (member) => {
+        const project = member.projects;
+        const { data: ownerEmail } = await supabase.rpc('get_user_email', { 
+          user_uuid: project.user_id 
+        });
+        
+        return {
+          id: project.id,
+          name: project.name,
+          created_at: project.created_at,
+          user_id: project.user_id,
+          version_count: project.env_versions?.[0]?.count || 0,
+          owner_email: ownerEmail || 'Unknown'
+        };
+      })
+    );
+
+    return sharedProjects;
+  }
+
   static async createProject(name: string, password: string): Promise<Project> {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('User not authenticated');

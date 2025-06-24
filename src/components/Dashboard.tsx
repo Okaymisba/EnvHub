@@ -1,14 +1,16 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus, Calendar, Database, LogOut, Shield } from 'lucide-react';
+import { Plus, Calendar, Database, LogOut, Shield, Users } from 'lucide-react';
 import { Project } from '@/types/project';
 
 interface DashboardProps {
   projects: Project[];
+  sharedProjects: (Project & { owner_email: string })[];
   onCreateProject: (name: string, password: string) => Promise<void>;
   onProjectClick: (project: Project) => void;
   onLogout: () => void;
@@ -17,6 +19,7 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({
   projects,
+  sharedProjects,
   onCreateProject,
   onProjectClick,
   onLogout,
@@ -49,6 +52,42 @@ export const Dashboard: React.FC<DashboardProps> = ({
       day: 'numeric'
     });
   };
+
+  const renderProjectCard = (project: Project, isShared = false, ownerEmail?: string) => (
+    <Card
+      key={project.id}
+      className="bg-gray-900 border-gray-700 hover:bg-gray-800 transition-all cursor-pointer hover:border-gray-600"
+      onClick={() => onProjectClick(project)}
+    >
+      <CardHeader>
+        <CardTitle className="text-white hover:text-blue-400 transition-colors flex items-center">
+          <Database className="mr-2 h-4 w-4" />
+          {project.name}
+        </CardTitle>
+        <CardDescription className="flex items-center text-gray-500">
+          <Calendar className="mr-1 h-3 w-3" />
+          Created {formatDate(project.created_at)}
+        </CardDescription>
+        {isShared && ownerEmail && (
+          <CardDescription className="flex items-center text-blue-400 text-xs">
+            <Users className="mr-1 h-3 w-3" />
+            Owner: {ownerEmail}
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-400">
+            {project.version_count || 0} versions
+          </span>
+          <div className="flex items-center text-green-500 text-xs">
+            <Shield className="h-3 w-3 mr-1" />
+            Encrypted
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -161,52 +200,45 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </Card>
             ))}
           </div>
-        ) : projects.length === 0 ? (
-          <div className="text-center py-12">
-            <Database className="mx-auto h-16 w-16 text-gray-600 mb-4" />
-            <h3 className="text-xl font-medium text-white mb-2">No repositories yet</h3>
-            <p className="text-gray-400 mb-6 max-w-md mx-auto">
-              Create your first secure repository to start managing environment variables with end-to-end encryption.
-            </p>
-            <Button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Your First Repository
-            </Button>
-          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
-              <Card
-                key={project.id}
-                className="bg-gray-900 border-gray-700 hover:bg-gray-800 transition-all cursor-pointer hover:border-gray-600"
-                onClick={() => onProjectClick(project)}
-              >
-                <CardHeader>
-                  <CardTitle className="text-white hover:text-blue-400 transition-colors flex items-center">
-                    <Database className="mr-2 h-4 w-4" />
-                    {project.name}
-                  </CardTitle>
-                  <CardDescription className="flex items-center text-gray-500">
-                    <Calendar className="mr-1 h-3 w-3" />
-                    Created {formatDate(project.created_at)}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-400">
-                      {project.version_count || 0} versions
-                    </span>
-                    <div className="flex items-center text-green-500 text-xs">
-                      <Shield className="h-3 w-3 mr-1" />
-                      Encrypted
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="space-y-8">
+            {/* Owned Projects Section */}
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-4">My Repositories</h3>
+              {projects.length === 0 ? (
+                <div className="text-center py-12">
+                  <Database className="mx-auto h-16 w-16 text-gray-600 mb-4" />
+                  <h3 className="text-xl font-medium text-white mb-2">No repositories yet</h3>
+                  <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                    Create your first secure repository to start managing environment variables with end-to-end encryption.
+                  </p>
+                  <Button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create Your First Repository
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {projects.map((project) => renderProjectCard(project))}
+                </div>
+              )}
+            </div>
+
+            {/* Shared Projects Section */}
+            {sharedProjects.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                  <Users className="mr-2 h-5 w-5" />
+                  Shared with me
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sharedProjects.map((project) => renderProjectCard(project, true, project.owner_email))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>
