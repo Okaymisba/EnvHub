@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry, ProjectMember, ProjectInvitation, ProjectRole } from '@/types/project';
 import { Notification } from '@/types/notification';
@@ -44,6 +43,106 @@ export class SupabaseService {
   static async signOut() {
     const { error } = await supabase.auth.signOut();
     return { error };
+  }
+
+  // Notification methods
+  static async getNotifications(): Promise<Notification[]> {
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  static async markNotificationAsRead(notificationId: string): Promise<void> {
+    const { error } = await supabase
+      .from('notifications')
+      .update({ read: true, updated_at: new Date().toISOString() })
+      .eq('id', notificationId);
+
+    if (error) throw error;
+  }
+
+  static async acceptInvitation(invitationId: string): Promise<void> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Get invitation details
+    const { data: invitation, error: inviteError } = await supabase
+      .from('project_invitations')
+      .select('*')
+      .eq('id', invitationId)
+      .single();
+
+    if (inviteError || !invitation) throw new Error('Invitation not found');
+
+    // Check if invitation is still valid
+    if (invitation.expires_at && new Date(invitation.expires_at) < new Date()) {
+      throw new Error('Invitation has expired');
+    }
+
+    // Check if user is already a member
+    const { data: existingMember } = await supabase
+      .from('project_members')
+      .select('id')
+      .eq('project_id', invitation.project_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (existingMember) {
+      throw new Error('You are already a member of this project');
+    }
+
+    // Add user to project members
+    const { error: memberError } = await supabase
+      .from('project_members')
+      .insert({
+        project_id: invitation.project_id,
+        user_id: user.id,
+        role: invitation.role,
+        encrypted_project_password: invitation.encrypted_project_password,
+        access_password_hash: invitation.access_password_hash,
+        invited_by: invitation.inviter_id,
+        accepted_at: new Date().toISOString()
+      });
+
+    if (memberError) throw memberError;
+
+    // Mark invitation as accepted
+    const { error: updateError } = await supabase
+      .from('project_invitations')
+      .update({ accepted_at: new Date().toISOString() })
+      .eq('id', invitationId);
+
+    if (updateError) throw updateError;
+
+    // Mark related notification as read
+    const { error: notifyError } = await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('data->invitation_id', invitationId);
+
+    if (notifyError) console.error('Failed to mark notification as read:', notifyError);
+  }
+
+  static async rejectInvitation(invitationId: string): Promise<void> {
+    // Delete the invitation
+    const { error: deleteError } = await supabase
+      .from('project_invitations')
+      .delete()
+      .eq('id', invitationId);
+
+    if (deleteError) throw deleteError;
+
+    // Mark related notification as read
+    const { error: notifyError } = await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('data->invitation_id', invitationId);
+
+    if (notifyError) console.error('Failed to mark notification as read:', notifyError);
   }
 
   // Project methods
