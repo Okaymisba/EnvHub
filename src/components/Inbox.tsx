@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Check, X, Mail } from 'lucide-react';
@@ -44,23 +44,24 @@ export const Inbox: React.FC<InboxProps> = ({
     });
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-gray-950 z-50 overflow-y-auto">
+      {/* Header: full width, left-aligned, with p-4 */}
+      <div className="flex items-center mb-6 justify-start p-4">
+        <Button
+          variant="ghost"
+          onClick={onClose}
+          className="text-gray-400 hover:text-white mr-4"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <h1 className="text-2xl font-bold text-white flex items-center">
+          <Mail className="mr-2 h-6 w-6" />
+          Inbox
+        </h1>
+      </div>
+      {/* Content: centered */}
       <div className="container mx-auto p-6 max-w-4xl">
-        <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={onClose}
-            className="text-gray-400 hover:text-white mr-4"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-white flex items-center">
-            <Mail className="mr-2 h-6 w-6" />
-            Inbox
-          </h1>
-        </div>
-
         <div className="space-y-4">
           {notifications.length === 0 ? (
             <Card className="bg-gray-900 border-gray-700">
@@ -124,6 +125,7 @@ export const Inbox: React.FC<InboxProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    typeof window !== 'undefined' ? document.body : (null as any)
   );
 };

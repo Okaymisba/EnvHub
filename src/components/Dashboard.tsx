@@ -31,8 +31,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
       <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center justify-between p-6">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">E</span>

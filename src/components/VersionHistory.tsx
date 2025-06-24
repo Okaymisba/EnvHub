@@ -104,7 +104,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({
         {versions.length > 0 && (
           <div className="mt-4 p-3 bg-gray-800 rounded-lg border border-gray-700">
             <p className="text-xs text-gray-400">
-              📁 Downloaded files are encrypted (.env.enc) and require the original project password to decrypt.
+              📁 Downloaded files are encrypted (.env) and require the original project password to decrypt.
               Use a CLI tool or decrypt manually to view the plaintext values.
             </p>
           </div>

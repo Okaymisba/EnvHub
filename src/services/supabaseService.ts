@@ -138,9 +138,9 @@ export class SupabaseService {
     if (updateError) throw updateError;
 
     // Mark related notification as read
-    const { error: notifyError } = await supabase
+    const { error: notifyError } = await (supabase
       .from('notifications')
-      .update({ read: true })
+      .update({ read: true }) as any)
       .eq('data->invitation_id', invitationId);
 
     if (notifyError) console.error('Failed to mark notification as read:', notifyError);
@@ -156,9 +156,9 @@ export class SupabaseService {
     if (deleteError) throw deleteError;
 
     // Mark related notification as read
-    const { error: notifyError } = await supabase
+    const { error: notifyError } = await (supabase
       .from('notifications')
-      .update({ read: true })
+      .update({ read: true }) as any)
       .eq('data->invitation_id', invitationId);
 
     if (notifyError) console.error('Failed to mark notification as read:', notifyError);
