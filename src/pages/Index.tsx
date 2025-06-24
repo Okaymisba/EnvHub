@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AuthForm } from '@/components/AuthForm';
 import { Dashboard } from '@/components/Dashboard';
@@ -221,6 +220,7 @@ const Index = () => {
       onProjectClick={handleProjectClick}
       onLogout={handleLogout}
       loading={loading}
+      user={user}
     />
   );
 };

@@ -1,5 +1,7 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { Project, EnvVersion, EnvVariable, EncryptedPayload, EnvEntry, ProjectMember, ProjectInvitation, ProjectRole } from '@/types/project';
+import { Notification } from '@/types/notification';
 import { PasswordUtils } from '@/utils/passwordUtils';
 import { CryptoUtils } from '@/utils/crypto';
 
