@@ -119,30 +119,33 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
           {!iconOnly && <span className="ml-2">Members</span>}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        className="w-80 bg-gray-900 border-gray-700 max-h-96 overflow-y-auto"
+      <DropdownMenuContent
+        className="
+          w-80 max-w-xs bg-black/90 border border-purple-900 shadow-2xl rounded-xl
+          backdrop-blur-md animate-fade-scale z-[9999] p-0
+        "
         align="end"
       >
-        <div className="p-3">
-          <h3 className="text-white font-medium mb-3">Project Members</h3>
-          
+        <div className="p-4">
+          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+            <Users className="h-4 w-4 text-purple-400" />
+            Project Members
+          </h3>
           {loading ? (
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-8 bg-gray-800 rounded animate-pulse"></div>
+                <div key={i} className="h-8 bg-gradient-to-r from-purple-900/30 to-blue-900/20 rounded animate-pulse"></div>
               ))}
             </div>
           ) : (
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {members.map((member) => (
-                <div key={member.id} className="flex items-center justify-between py-2">
+                <div key={member.id} className="flex items-center justify-between py-2 px-2 rounded-lg bg-black/40 hover:bg-gradient-to-r hover:from-purple-900/30 hover:to-blue-900/20 transition">
                   <div className="flex items-center space-x-2">
                     {getRoleIcon(member.role)}
-                    <span className="text-gray-300 text-sm">{member.email}</span>
+                    <span className="text-gray-200 text-sm font-mono">{member.email}</span>
                   </div>
-                  <span className="text-xs text-gray-500 capitalize">
-                    {member.role}
-                  </span>
+                  <span className="text-xs text-gray-400 capitalize">{member.role}</span>
                 </div>
               ))}
             </div>
@@ -150,15 +153,14 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
 
           {canInvite && (
             <>
-              <DropdownMenuSeparator className="bg-gray-700 my-3" />
-              
+              <DropdownMenuSeparator className="bg-purple-900/40 my-4" />
               {!showInviteForm ? (
                 <Button
                   onClick={() => setShowInviteForm(true)}
                   size="sm"
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg transition"
                 >
-                  <UserPlus className="mr-2 h-3 w-3" />
+                  <UserPlus className="mr-2 h-4 w-4" />
                   Invite Member
                 </Button>
               ) : (
@@ -170,23 +172,21 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="user@example.com"
-                      className="bg-gray-800 border-gray-600 text-white text-sm h-8"
-                      autoComplete='off'
+                      className="bg-black/70 border border-purple-800 text-white text-sm h-8 rounded-lg"
+                      autoComplete="off"
                     />
                   </div>
-                  
                   <div>
                     <Label className="text-gray-300 text-xs">Role</Label>
                     <select
                       value={inviteRole}
                       onChange={(e) => setInviteRole(e.target.value as ProjectRole)}
-                      className="w-full bg-gray-800 border border-gray-600 text-white text-sm h-8 rounded px-2"
+                      className="w-full bg-black/70 border border-purple-800 text-white text-sm h-8 rounded-lg px-2"
                     >
                       <option value="user">User</option>
                       <option value="admin">Admin</option>
                     </select>
                   </div>
-                  
                   <div>
                     <Label className="text-gray-300 text-xs">Access Password</Label>
                     <Input
@@ -194,11 +194,10 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       value={accessPassword}
                       onChange={(e) => setAccessPassword(e.target.value)}
                       placeholder="Password for invited user"
-                      className="bg-gray-800 border-gray-600 text-white text-sm h-8"
-                      autoComplete='new-password'
+                      className="bg-black/70 border border-purple-800 text-white text-sm h-8 rounded-lg"
+                      autoComplete="new-password"
                     />
                   </div>
-                  
                   <div>
                     <Label className="text-gray-300 text-xs">Project Password</Label>
                     <Input
@@ -206,16 +205,15 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       value={projectPassword}
                       onChange={(e) => setProjectPassword(e.target.value)}
                       placeholder="Your project password"
-                      className="bg-gray-800 border-gray-600 text-white text-sm h-8"
-                      autoComplete='new-password'
+                      className="bg-black/70 border border-purple-800 text-white text-sm h-8 rounded-lg"
+                      autoComplete="new-password"
                     />
                   </div>
-                  
                   <div className="flex space-x-2">
                     <Button
                       onClick={handleInvite}
                       size="sm"
-                      className="flex-1 bg-green-600 hover:bg-green-700 h-8 text-xs"
+                      className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold h-8 text-xs rounded-lg transition"
                     >
                       Send
                     </Button>
@@ -223,7 +221,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       onClick={() => setShowInviteForm(false)}
                       variant="ghost"
                       size="sm"
-                      className="flex-1 text-gray-400 hover:text-white h-8 text-xs"
+                      className="flex-1 text-gray-400 hover:text-white h-8 text-xs rounded-lg"
                     >
                       Cancel
                     </Button>
@@ -233,6 +231,15 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
             </>
           )}
         </div>
+        <style>{`
+          .animate-fade-scale {
+            animation: fadeScaleIn 0.25s cubic-bezier(0.4,0,0.2,1);
+          }
+          @keyframes fadeScaleIn {
+            from { opacity: 0; transform: scale(0.96);}
+            to { opacity: 1; transform: none;}
+          }
+        `}</style>
       </DropdownMenuContent>
     </DropdownMenu>
   );
