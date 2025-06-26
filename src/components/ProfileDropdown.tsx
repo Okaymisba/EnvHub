@@ -97,35 +97,40 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-10 w-10">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 hover:ring-2 hover:ring-purple-600 transition-all duration-200">
+          <Avatar className="h-10 w-10 transition-all duration-200 ring-2 ring-transparent hover:ring-purple-600">
             <AvatarImage src={user?.user_metadata?.avatar_url} alt="Profile" />
-            <AvatarFallback className="bg-blue-600 text-white text-xs">
+            <AvatarFallback className="bg-gradient-to-br from-purple-700 to-blue-700 text-white text-xs">
               {getUserInitials()}
             </AvatarFallback>
           </Avatar>
           {unreadCount > 0 && (
-            <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full px-1.5 h-5 min-w-[20px] flex items-center justify-center border-2 border-gray-950 z-10">
+            <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full px-1.5 h-5 min-w-[20px] flex items-center justify-center border-2 border-black z-10 transition-all duration-200">
               {unreadCount}
             </span>
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 bg-gray-900 border-gray-700" align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            <p className="text-sm font-medium text-white">
-              {user?.user_metadata?.full_name || user?.email}
-            </p>
-            <p className="text-xs text-gray-400">
-              {user?.email}
-            </p>
+      <DropdownMenuContent
+        className="w-[90vw] max-w-xs sm:w-60 bg-black/80 border border-purple-900 rounded-xl shadow-2xl backdrop-blur-md animate-dropdown-fade z-[9999] p-0 pb-3"
+        align="end"
+        sideOffset={8}
+      >
+        <div className="flex items-center gap-3 p-4 border-b border-slate-800">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={user?.user_metadata?.avatar_url} alt="Profile" />
+            <AvatarFallback className="bg-gradient-to-br from-purple-700 to-blue-700 text-white text-xs">
+              {getUserInitials()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-white">{user?.user_metadata?.full_name || user?.email}</span>
+            <span className="text-xs text-gray-400">{user?.email}</span>
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-gray-700" />
         <DropdownMenuItem 
           onClick={handleInboxClick}
-          className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer"
+          className="text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 cursor-pointer transition-all duration-200"
         >
           <Mail className="mr-2 h-4 w-4" />
           Inbox
@@ -135,14 +140,23 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
             </span>
           )}
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-gray-700" />
+        <DropdownMenuSeparator className="bg-slate-800" />
         <DropdownMenuItem 
           onClick={onLogout}
-          className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer"
+          className="text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 cursor-pointer transition-all duration-200 pt-2"
         >
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
         </DropdownMenuItem>
+        <style>{`
+          .animate-dropdown-fade {
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.4,0,0.2,1);
+          }
+          @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-10px) scale(0.98);}
+            to { opacity: 1; transform: none;}
+          }
+        `}</style>
       </DropdownMenuContent>
     </DropdownMenu>
   );
