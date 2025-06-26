@@ -66,9 +66,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {formatDate(project.created_at)}
           </div>
           {ownerEmail && (
-            <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[120px]">
+            <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[180px] whitespace-nowrap">
               <User className="mr-1 h-4 w-4" />
-              Owner: {ownerEmail}
+              <span>Owner:</span>
+              <span className="ml-1">{ownerEmail}</span>
             </div>
           )}
           <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[100px]">
