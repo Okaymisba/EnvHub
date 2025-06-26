@@ -27,15 +27,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   if (viewMode === 'list') {
     return (
-      <Card
+      <div
         className={`
-          flex flex-row items-center min-h-[80px] px-6 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-lg border-0 relative overflow-hidden group transition-all
-          hover:scale-[1.01] hover:ring-2 hover:ring-purple-700
+          w-full bg-transparent border-b border-slate-800
+          flex flex-col sm:flex-row items-start sm:items-center
+          px-2 sm:px-4 py-3 group transition hover:bg-slate-800/60 cursor-pointer
+          last:border-b-0
         `}
         onClick={() => onProjectClick(project)}
       >
-        <div className="flex-1 flex items-center gap-6 overflow-x-auto">
-          <div className="min-w-[180px] font-semibold text-white flex items-center gap-2">
+        {/* Top row: name + view button (mobile), name only (desktop) */}
+        <div className="flex w-full items-center justify-between sm:justify-start gap-2 sm:gap-6">
+          <div className="font-semibold text-white flex items-center gap-2 min-w-[120px]">
             {project.name}
             {ownerEmail && (
               <Badge variant="secondary" className="bg-gray-700 text-gray-300 ml-2">
@@ -43,33 +46,49 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[180px]">
+          {/* View button: right of name on mobile, at end on desktop */}
+          <div className="flex-shrink-0 sm:hidden">
+            <button
+              className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
+              onClick={e => {
+                e.stopPropagation();
+                onProjectClick(project);
+              }}
+            >
+              View <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+        {/* Details row: only on sm and up */}
+        <div className="hidden sm:flex flex-1 items-center gap-6 w-full mt-0">
+          <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[120px]">
             <Calendar className="mr-1 h-4 w-4" />
             {formatDate(project.created_at)}
           </div>
           {ownerEmail && (
-            <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[220px]">
+            <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[120px]">
               <User className="mr-1 h-4 w-4" />
               Owner: {ownerEmail}
             </div>
           )}
-          <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[120px]">
+          <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[100px]">
             <FileText className="mr-1 h-4 w-4" />
             {project.version_count || 0} versions
           </div>
+          {/* View button on the far right for desktop */}
+          <div className="flex-shrink-0 ml-auto">
+            <button
+              className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
+              onClick={e => {
+                e.stopPropagation();
+                onProjectClick(project);
+              }}
+            >
+              View <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-        <div className="flex-shrink-0 ml-auto">
-          <button
-            className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
-            onClick={e => {
-              e.stopPropagation();
-              onProjectClick(project);
-            }}
-          >
-            View <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </Card>
+      </div>
     );
   }
 
