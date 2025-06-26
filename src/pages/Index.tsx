@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AuthForm } from '@/components/AuthForm';
 import { Dashboard } from '@/components/Dashboard';
 import { ProjectDetails } from '@/components/ProjectDetails';
+import { LandingPage } from '@/components/LandingPage';
 import { Project, EnvVersion } from '@/types/project';
 import { CryptoUtils } from '@/utils/crypto';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +16,7 @@ const Index = () => {
   const [versions, setVersions] = useState<EnvVersion[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [showAuth, setShowAuth] = useState(false);
   const { toast } = useToast();
 
   // Check for existing session on mount
@@ -191,14 +193,28 @@ const Index = () => {
     );
   }
 
-  if (!user) {
+  if (!user && !showAuth) {
     return (
-      <AuthForm
-        onLogin={handleLogin}
-        onSignup={handleSignup}
-        onGoogleAuth={handleGoogleAuth}
-        loading={loading}
-      />
+      <LandingPage onGetStarted={() => setShowAuth(true)} />
+    );
+  }
+
+  if (!user && showAuth) {
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setShowAuth(false)}
+          className="absolute top-4 left-4 z-10 text-gray-400 hover:text-white transition-colors duration-300"
+        >
+          ← Back to Home
+        </button>
+        <AuthForm
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+          onGoogleAuth={handleGoogleAuth}
+          loading={loading}
+        />
+      </div>
     );
   }
 
