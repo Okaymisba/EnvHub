@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,11 +18,13 @@ import { useToast } from '@/hooks/use-toast';
 interface ProjectMembersProps {
   project: Project;
   currentUserRole: ProjectRole;
+  iconOnly?: boolean;
 }
 
 export const ProjectMembers: React.FC<ProjectMembersProps> = ({ 
   project, 
-  currentUserRole 
+  currentUserRole, 
+  iconOnly 
 }) => {
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [loading, setLoading] = useState(false);
@@ -112,10 +113,10 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
         <Button
           variant="outline"
           size="sm"
-          className="bg-gray-900 border-none text-gray-300 hover:bg-gray-800 hover:text-white"
+          className="bg-black/60 border-none text-gray-300 hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 hover:text-white"
         >
-          <Users className="mr-2 h-4 w-4" />
-          Members
+          <Users className="mr-2 h-4 w-4 " />
+          {!iconOnly && <span className="ml-2">Members</span>}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
