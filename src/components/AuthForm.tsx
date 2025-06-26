@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Github } from 'lucide-react';
+import { ForgotPassword } from './ForgotPassword';
+import { Link } from 'react-router-dom';
 
 interface AuthFormProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -19,6 +21,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   loading
 }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,6 +33,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       await onSignup(email, password);
     }
   };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+        <ForgotPassword onBack={() => setShowForgotPassword(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
@@ -86,6 +97,20 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                 className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
               />
             </div>
+            
+            {isLogin && (
+              <div className="text-right">
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-slate-400 hover:text-white text-sm p-0 h-auto"
+                >
+                  Forgot password?
+                </Button>
+              </div>
+            )}
+
             <Button
               type="submit"
               disabled={loading}
@@ -103,6 +128,25 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </Button>
+
+          {/* Terms and Privacy Links */}
+          <div className="text-center text-xs text-slate-500 space-y-1">
+            <p>By continuing, you agree to our</p>
+            <div className="space-x-4">
+              <Link 
+                to="/terms" 
+                className="text-slate-400 hover:text-white underline underline-offset-2"
+              >
+                Terms of Service
+              </Link>
+              <Link 
+                to="/privacy" 
+                className="text-slate-400 hover:text-white underline underline-offset-2"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

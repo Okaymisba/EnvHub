@@ -1,0 +1,84 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+const PrivacyPolicy = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+      <div className="max-w-4xl mx-auto py-8">
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/')}
+          className="mb-6 text-white hover:bg-slate-800"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Home
+        </Button>
+
+        <Card className="bg-slate-800 border-slate-700">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-white">Privacy Policy</CardTitle>
+            <p className="text-slate-400">Last updated: December 2024</p>
+          </CardHeader>
+          <CardContent className="text-slate-300 space-y-6">
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">1. Information We Collect</h2>
+              <p>
+                EnvHub collects minimal information necessary to provide our services. We collect your email address
+                for account creation and authentication purposes. Your environment variables and secrets are encrypted
+                end-to-end before storage.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">2. How We Use Your Information</h2>
+              <p>
+                We use your email address solely for account management and service-related communications.
+                Your encrypted environment variables are stored securely and are never accessible to EnvHub staff.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">3. Data Security</h2>
+              <p>
+                All sensitive data is encrypted using industry-standard encryption before it leaves your device.
+                We implement multiple layers of security to protect your information, including secure transmission
+                protocols and encrypted storage.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">4. Data Sharing</h2>
+              <p>
+                We do not sell, trade, or share your personal information with third parties. Your data remains
+                private and is only accessible to you and team members you explicitly invite to your projects.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">5. Your Rights</h2>
+              <p>
+                You have the right to access, update, or delete your account and associated data at any time.
+                You can export your environment variables or permanently delete your account through our dashboard.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">6. Contact Us</h2>
+              <p>
+                If you have any questions about this Privacy Policy, please contact us at privacy@envhub.dev
+              </p>
+            </section>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default PrivacyPolicy;
