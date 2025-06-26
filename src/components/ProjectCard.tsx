@@ -96,18 +96,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <Card
       className={`
-        group transition-all cursor-pointer border-0
-        bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-xl hover:scale-[1.03]
-        relative overflow-hidden
+        group transition-all cursor-pointer border border-purple-900
+        bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 shadow-2xl rounded-2xl
+        hover:scale-[1.03] hover:border-blue-700 relative overflow-hidden
       `}
       onClick={() => onProjectClick(project)}
     >
+      {/* Animated hover overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-purple-900/30 to-blue-900/20 z-0" />
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-lg flex items-center justify-between">
           {project.name}
           {ownerEmail && (
-            <Badge variant="secondary" className="bg-gray-700 text-gray-300">
+            <Badge variant="secondary" className="bg-gradient-to-r from-purple-700 to-blue-700 text-gray-100">
               Shared
             </Badge>
           )}
@@ -132,7 +133,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
         <div className="mt-4 flex justify-end">
           <button
-            className="flex items-center gap-1 px-3 py-1 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
+            className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
             onClick={e => {
               e.stopPropagation();
               onProjectClick(project);
