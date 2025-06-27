@@ -1,61 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { AuthForm } from '@/components/AuthForm';
-import { Dashboard } from '@/components/Dashboard';
-import { LandingPage } from '@/components/LandingPage';
-import { Project } from '@/types/project';
-import { useToast } from '@/hooks/use-toast';
-import { SupabaseService } from '@/services/supabaseService';
-import { useNavigate } from 'react-router-dom';
 
-const Index = () => {
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ProjectDetails } from '@/components/ProjectDetails';
+import { AuthForm } from '@/components/AuthForm';
+import { Project } from '@/types/project';
+import { SupabaseService } from '@/services/supabaseService';
+import { useToast } from '@/hooks/use-toast';
+
+const ProjectPage = () => {
+  const { projectId } = useParams<{ projectId: string }>();
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [sharedProjects, setSharedProjects] = useState<(Project & { owner_email: string })[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
-  // Check for existing session on mount
   useEffect(() => {
-    const initAuth = async () => {
+    const initPage = async () => {
       try {
         const currentUser = await SupabaseService.getCurrentUser();
-        if (currentUser) {
-          setUser(currentUser);
-          await loadProjects();
+        if (!currentUser) {
+          setShowAuth(true);
+          setLoading(false);
+          return;
+        }
+
+        setUser(currentUser);
+
+        if (projectId) {
+          // Try to get the project - this will check if user has access
+          const [userProjects, sharedProjects] = await Promise.all([
+            SupabaseService.getProjects(),
+            SupabaseService.getSharedProjects()
+          ]);
+
+          const foundProject = [...userProjects, ...sharedProjects].find(p => p.id === projectId);
+          
+          if (!foundProject) {
+            toast({
+              title: 'Project not found',
+              description: 'You do not have access to this project',
+              variant: 'destructive'
+            });
+            navigate('/');
+            return;
+          }
+
+          setProject(foundProject);
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error('Error loading project:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load project',
+          variant: 'destructive'
+        });
+        navigate('/');
       } finally {
-        setInitialLoading(false);
+        setLoading(false);
       }
     };
 
-    initAuth();
-  }, []);
-
-  const loadProjects = async () => {
-    setLoading(true);
-    try {
-      const [projectsData, sharedProjectsData] = await Promise.all([
-        SupabaseService.getProjects(),
-        SupabaseService.getSharedProjects()
-      ]);
-      setProjects(projectsData);
-      setSharedProjects(sharedProjectsData);
-    } catch (error) {
-      console.error('Load projects error:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load projects',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    initPage();
+  }, [projectId, navigate, toast]);
 
   const handleLogin = async (email: string, password: string) => {
     setLoading(true);
@@ -65,7 +73,11 @@ const Index = () => {
         throw new Error(result.error.message);
       }
       setUser(result.user);
-      await loadProjects();
+      setShowAuth(false);
+      
+      // Reload the page to fetch project data
+      window.location.reload();
+      
       toast({
         title: 'Welcome back!',
         description: 'Successfully signed in'
@@ -112,7 +124,6 @@ const Index = () => {
       if (result.error) {
         throw new Error(result.error.message);
       }
-      // Google auth will redirect, so we don't need to handle success here
     } catch (error: any) {
       console.error('Google auth error:', error);
       toast({
@@ -124,56 +135,18 @@ const Index = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await SupabaseService.signOut();
-      setUser(null);
-      setProjects([]);
-      toast({
-        title: 'Signed out',
-        description: 'Come back soon!'
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  const handleBack = () => {
+    navigate('/');
   };
 
-  const handleCreateProject = async (name: string, password: string) => {
-    try {
-      const newProject = await SupabaseService.createProject(name, password);
-      await loadProjects();
-      toast({
-        title: 'Project created!',
-        description: `${name} is ready for your environment variables`
-      });
-    } catch (error: any) {
-      console.error('Create project error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to create project',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleProjectClick = (project: Project) => {
-    navigate(`/project/${project.id}`);
-  };
-
-  if (initialLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-950">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading EnvHub...</p>
+          <p className="text-gray-400">Loading project...</p>
         </div>
       </div>
-    );
-  }
-
-  if (!user && !showAuth) {
-    return (
-      <LandingPage onGetStarted={() => setShowAuth(true)} />
     );
   }
 
@@ -181,7 +154,7 @@ const Index = () => {
     return (
       <div className="relative">
         <button
-          onClick={() => setShowAuth(false)}
+          onClick={() => navigate('/')}
           className="absolute top-4 left-4 z-10 text-gray-400 hover:text-white transition-colors duration-300"
         >
           ← Back to Home
@@ -196,17 +169,29 @@ const Index = () => {
     );
   }
 
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+        <div className="text-center">
+          <p className="text-gray-400">Project not found</p>
+          <button
+            onClick={() => navigate('/')}
+            className="mt-4 text-blue-400 hover:text-blue-300"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Dashboard
-      projects={projects}
-      sharedProjects={sharedProjects}
-      onCreateProject={handleCreateProject}
-      onProjectClick={handleProjectClick}
-      onLogout={handleLogout}
+    <ProjectDetails
+      project={project}
+      onBack={handleBack}
       loading={loading}
-      user={user}
     />
   );
 };
 
-export default Index;
+export default ProjectPage;
