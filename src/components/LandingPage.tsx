@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield, Zap, Users, Globe, Database, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -17,6 +18,8 @@ const featureImages = [
 ];
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
+  const navigate = useNavigate();
+
   const features = [
     {
       icon: Shield,
@@ -116,6 +119,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 🛡️ Start Free & Secure Your Secrets
               </Button>
               <Button
+                onClick={() => navigate('/pricing')}
                 variant="outline"
                 size="lg"
                 className="border-gray-700 text-gray-900 hover:bg-gray-300 px-10 py-5 text-xl font-semibold transition-all duration-300 hover:scale-105"
@@ -193,18 +197,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               © 2025 EnvHub by Misbah. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <a 
-                href="/privacy" 
+              <button
+                onClick={() => navigate('/pricing')}
+                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => navigate('/privacy')}
                 className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
               >
                 Privacy Policy
-              </a>
-              <a 
-                href="/terms" 
+              </button>
+              <button
+                onClick={() => navigate('/terms')}
                 className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
               >
                 Terms of Service
-              </a>
+              </button>
             </div>
           </div>
         </div>

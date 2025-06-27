@@ -1,0 +1,258 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Check, X, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+const Pricing = () => {
+  const navigate = useNavigate();
+
+  const plans = [
+    {
+      name: 'Free',
+      price: '$0',
+      period: 'forever',
+      description: 'Perfect for getting started',
+      features: [
+        { text: '2 projects', included: true },
+        { text: '20 environment variables per project', included: true },
+        { text: 'CLI access (limited)', included: true, tooltip: 'Can add up to 5 env variables through CLI' },
+        { text: 'Ads will be shown', included: false },
+        { text: 'Team collaboration', included: false }
+      ],
+      buttonText: 'Get Started Free',
+      popular: false,
+      buttonVariant: 'outline' as const
+    },
+    {
+      name: 'Pro',
+      price: '$4',
+      period: 'per month',
+      description: 'Great for individual developers',
+      features: [
+        { text: '10 projects (then $0.50 per project)', included: true },
+        { text: '50 env variables each (then $0.005 per env)', included: true },
+        { text: 'Full CLI access', included: true },
+        { text: 'No ads', included: true },
+        { text: 'Invite up to 5 members (then $0.10 per member)', included: true }
+      ],
+      buttonText: 'Start Pro Trial',
+      popular: true,
+      buttonVariant: 'default' as const
+    },
+    {
+      name: 'Team',
+      price: '$10',
+      period: 'per month',
+      description: 'Perfect for growing teams',
+      features: [
+        { text: '50 projects (then $0.50 per project)', included: true },
+        { text: '200 env variables each (then $0.005 per env)', included: true },
+        { text: 'Full CLI access', included: true },
+        { text: 'No ads', included: true },
+        { text: 'Invite up to 25 members (then $0.10 per member)', included: true }
+      ],
+      buttonText: 'Start Team Trial',
+      popular: false,
+      buttonVariant: 'outline' as const
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <div className="border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => navigate('/')}
+              className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
+            >
+              EnvHub
+            </button>
+            <Button
+              onClick={() => navigate('/')}
+              variant="ghost"
+              className="text-gray-400 hover:text-white"
+            >
+              ← Back to Home
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent">
+            Simple, Transparent Pricing
+          </h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Choose the plan that fits your needs. Start free, upgrade when you grow.
+          </p>
+        </div>
+
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {plans.map((plan, index) => (
+            <Card
+              key={plan.name}
+              className={`relative bg-slate-900/80 border-2 transition-all duration-300 hover:scale-105 ${
+                plan.popular 
+                  ? 'border-purple-500 shadow-2xl shadow-purple-500/20' 
+                  : 'border-slate-700 hover:border-slate-600'
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold">
+                    Most Popular
+                  </span>
+                </div>
+              )}
+              
+              <CardHeader className="text-center pb-8">
+                <CardTitle className="text-2xl font-bold text-white mb-2">
+                  {plan.name}
+                </CardTitle>
+                <div className="mb-4">
+                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
+                  <span className="text-gray-400 ml-2">/{plan.period}</span>
+                </div>
+                <p className="text-gray-400">{plan.description}</p>
+              </CardHeader>
+
+              <CardContent className="space-y-4">
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-3">
+                      {feature.included ? (
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-500 flex-shrink-0" />
+                      )}
+                      <span className={`text-sm ${feature.included ? 'text-gray-200' : 'text-gray-500'}`}>
+                        {feature.text}
+                      </span>
+                      {feature.tooltip && (
+                        <div className="group relative">
+                          <Info className="w-4 h-4 text-gray-500 cursor-help" />
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                            {feature.tooltip}
+                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  className={`w-full py-3 font-semibold ${
+                    plan.popular
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
+                      : ''
+                  }`}
+                  variant={plan.buttonVariant}
+                  onClick={() => navigate('/')}
+                >
+                  {plan.buttonText}
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* FAQ Section */}
+        <div className="mt-24 max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">
+            Frequently Asked Questions
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Can I change plans anytime?
+                </h3>
+                <p className="text-gray-400">
+                  Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  What happens if I exceed my limits?
+                </h3>
+                <p className="text-gray-400">
+                  You'll be charged according to our transparent overage rates. No surprises, just predictable scaling.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Is there a free trial for paid plans?
+                </h3>
+                <p className="text-gray-400">
+                  Yes! All paid plans come with a 14-day free trial. No credit card required to start.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Do you offer discounts for annual billing?
+                </h3>
+                <p className="text-gray-400">
+                  Yes! Save 20% when you choose annual billing on any paid plan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-24 text-center">
+          <h2 className="text-3xl font-bold text-white mb-6">
+            Ready to secure your environment variables?
+          </h2>
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Join thousands of developers who trust EnvHub with their secrets.
+          </p>
+          <Button
+            onClick={() => navigate('/')}
+            size="lg"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-4 text-xl font-bold"
+          >
+            Get Started Free
+          </Button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-slate-800 py-8 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-gray-600">
+              © 2025 EnvHub by Misbah. All rights reserved.
+            </p>
+            <div className="flex space-x-6">
+              <button
+                onClick={() => navigate('/privacy')}
+                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+              >
+                Privacy Policy
+              </button>
+              <button
+                onClick={() => navigate('/terms')}
+                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+              >
+                Terms of Service
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Pricing;
