@@ -101,21 +101,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="text-center">
-            {/* SVG Lock Logo */}
-            <div className="mx-auto w-24 h-24 flex items-center justify-center mb-8 shadow-2xl animate-fade-in-up bg-gradient-to-br from-purple-800 to-blue-900 rounded-2xl">
-              <svg width="56" height="56" viewBox="0 0 56 56" fill="none" className="mx-auto">
-                <rect width="56" height="56" rx="16" fill="url(#paint0_linear)" />
-                <path d="M18 26V20C18 15.58 21.58 12 26 12C30.42 12 34 15.58 34 20V26" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
-                <rect x="14" y="26" width="28" height="18" rx="6" stroke="#fff" strokeWidth="2.5" />
-                <circle cx="28" cy="35" r="3" fill="#fff" />
-                <defs>
-                  <linearGradient id="paint0_linear" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#7C3AED" />
-                    <stop offset="1" stopColor="#2563EB" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
             <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 animate-fade-in-up bg-gradient-to-r from-purple-400 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent drop-shadow-xl">
               🚨 Secrets Leak Every Day — Stop Being the Next One.
             </h1>
