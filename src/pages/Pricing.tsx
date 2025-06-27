@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, X, Info } from 'lucide-react';
+import { Check, X, Info, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Pricing = () => {
@@ -63,21 +62,22 @@ const Pricing = () => {
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
       <div className="border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => navigate('/')}
-              className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
-            >
-              EnvHub
-            </button>
+        <div className="flex items-center justify-between p-6">
+          <div className="flex items-center">
             <Button
               onClick={() => navigate('/')}
               variant="ghost"
-              className="text-gray-400 hover:text-white"
+              size="sm"
+              className="text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60"
             >
-              ← Back to Home
+              <ArrowLeft className="mr-2 h-4 w-4" />
             </Button>
+            <button
+              onClick={() => navigate('/')}
+              className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent ml-2"
+            >
+              EnvHub
+            </button>
           </div>
         </div>
       </div>
@@ -98,11 +98,10 @@ const Pricing = () => {
           {plans.map((plan, index) => (
             <Card
               key={plan.name}
-              className={`relative bg-slate-900/80 border-2 transition-all duration-300 hover:scale-105 ${
-                plan.popular 
-                  ? 'border-purple-500 shadow-2xl shadow-purple-500/20' 
-                  : 'border-slate-700 hover:border-slate-600'
-              }`}
+              className={`relative bg-slate-900/80 border-2 transition-all duration-300 hover:scale-105 ${plan.popular
+                ? 'border-purple-500 shadow-2xl shadow-purple-500/20'
+                : 'border-slate-700 hover:border-slate-600'
+                }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -111,7 +110,7 @@ const Pricing = () => {
                   </span>
                 </div>
               )}
-              
+
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl font-bold text-white mb-2">
                   {plan.name}
@@ -149,11 +148,10 @@ const Pricing = () => {
                 </ul>
 
                 <Button
-                  className={`w-full py-3 font-semibold ${
-                    plan.popular
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
-                      : ''
-                  }`}
+                  className={`w-full py-3 font-semibold ${plan.popular
+                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
+                    : ''
+                    }`}
                   variant={plan.buttonVariant}
                   onClick={() => navigate('/')}
                 >
