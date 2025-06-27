@@ -57,16 +57,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
   ];
 
   return (
-    <div className="w-full bg-black relative overflow-x-hidden">
+    <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-[320px] h-[320px] bg-purple-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-0 right-0 w-[280px] h-[280px] bg-blue-900 opacity-10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute top-0 left-0 w-[420px] h-[420px] bg-purple-900 opacity-30 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-0 right-0 w-[320px] h-[320px] bg-blue-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
       </div>
 
-      {/* Hero Section */}
+      {/* 1. Secrets Leak Alert Section */}
+      <section className="relative z-10 w-full bg-gradient-to-r from-red-900/80 via-fuchsia-900/80 to-blue-900/80 border-b-2 border-purple-800 shadow-2xl py-10 px-4">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="flex-1 mb-8 md:mb-0">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">
+              Secrets Are Leaking — By the Millions
+            </h2>
+            <p className="text-lg text-purple-200 font-medium max-w-xl">
+              Every month, millions of secrets like API keys, passwords, and tokens are accidentally exposed — putting entire systems at risk.
+            </p>
+          </div>
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+            <div className="bg-black/60 border border-red-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
+              <span className="text-4xl font-extrabold text-red-400 mb-1 animate-pulse">3.25M</span>
+              <span className="text-xs text-gray-400 text-center">secrets leaked/month<br />on GitHub (2024)</span>
+            </div>
+            <div className="bg-black/60 border border-fuchsia-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
+              <span className="text-4xl font-extrabold text-fuchsia-300 mb-1 animate-pulse">1.07M</span>
+              <span className="text-xs text-gray-400 text-center">auth keys/month<br />detected by GitGuardian (2023)</span>
+            </div>
+            <div className="bg-black/60 border border-yellow-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
+              <span className="text-4xl font-extrabold text-yellow-300 mb-1 animate-pulse">46,000+</span>
+              <span className="text-xs text-gray-400 text-center">OpenAI API keys/month<br />exposed — a 1,212× spike</span>
+            </div>
+          </div>
+        </div>
+        <p className="text-base text-gray-400 italic mt-8 max-w-3xl mx-auto text-center">
+          “90% of secrets remain valid for at least 5 days — and 70% are still live after 2 years.”
+          <br />
+          <span className="text-xs text-gray-500">— HelpNetSecurity</span>
+        </p>
+      </section>
+
+      {/* 2. Hero Section */}
       <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="text-center">
             {/* SVG Lock Logo */}
             <div className="mx-auto w-24 h-24 flex items-center justify-center mb-8 shadow-2xl animate-fade-in-up bg-gradient-to-br from-purple-800 to-blue-900 rounded-2xl">
@@ -84,13 +117,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               </svg>
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 animate-fade-in-up bg-gradient-to-r from-purple-400 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent drop-shadow-xl">
-              EnvHub
+              🚨 Secrets Leak Every Day — Stop Being the Next One.
             </h1>
             <p className="text-2xl md:text-3xl text-gray-200 mb-6 max-w-2xl mx-auto animate-fade-in-up font-semibold">
-              Secure, Share, and Automate Your Secrets — Instantly.
-            </p>
-            <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto animate-fade-in-up">
-              The all-in-one platform for environment variables and secrets. Trusted by fast-moving teams and solo devs. No leaks. No friction. Just speed and security.
+              EnvHub helps developers and teams securely manage, share, and sync environment variables — with end-to-end encryption and full CLI access.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
               <Button
@@ -98,14 +128,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-10 py-5 text-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow"
               >
-                🚀 Try EnvHub Free
+                🛡️ Start Free & Secure Your Secrets
               </Button>
               <Button
                 variant="outline"
                 size="lg"
-                className="border-gray-700 text-gray-300 hover:bg-gray-900 px-10 py-5 text-xl font-semibold transition-all duration-300 hover:scale-105"
+                className="border-gray-700 text-gray-900 hover:bg-gray-300 px-10 py-5 text-xl font-semibold transition-all duration-300 hover:scale-105"
               >
-                See Live Demo
+                View Pricing
               </Button>
             </div>
           </div>
