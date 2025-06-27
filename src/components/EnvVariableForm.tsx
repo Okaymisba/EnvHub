@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +27,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
   };
 
   const updateEntry = (id: string, field: 'name' | 'value', value: string) => {
-    setEntries(entries.map(entry => 
+    setEntries(entries.map(entry =>
       entry.id === id ? { ...entry, [field]: value } : entry
     ));
   };
@@ -44,42 +43,40 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl">
       <CardHeader>
         <CardTitle className="text-white flex items-center">
-          <Plus className="mr-2 h-5 w-5" />
+          <Plus className="mr-2 h-5 w-5 text-purple-400" />
           Add Environment Variables
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-4">
             {entries.map((entry, index) => (
-              <div key={entry.id} className="flex gap-3 items-end">
+              <div key={entry.id} className="flex flex-col sm:flex-row gap-3 items-end bg-gradient-to-r from-purple-900/30 to-blue-900/20 rounded-xl p-3 border border-purple-800">
                 <div className="flex-1">
-                  <Label className="text-gray-300 text-sm">Variable Name</Label>
+                  <Label className="text-gray-300 text-xs">Variable Name</Label>
                   <Input
                     value={entry.name}
                     onChange={(e) => updateEntry(entry.id!, 'name', e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key == ' ') {
-                        e.preventDefault();            
-                      }
+                      if (e.key == ' ') e.preventDefault();
                     }}
                     placeholder="API_KEY"
-                    className="bg-gray-800 border-gray-600 text-white font-mono"
+                    className="bg-black/70 border border-purple-800 text-white font-mono rounded-lg focus:border-blue-600 focus:ring-0"
                     required
                     autoComplete='off'
                   />
                 </div>
                 <div className="flex-1">
-                  <Label className="text-gray-300 text-sm">Value</Label>
+                  <Label className="text-gray-300 text-xs">Value</Label>
                   <Input
                     value={entry.value}
                     onChange={(e) => updateEntry(entry.id!, 'value', e.target.value)}
                     placeholder="your-secret-value"
                     type="password"
-                    className="bg-gray-800 border-gray-600 text-white font-mono"
+                    className="bg-black/70 border border-purple-800 text-white font-mono rounded-lg focus:border-blue-600 focus:ring-0"
                     required
                     autoComplete='new-password'
                   />
@@ -90,7 +87,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
                   size="sm"
                   onClick={() => removeEntry(entry.id!)}
                   disabled={entries.length === 1}
-                  className="border-gray-600 text-gray-400 hover:text-red-400 hover:border-red-600"
+                  className="border-gray-700 text-gray-400 hover:text-red-400 hover:border-red-600 rounded-lg"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -102,20 +99,20 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
             type="button"
             variant="outline"
             onClick={addEntry}
-            className="w-full border-gray-600 text-black-300 hover:bg-gray-200"
+            className="w-full border-purple-800 text-gray-900 hover:bg-gradient-to-r hover:from-purple-900/30 hover:to-blue-900/20 hover:text-white rounded-lg transition"
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Another Variable
           </Button>
 
-          <div className="border-t border-gray-700 pt-4">
-            <Label className="text-gray-300 text-sm">Project Password</Label>
+          <div className="border-t border-purple-900 pt-4">
+            <Label className="text-gray-300 text-xs">Project Password</Label>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter project password to encrypt variables"
-              className="bg-gray-800 border-gray-600 text-white"
+              className="bg-black/70 border border-purple-800 text-white rounded-lg focus:border-blue-600 focus:ring-0"
               required
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -126,7 +123,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
           <Button
             type="submit"
             disabled={loading || !password.trim() || entries.every(e => !e.name.trim() || !e.value.trim())}
-            className="w-full bg-green-600 hover:bg-green-700"
+            className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition disabled:opacity-60"
           >
             {loading ? (
               <>Encrypting & Saving...</>
