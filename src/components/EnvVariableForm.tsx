@@ -54,7 +54,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-4">
             {entries.map((entry, index) => (
-              <div key={entry.id} className="flex flex-col sm:flex-row gap-3 items-end bg-gradient-to-r from-purple-900/30 to-blue-900/20 rounded-xl p-3 border border-purple-800">
+              <div key={entry.id} className="flex flex-col sm:flex-row gap-3 items-stretch bg-gradient-to-r from-purple-900/30 to-blue-900/20 rounded-xl p-3 border border-purple-800">
                 <div className="flex-1">
                   <Label className="text-gray-300 text-xs">Variable Name</Label>
                   <Input
