@@ -505,14 +505,84 @@ export class SupabaseService {
     return this.getEnvVariables(projectId, latestVersion.id);
   }
 
-  static async deleteEnvVariable(variableId: string): Promise<void> {
+  static async deleteEnvVariable(variableId: string, password: string): Promise<void> {
+    // First get the variable details
+    const { data: variable, error: varError } = await supabase
+      .from('env_variables')
+      .select('*')
+      .eq('id', variableId)
+      .single();
+
+    if (varError) throw varError;
+
+    // Get current variables except the one being deleted
+    const currentVariables = await this.getCurrentEnvVariables(variable.project_id);
+    const remainingVariables = currentVariables.filter(v => v.id !== variableId);
+
+    // Get the next version number
+    const { data: existingVersions, error: countError } = await supabase
+      .from('env_versions')
+      .select('version_number')
+      .eq('project_id', variable.project_id)
+      .order('version_number', { ascending: false })
+      .limit(1);
+
+    if (countError) throw countError;
+
+    const nextVersionNumber = existingVersions?.length > 0
+      ? existingVersions[0].version_number + 1
+      : 1;
+
+    // Create version metadata
+    const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+
+    const { data: version, error: versionError } = await supabase
+      .from('env_versions')
+      .insert({
+        project_id: variable.project_id,
+        version_number: nextVersionNumber,
+        variable_count: remainingVariables.length,
+        salt: dummyEncryption.salt,
+        nonce: dummyEncryption.nonce,
+        tag: dummyEncryption.tag
+      })
+      .select()
+      .single();
+
+    if (versionError) throw versionError;
+
+    // Create individual encrypted environment variables
+    const envVariables = await Promise.all(
+      remainingVariables.map(async (v) => {
+        const decryptedValue = await this.decryptEnvValue(v, password);
+        const encryptedValue = await CryptoUtils.encrypt(decryptedValue, password);
+        return {
+          project_id: variable.project_id,
+          version_id: version.id,
+          env_name: v.env_name,
+          env_value_encrypted: encryptedValue.ciphertext,
+          salt: encryptedValue.salt,
+          nonce: encryptedValue.nonce,
+          tag: encryptedValue.tag
+        };
+      })
+    );
+
+    // Insert new version's variables
+    const { error: variablesError } = await supabase
+      .from('env_variables')
+      .insert(envVariables);
+
+    if (variablesError) throw variablesError;
+
+    // Delete the variable from the previous version
     const { error } = await supabase
       .from('env_variables')
       .delete()
       .eq('id', variableId);
 
     if (error) throw error;
-  }
+}
 
   static async createEnvVersion(
     projectId: string,

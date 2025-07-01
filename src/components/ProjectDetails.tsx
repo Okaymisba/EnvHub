@@ -182,7 +182,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         throw new Error('Invalid project password');
       }
 
-      await SupabaseService.deleteEnvVariable(variableId);
+      await SupabaseService.deleteEnvVariable(variableId, tempPassword);
       await loadProjectData();
       setDeletePrompt({ variableId: '', isOpen: false });
       setTempPassword('');
