@@ -337,7 +337,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                           </span>
                           <div className="font-mono text-xs mt-2">
                             {revealedValues[envVar.id] ? (
-                              <span className="text-white bg-black/60 px-2 py-1 rounded">
+                              <span className="text-white bg-black/60 px-2 py-1 rounded break-all whitespace-pre-wrap block w-full">
                                 {revealedValues[envVar.id]}
                               </span>
                             ) : (
