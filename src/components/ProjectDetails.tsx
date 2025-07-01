@@ -12,6 +12,7 @@ import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
 import { PasswordUtils } from '@/utils/passwordUtils';
 import { CryptoUtils } from '@/utils/crypto';
+import {CLIGuide} from "@/components/cliGuideMarkdown.tsx";
 
 interface ProjectDetailsProps {
   project: Project;
@@ -424,7 +425,17 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 </CardContent>
               </Card>
             )}
+
+            <Card className="bg-black/80 border border-purple-900 shadow-xl rounded-2xl max-w-3xl mx-auto">
+              <CardHeader>
+                <CardTitle className="text-white text-lg">📦 EnvHub CLI Guide</CardTitle>
+              </CardHeader>
+              <CardContent className="prose prose-invert max-w-none prose-pre:bg-transparent prose-code:bg-purple-950/60 prose-code:text-purple-300 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:border-purple-800/40">
+                <CLIGuide />
+              </CardContent>
+            </Card>
           </div>
+
         </div>
 
         {/* Password Prompt Modal */}
