@@ -35,7 +35,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white max-w-2xl w-full max-h-[80vh] overflow-y-auto p-0 [&>button]:hidden">
+      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white max-w-2xl w-full max-h-[80vh] overflow-y-auto p-0 [&>button]:hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-black/20 [&::-webkit-scrollbar-thumb]:bg-purple-900/50 hover:[&::-webkit-scrollbar-thumb]:bg-purple-800/70">
         {/* Animated background blob */}
         <div className="absolute -top-8 -left-8 w-32 h-32 sm:-top-16 sm:-left-16 sm:w-48 sm:h-48 bg-purple-900 opacity-20 rounded-full blur-3xl pointer-events-none" />
 
