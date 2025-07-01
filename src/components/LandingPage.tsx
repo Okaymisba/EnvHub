@@ -1,234 +1,273 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Zap, Users, Globe, Database, Settings } from 'lucide-react';
+import { Shield, Zap, Database, Lock, AlertTriangle, TrendingUp, GitBranch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface LandingPageProps {
   onGetStarted: () => void;
 }
 
-const featureImages = [
-  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
-  "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80"
+const features = [
+  {
+    icon: Shield,
+    title: "Zero-Knowledge Encryption",
+    description: "Your secrets are encrypted before they leave your device. Not even we can access them.",
+    gradient: "from-blue-600 to-cyan-500"
+  },
+  {
+    icon: Zap,
+    title: "Instant Detection",
+    description: "Real-time alerts if your secrets are exposed or compromised.",
+    gradient: "from-purple-600 to-pink-500"
+  },
+  {
+    icon: Database,
+    title: "Automated Rotation",
+    description: "Automatically rotate exposed secrets to prevent unauthorized access.",
+    gradient: "from-orange-600 to-red-500"
+  }
 ];
+
+const leakStats = [
+  {
+    value: "3.25M",
+    label: "secrets leaked/month on GitHub",
+    sublabel: "(2024)",
+    icon: AlertTriangle,
+    color: "text-red-400"
+  },
+  {
+    value: "1.07M",
+    label: "auth keys/month detected",
+    sublabel: "by GitGuardian (2023)",
+    icon: TrendingUp,
+    color: "text-orange-400"
+  },
+  {
+    value: "46K+",
+    label: "OpenAI API keys exposed monthly",
+    sublabel: "a 1,212× spike",
+    icon: Lock,
+    color: "text-yellow-400"
+  }
+];
+
+// ... (previous imports and interfaces remain the same)
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
   const navigate = useNavigate();
 
-  const features = [
-    {
-      icon: Shield,
-      title: "Ironclad Security",
-      description: "Your secrets are protected with zero-knowledge encryption. Only you and your team can access them.",
-      image: featureImages[0]
-    },
-    {
-      icon: Zap,
-      title: "Instant Collaboration",
-      description: "Invite teammates and share secrets in seconds. No more copy-paste or risky emails.",
-      image: featureImages[1]
-    },
-    {
-      icon: Database,
-      title: "CI/CD Ready",
-      description: "Integrate with GitHub Actions, Vercel, and more. Secure automation, zero hassle.",
-      image: featureImages[2]
-    },
-    {
-      icon: Globe,
-      title: "Global Access",
-      description: "Access your secrets securely from anywhere, on any device.",
-      image: featureImages[3]
-    },
-    {
-      icon: Settings,
-      title: "Developer Focused",
-      description: "CLI, API, and dashboard. Versioning, audit logs, and no vendor lock-in.",
-      image: featureImages[4]
-    },
-    {
-      icon: Users,
-      title: "Start in Seconds",
-      description: "No setup. No credit card. Sign in and secure your first project instantly.",
-      image: featureImages[5]
-    }
-  ];
-
   return (
     <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
-      {/* Animated Background Blobs */}
+      {/* Background Effects - keep the same */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-[420px] h-[420px] bg-purple-900 opacity-30 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-0 right-0 w-[320px] h-[320px] bg-blue-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-3xl animate-pulse-slow delay-200"></div>
+        <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-fuchsia-900/20 rounded-full blur-3xl animate-pulse-slow delay-500"></div>
       </div>
 
-      {/* 1. Secrets Leak Alert Section */}
-      <section className="relative z-10 w-full bg-gradient-to-r from-red-900/80 via-fuchsia-900/80 to-blue-900/80 border-b-2 border-purple-800 shadow-2xl py-10 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div className="flex-1 mb-8 md:mb-0">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">
-              Secrets Are Leaking — By the Millions
-            </h2>
-            <p className="text-lg text-purple-200 font-medium max-w-xl">
-              Every month, millions of secrets like API keys, passwords, and tokens are accidentally exposed — putting entire systems at risk.
-            </p>
-          </div>
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-            <div className="bg-black/60 border border-red-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
-              <span className="text-4xl font-extrabold text-red-400 mb-1 animate-pulse">3.25M</span>
-              <span className="text-xs text-gray-400 text-center">secrets leaked/month<br />on GitHub (2024)</span>
-            </div>
-            <div className="bg-black/60 border border-fuchsia-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
-              <span className="text-4xl font-extrabold text-fuchsia-300 mb-1 animate-pulse">1.07M</span>
-              <span className="text-xs text-gray-400 text-center">auth keys/month<br />detected by GitGuardian (2023)</span>
-            </div>
-            <div className="bg-black/60 border border-yellow-700 rounded-xl p-6 flex flex-col items-center shadow-lg">
-              <span className="text-4xl font-extrabold text-yellow-300 mb-1 animate-pulse">46,000+</span>
-              <span className="text-xs text-gray-400 text-center">OpenAI API keys/month<br />exposed — a 1,212× spike</span>
-            </div>
-          </div>
-        </div>
-        <p className="text-base text-gray-400 italic mt-8 max-w-3xl mx-auto text-center">
-          “90% of secrets remain valid for at least 5 days — and 70% are still live after 2 years.”
-          <br />
-          <span className="text-xs text-gray-500">— HelpNetSecurity</span>
-        </p>
-      </section>
-
-      {/* 2. Hero Section */}
+      {/* New Hero Section */}
       <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 animate-fade-in-up bg-gradient-to-r from-purple-400 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent drop-shadow-xl">
-              🚨 Secrets Leak Every Day — Stop Being the Next One.
+        <div className="max-w-6xl mx-auto px-4 pt-20">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-2 mb-6 animate-fade-in-up">
+              <GitBranch className="w-8 h-8 text-purple-400" />
+              <span className="text-lg text-gray-400 font-medium">Introducing EnvHub</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in-up">
+              The{" "}
+              <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+                GitHub for Secrets
+              </span>
             </h1>
-            <p className="text-2xl md:text-3xl text-gray-200 mb-6 max-w-2xl mx-auto animate-fade-in-up font-semibold">
-              EnvHub helps developers and teams securely manage, share, and sync environment variables — with end-to-end encryption and full CLI access.
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8 animate-fade-in-up delay-100">
+              Just like GitHub revolutionized code collaboration, 
+              EnvHub is transforming how teams manage and secure their secrets.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 animate-fade-in-up delay-200">
               <Button
                 onClick={onGetStarted}
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-10 py-5 text-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 
+                         text-white px-8 py-6 text-xl font-bold shadow-xl hover:shadow-purple-500/20 
+                         transition-all duration-300 hover:scale-105 group"
               >
-                🛡️ Start Free & Secure Your Secrets
+                Start Securing Now
+                <Shield className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
-                onClick={() => navigate('/pricing')}
                 variant="outline"
                 size="lg"
-                className="border-gray-700 text-gray-900 hover:bg-gray-300 px-10 py-5 text-xl font-semibold transition-all duration-300 hover:scale-105"
+                className="border-gray-700 text-gray-900 hover:text-gray px-8 py-6 text-xl hover:scale-105 group duration-300 transition-all"
+                onClick={() => navigate('/demo')}
               >
-                View Pricing
+                Watch Demo
               </Button>
             </div>
+            <div className="flex items-center justify-center gap-4 text-sm text-gray-400 animate-fade-in-up delay-300">
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4 text-green-400" />
+                Military-grade encryption
+              </div>
+              <div className="h-1 w-1 bg-gray-700 rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-blue-400" />
+                Secure Storage
+              </div>
+              <div className="h-1 w-1 bg-gray-700 rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-yellow-400" />
+                Instant Setup
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Section - modified to be more impactful */}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 flex items-center justify-center gap-3">
+              <AlertTriangle className="w-8 h-8 text-red-400 animate-pulse" />
+              <span>The Secret Crisis</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-12 animate-fade-in-up delay-100">
+              Every month, millions of secrets like API keys, passwords, and tokens are accidentally exposed — putting entire systems at risk.
+            </p>
+          </div>
+
+          {/* Alert Section - Now with consistent background */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {leakStats.map((stat, index) => (
+              <Card key={index}
+                className="bg-slate-900/50 border-slate-800 hover:border-purple-500/50 transition-all duration-300
+                              animate-fade-in-up group backdrop-blur-sm"
+                style={{ animationDelay: `${index * 100 + 200}ms` }}>
+                <CardContent className="p-6">
+                  <stat.icon className={`w-6 h-6 ${stat.color} mb-3 group-hover:scale-110 transition-transform`} />
+                  <div className={`text-4xl font-bold mb-2 ${stat.color}`}>
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-300 text-sm font-medium">
+                    {stat.label}
+                  </div>
+                  <div className="text-gray-500 text-xs">
+                    {stat.sublabel}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <blockquote className="text-lg text-gray-300 text-center italic max-w-3xl mx-auto border-l-4 border-purple-500/50 pl-4 animate-fade-in-up delay-300 mb-16">
+            "90% of secrets remain valid for at least 5 days — and 70% are still live after 2 years."
+            <footer className="text-gray-500 text-sm mt-2">— HelpNetSecurity</footer>
+          </blockquote>
+        </div>
+
+        {/* Main Hero Section */}
+        <div className="max-w-5xl mx-auto px-4 py-16 text-center">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in-up">
+            <span className="bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
+              Stop Being the Next Statistic
+            </span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
+            EnvHub provides military-grade encryption and real-time monitoring to protect your secrets before they become part of these statistics.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200">
+            <Button
+              onClick={onGetStarted}
+              size="lg"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
+                         text-white px-8 py-6 text-xl font-bold shadow-xl hover:shadow-purple-500/20
+                         transition-all duration-300 hover:scale-105"
+            >
+              Secure Your Secrets Now
+              <Shield className="ml-2 w-5 h-5" />
+            </Button>
+            <Button
+              onClick={() => navigate('/pricing')}
+              variant="outline"
+              size="lg"
+              className="border-gray-700 text-gray-900 hover:gray px-8 py-6 text-xl hover:scale-105 group duration-300 transition-all"
+            >
+              Pricing
+            </Button>
           </div>
         </div>
-      </div>
 
-      {/* Features Grid */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-white mb-4 animate-fade-in-up">
-            Why Developers Love EnvHub
-          </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto animate-fade-in-up">
-            Effortless security. Blazing speed. Built for modern teams.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="bg-slate-900/80 border-slate-800 hover:bg-slate-900/90 transition-all duration-300 hover:scale-105 animate-fade-in-up group shadow-xl"
-              style={{ animationDelay: `${index * 120}ms` }}
-            >
-              <CardContent className="p-0">
-                <img
-                  src={feature.image}
-                  alt={feature.title}
-                  className="w-full h-40 object-cover rounded-t-xl transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="p-7">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-md">
-                      <feature.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white">{feature.title}</h3>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed text-base">{feature.description}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="relative z-10 bg-gradient-to-r from-purple-900/40 to-blue-900/40 py-20">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-extrabold text-white mb-6 animate-fade-in-up">
-            Ready to Secure Your Workflow?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up">
-            Join thousands of developers who trust EnvHub. Start free — no credit card required.
-          </p>
-          <Button
-            onClick={onGetStarted}
-            size="lg"
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-14 py-6 text-2xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-bounce-slow"
-          >
-            Get Started — It’s Free!
-          </Button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="relative z-10 border-t border-slate-800 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-600">
-              © 2025 EnvHub by Misbah. All rights reserved.
-            </p>
-            <div className="flex space-x-6">
-              <button
-                onClick={() => navigate('/pricing')}
-                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+        {/* Features Section */}
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <div className="grid md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <Card
+                key={index}
+                className="bg-slate-900/50 border-slate-800 hover:border-purple-500/50
+                           transition-all duration-300 hover:scale-105 animate-fade-in-up backdrop-blur-sm"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
+                <CardContent className="p-6">
+                  <div className={`w-12 h-12 bg-gradient-to-r ${feature.gradient} rounded-xl 
+                                  flex items-center justify-center mb-4`}>
+                    <feature.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                  <p className="text-gray-300">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="max-w-4xl mx-auto px-4 py-16">
+          <Card className="bg-slate-900/50 border-purple-500/20 p-8 backdrop-blur-sm">
+            <div className="text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Don't Wait Until Your Secrets Are Exposed
+              </h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Join thousands of developers who trust EnvHub to protect their sensitive data.
+              </p>
+              <Button
+                onClick={onGetStarted}
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
+                         text-white px-8 py-6 text-xl font-bold shadow-xl
+                         transition-all duration-300 hover:scale-105"
+              >
+                Start Protecting Your Secrets
+                <Lock className="ml-2 w-5 h-5" />
+              </Button>
+              <p className="text-gray-400 mt-4">No credit card required • Set up in 2 minutes</p>
+            </div>
+          </Card>
+        </div>
+
+        {/* Footer */}
+        <footer className="border-t border-slate-800 py-8">
+          <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400">© 2025 EnvHub by Misbah</p>
+            <div className="flex gap-8">
+              <button onClick={() => navigate('/pricing')} className="text-gray-400 hover:text-purple-400 transition-colors">
                 Pricing
               </button>
-              <button
-                onClick={() => navigate('/privacy')}
-                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
-              >
-                Privacy Policy
+              <button onClick={() => navigate('/privacy')} className="text-gray-400 hover:text-purple-400 transition-colors">
+                Privacy
               </button>
-              <button
-                onClick={() => navigate('/terms')}
-                className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
-              >
-                Terms of Service
+              <button onClick={() => navigate('/terms')} className="text-gray-400 hover:text-purple-400 transition-colors">
+                Terms
               </button>
             </div>
           </div>
-        </div>
+        </footer>
       </div>
 
       {/* Animations */}
       <style>{`
         .animate-fade-in-up {
           opacity: 0;
-          transform: translateY(30px);
-          animation: fadeInUp 0.8s forwards;
-        }
-        .animate-bounce-slow {
-          animation: bounce 2.5s infinite;
+          transform: translateY(20px);
+          animation: fadeInUp 0.6s forwards;
         }
         .animate-pulse-slow {
           animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -236,17 +275,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         @keyframes fadeInUp {
           to {
             opacity: 1;
-            transform: none;
+            transform: translateY(0);
           }
         }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0);}
-          50% { transform: translateY(-8px);}
-        }
         @keyframes pulse {
-          0%, 100% { opacity: 0.3;}
-          50% { opacity: 0.6;}
+          0%, 100% { opacity: 0.2;}
+          50% { opacity: 0.4;}
         }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-500 { animation-delay: 500ms; }
       `}</style>
     </div>
   );
