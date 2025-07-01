@@ -34,6 +34,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   const [passwordPrompt, setPasswordPrompt] = useState<{ variableId: string; isOpen: boolean }>({ variableId: '', isOpen: false });
   const [deletePrompt, setDeletePrompt] = useState<{ variableId: string; isOpen: boolean }>({ variableId: '', isOpen: false });
   const [tempPassword, setTempPassword] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -174,7 +175,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       });
       return;
     }
-
+    setIsDeleting(true);
     try {
       // Verify password first
       const isValidPassword = await SupabaseService.verifyProjectPassword(project.id, tempPassword);
@@ -197,6 +198,8 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         description: error.message || 'Failed to delete variable',
         variant: 'destructive'
       });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -500,9 +503,9 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                     <Button
                       onClick={() => handleDeleteVariable(deletePrompt.variableId)}
                       className="bg-gradient-to-r from-red-600 to-purple-700 hover:from-red-700 hover:to-purple-800 text-white"
-                      disabled={!tempPassword.trim()}
+                      disabled={!tempPassword.trim() || isDeleting}
                     >
-                      Delete
+                      {isDeleting ? 'Deleting...' : 'Delete'}
                     </Button>
                   </div>
                 </div>
