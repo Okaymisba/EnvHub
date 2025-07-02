@@ -13,6 +13,7 @@ import { Notification } from '@/types/notification';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
 import { Inbox } from '@/components/Inbox';
+import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { useNavigate } from 'react-router-dom';
 
 interface ProfileDropdownProps {
@@ -22,6 +23,7 @@ interface ProfileDropdownProps {
 
 export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout }) => {
   const [showInbox, setShowInbox] = useState(false);
+  const [showSubscription, setShowSubscription] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const { toast } = useToast();
@@ -84,6 +86,10 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
     }
   };
 
+  const handleSubscriptionClick = () => {
+    setShowSubscription(true);
+  };
+
   if (showInbox) {
     return (
       <Inbox
@@ -94,6 +100,10 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
         onMarkAsRead={loadNotifications}
       />
     );
+  }
+
+  if (showSubscription) {
+    return <SubscriptionManager onClose={() => setShowSubscription(false)} />;
   }
 
   return (
@@ -143,7 +153,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
           )}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => navigate('/pricing')}
+          onClick={handleSubscriptionClick}
           className="text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 cursor-pointer transition-all duration-200"
         >
           <CreditCard className="mr-2 h-4 w-4" />

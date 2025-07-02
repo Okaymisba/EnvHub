@@ -261,6 +261,87 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          card_brand: string | null
+          card_last_four: string | null
+          created_at: string | null
+          email: string
+          ends_at: string | null
+          id: string
+          is_paused: boolean | null
+          is_usage_based: boolean | null
+          lemon_squeezy_id: string
+          name: string
+          order_id: number | null
+          price: string
+          product_id: number
+          product_name: string
+          renews_at: string | null
+          setup_fee: string | null
+          status: string
+          status_formatted: string
+          subscription_item_id: number | null
+          trial_ends_at: string | null
+          updated_at: string | null
+          user_id: string
+          variant_id: number
+          variant_name: string
+        }
+        Insert: {
+          card_brand?: string | null
+          card_last_four?: string | null
+          created_at?: string | null
+          email: string
+          ends_at?: string | null
+          id?: string
+          is_paused?: boolean | null
+          is_usage_based?: boolean | null
+          lemon_squeezy_id: string
+          name: string
+          order_id?: number | null
+          price: string
+          product_id: number
+          product_name: string
+          renews_at?: string | null
+          setup_fee?: string | null
+          status: string
+          status_formatted: string
+          subscription_item_id?: number | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          variant_id: number
+          variant_name: string
+        }
+        Update: {
+          card_brand?: string | null
+          card_last_four?: string | null
+          created_at?: string | null
+          email?: string
+          ends_at?: string | null
+          id?: string
+          is_paused?: boolean | null
+          is_usage_based?: boolean | null
+          lemon_squeezy_id?: string
+          name?: string
+          order_id?: number | null
+          price?: string
+          product_id?: number
+          product_name?: string
+          renews_at?: string | null
+          setup_fee?: string | null
+          status?: string
+          status_formatted?: string
+          subscription_item_id?: number | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          variant_id?: number
+          variant_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

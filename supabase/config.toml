@@ -1,1 +1,21 @@
+
 project_id = "otzukwvudeucxbrrnhvx"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+port = 54324
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+
+[functions.lemon-squeezy-webhook]
+verify_jwt = false
+
+[functions.create-checkout]
+verify_jwt = true
