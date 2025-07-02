@@ -115,10 +115,10 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
 
           {limits && (
             <div className="px-6 mb-4">
-              <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+              <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">Current Plan: {limits.plan}</span>
-                  <span className="text-sm text-gray-400">
+                  <span className="text-sm text-white">Current Plan: {limits.plan}</span>
+                  <span className="text-sm text-white">
                     Projects: {currentCount}/{limits.max_projects}
                   </span>
                 </div>
@@ -174,7 +174,7 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
                 required
                 disabled={!canCreate}
               />
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-white mt-2">
                 This password encrypts your secrets. Don't lose it!
               </p>
             </div>

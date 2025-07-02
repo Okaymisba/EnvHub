@@ -118,7 +118,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
           Add Environment Variables
         </CardTitle>
         {limits && (
-          <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl p-3 mt-4 pb-4">
+          <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-lg p-3 mt-4 pb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-white">Plan: {limits.plan}</span>
               <span className="text-sm text-white ">
