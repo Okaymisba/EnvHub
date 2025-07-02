@@ -14,9 +14,10 @@ interface EnvVariableFormProps {
   onSave: (entries: EnvEntry[], password: string) => Promise<void>;
   loading: boolean;
   projectId: string;
+  length: number;
 }
 
-export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loading, projectId }) => {
+export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loading, projectId, length}) => {
   const [entries, setEntries] = useState<EnvEntry[]>([{ name: '', value: '', id: '1' }]);
   const [password, setPassword] = useState('');
   const [limits, setLimits] = useState<SubscriptionLimits | null>(null);
@@ -107,7 +108,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
     }
   };
 
-  const validEntryCount = entries.filter(entry => entry.name.trim() && entry.value.trim()).length;
+  const validEntryCount = length;
 
   return (
     <Card className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl">
@@ -117,10 +118,10 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
           Add Environment Variables
         </CardTitle>
         {limits && (
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 mt-4">
+          <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl p-3 mt-4 pb-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-400">Plan: {limits.plan}</span>
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-white">Plan: {limits.plan}</span>
+              <span className="text-sm text-white ">
                 Variables: {validEntryCount}/{limits.max_env_vars_per_project}
               </span>
             </div>

@@ -403,7 +403,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           {/* Add Variables Form - Right Side */}
           <div>
             {canModify ? (
-              <EnvVariableForm onSave={handleSaveEnvVariables} loading={loading} projectId={project.id} />
+              <EnvVariableForm onSave={handleSaveEnvVariables} loading={loading} projectId={project.id} length={envVariables.length} />
             ) : (
               <Card className="bg-black/80 border border-purple-900 shadow-xl rounded-2xl">
                 <CardHeader>
