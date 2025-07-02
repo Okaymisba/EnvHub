@@ -9,7 +9,7 @@ const TermsOfService = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+    <div className="min-h-screen bg-gradient-to-br bg-black relative overflow-x-hidden p-4">
       <div className="max-w-4xl mx-auto py-8">
         <Button
           variant="ghost"
@@ -20,7 +20,7 @@ const TermsOfService = () => {
           Back to Home
         </Button>
 
-        <Card className="bg-slate-800 border-slate-700">
+        <Card className="bg-black/80 border border-purple-900 shadow-xl rounded-2xl">
           <CardHeader>
             <CardTitle className="text-3xl font-bold text-white">Terms of Service</CardTitle>
             <p className="text-slate-400">Last updated: December 2024</p>
@@ -86,11 +86,16 @@ const TermsOfService = () => {
                 retention policies.
               </p>
             </section>
-
             <section>
-              <h2 className="text-xl font-semibold text-white mb-3">8. Contact Information</h2>
+              <h2 className="text-xl font-semibold text-white mb-3">8. Cookies and Third-Party Advertising</h2>
               <p>
-                For questions regarding these Terms of Service, please contact us at legal@envhub.dev
+                We use cookies and may partner with third-party services such as Google AdSense to display ads. These services may use cookies and similar technologies to collect information about your use of our service. By using EnvHub, you consent to such tracking and data usage as outlined in our Privacy Policy.
+              </p>
+            </section>
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">9. Contact Information</h2>
+              <p>
+                For questions regarding these Terms of Service, please contact me at msbahsarfaraz@gmail.com
               </p>
             </section>
           </CardContent>

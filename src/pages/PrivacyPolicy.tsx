@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+    <div className="min-h-screen bg-black relative overflow-x-hidden p-4">
       <div className="max-w-4xl mx-auto py-8">
         <Button
           variant="ghost"
@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
           Back to Home
         </Button>
 
-        <Card className="bg-slate-800 border-slate-700">
+        <Card className="bg-black/80 border border-purple-900 shadow-xl rounded-2xl">
           <CardHeader>
             <CardTitle className="text-3xl font-bold text-white">Privacy Policy</CardTitle>
             <p className="text-slate-400">Last updated: December 2024</p>
@@ -71,7 +71,13 @@ const PrivacyPolicy = () => {
             <section>
               <h2 className="text-xl font-semibold text-white mb-3">6. Contact Us</h2>
               <p>
-                If you have any questions about this Privacy Policy, please contact us at privacy@envhub.dev
+                If you have any questions about this Privacy Policy, please contact me at msbahsarfaraz@gmail.com
+              </p>
+            </section>
+            <section>
+              <h2 className="text-xl font-semibold text-white mb-3">7. Cookies and Advertising</h2>
+              <p>
+                We use cookies and similar technologies to improve your experience and deliver relevant advertising. EnvHub may display ads served by third-party vendors, including Google, which use cookies to serve ads based on your prior visits to this or other websites.
               </p>
             </section>
           </CardContent>
