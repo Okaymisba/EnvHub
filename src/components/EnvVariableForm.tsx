@@ -32,9 +32,9 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
       const validEntries = entries.filter(entry => entry.name.trim() && entry.value.trim());
       const [limitsResult, canAddResult] = await Promise.all([
         SubscriptionLimitService.getUserSubscriptionLimits(),
-        SubscriptionLimitService.canUserAddEnvVars(projectId, validEntries.length)
+        SubscriptionLimitService.canUserAddEnvVars(projectId, validEntries.length),
       ]);
-      
+
       setLimits(limitsResult);
       setCanAddVars(canAddResult);
     } catch (error) {

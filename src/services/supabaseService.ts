@@ -556,7 +556,9 @@ export class SupabaseService {
       remainingVariables.map(async (v) => {
         const decryptedValue = await this.decryptEnvValue(v, password);
         const encryptedValue = await CryptoUtils.encrypt(decryptedValue, password);
+        const user = await this.getCurrentUser();
         return {
+          user_id: user?.id,
           project_id: variable.project_id,
           version_id: version.id,
           env_name: v.env_name,

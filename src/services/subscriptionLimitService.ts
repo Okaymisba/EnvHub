@@ -40,9 +40,9 @@ export class SubscriptionLimitService {
     if (!user) throw new Error('User not authenticated');
 
     const { data, error } = await supabase.rpc('can_user_add_env_vars', {
-      user_uuid: user.id,
+      new_var_count: newVarCount,
       project_uuid: projectId,
-      new_var_count: newVarCount
+      user_uuid: user.id,
     });
 
     if (error) throw error;
