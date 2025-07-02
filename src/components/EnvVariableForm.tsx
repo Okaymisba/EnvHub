@@ -1,23 +1,67 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Trash2, Save } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Plus, Trash2, Save, AlertTriangle, Crown } from 'lucide-react';
 import { EnvEntry } from '@/types/project';
+import { SubscriptionLimitService, SubscriptionLimits } from '@/services/subscriptionLimitService';
+import { useToast } from '@/hooks/use-toast';
 
 interface EnvVariableFormProps {
   onSave: (entries: EnvEntry[], password: string) => Promise<void>;
   loading: boolean;
+  projectId: string;
 }
 
-export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loading }) => {
+export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loading, projectId }) => {
   const [entries, setEntries] = useState<EnvEntry[]>([{ name: '', value: '', id: '1' }]);
   const [password, setPassword] = useState('');
+  const [limits, setLimits] = useState<SubscriptionLimits | null>(null);
+  const [canAddVars, setCanAddVars] = useState(true);
+  const { toast } = useToast();
 
-  const addEntry = () => {
+  useEffect(() => {
+    checkLimits();
+  }, [projectId, entries.length]);
+
+  const checkLimits = async () => {
+    try {
+      const validEntries = entries.filter(entry => entry.name.trim() && entry.value.trim());
+      const [limitsResult, canAddResult] = await Promise.all([
+        SubscriptionLimitService.getUserSubscriptionLimits(),
+        SubscriptionLimitService.canUserAddEnvVars(projectId, validEntries.length)
+      ]);
+      
+      setLimits(limitsResult);
+      setCanAddVars(canAddResult);
+    } catch (error) {
+      console.error('Failed to check limits:', error);
+    }
+  };
+
+  const addEntry = async () => {
     const newId = Date.now().toString();
-    setEntries([...entries, { name: '', value: '', id: newId }]);
+    const newEntries = [...entries, { name: '', value: '', id: newId }];
+    
+    // Check if adding this entry would exceed limits
+    try {
+      const canAdd = await SubscriptionLimitService.canUserAddEnvVars(projectId, newEntries.filter(e => e.name.trim() && e.value.trim()).length);
+      if (!canAdd && limits) {
+        toast({
+          title: 'Environment Variable Limit',
+          description: `Your ${limits.plan} plan allows up to ${limits.max_env_vars_per_project} environment variables per project.`,
+          variant: 'destructive'
+        });
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to check limits:', error);
+    }
+    
+    setEntries(newEntries);
   };
 
   const removeEntry = (id: string) => {
@@ -37,10 +81,33 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
     const validEntries = entries.filter(entry => entry.name.trim() && entry.value.trim());
     if (validEntries.length === 0 || !password.trim()) return;
 
-    await onSave(validEntries, password);
-    setEntries([{ name: '', value: '', id: '1' }]);
-    setPassword('');
+    if (!canAddVars) {
+      toast({
+        title: 'Environment Variable Limit Reached',
+        description: `You've reached your ${limits?.plan} plan limit. Upgrade to add more environment variables.`,
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      await onSave(validEntries, password);
+      setEntries([{ name: '', value: '', id: '1' }]);
+      setPassword('');
+    } catch (error: any) {
+      if (error.message?.includes('check_user_can_add_env_vars')) {
+        toast({
+          title: 'Environment Variable Limit Reached',
+          description: `You've reached your subscription limit for environment variables in this project. Please upgrade your plan.`,
+          variant: 'destructive'
+        });
+      } else {
+        throw error; // Re-throw other errors to be handled by parent
+      }
+    }
   };
+
+  const validEntryCount = entries.filter(entry => entry.name.trim() && entry.value.trim()).length;
 
   return (
     <Card className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl">
@@ -49,8 +116,37 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
           <Plus className="mr-2 h-5 w-5 text-purple-400" />
           Add Environment Variables
         </CardTitle>
+        {limits && (
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-400">Plan: {limits.plan}</span>
+              <span className="text-sm text-gray-400">
+                Variables: {validEntryCount}/{limits.max_env_vars_per_project}
+              </span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div 
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  validEntryCount >= limits.max_env_vars_per_project ? 'bg-red-600' : 'bg-purple-600'
+                }`}
+                style={{ width: `${Math.min(100, (validEntryCount / limits.max_env_vars_per_project) * 100)}%` }}
+              />
+            </div>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
+        {!canAddVars && limits && validEntryCount > 0 && (
+          <Alert className="border-orange-600 bg-orange-900/20 mb-6">
+            <AlertTriangle className="h-4 w-4 text-orange-400" />
+            <AlertDescription className="text-orange-200">
+              You've reached your {limits.plan} plan limit of {limits.max_env_vars_per_project} environment variables per project.
+              <br />
+              <span className="text-orange-300 font-medium">Upgrade your plan to add more variables.</span>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-4">
             {entries.map((entry, index) => (
@@ -95,15 +191,31 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
             ))}
           </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={addEntry}
-            className="w-full border-purple-800 text-gray-900 hover:bg-gradient-to-r hover:from-purple-900/30 hover:to-blue-900/20 hover:text-white rounded-lg transition"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Another Variable
-          </Button>
+          {canAddVars ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addEntry}
+              className="w-full border-purple-800 text-gray-900 hover:bg-gradient-to-r hover:from-purple-900/30 hover:to-blue-900/20 hover:text-white rounded-lg transition"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Another Variable
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition"
+              onClick={() => {
+                toast({
+                  title: 'Upgrade Required',
+                  description: 'Please upgrade your plan to add more environment variables',
+                });
+              }}
+            >
+              <Crown className="mr-2 h-4 w-4" />
+              Upgrade to Add More Variables
+            </Button>
+          )}
 
           <div className="border-t border-purple-900 pt-4">
             <Label className="text-gray-300 text-xs">Project Password</Label>
@@ -122,7 +234,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
 
           <Button
             type="submit"
-            disabled={loading || !password.trim() || entries.every(e => !e.name.trim() || !e.value.trim())}
+            disabled={loading || !password.trim() || entries.every(e => !e.name.trim() || !e.value.trim()) || !canAddVars}
             className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition disabled:opacity-60"
           >
             {loading ? (

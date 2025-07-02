@@ -1,0 +1,64 @@
+
+import { supabase } from '@/integrations/supabase/client';
+
+export interface SubscriptionLimits {
+  plan: string;
+  max_projects: number;
+  max_env_vars_per_project: number;
+  max_team_members: number;
+  has_cli_access: boolean;
+}
+
+export class SubscriptionLimitService {
+  static async getUserSubscriptionLimits(): Promise<SubscriptionLimits> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase.rpc('get_user_subscription_limits', {
+      user_uuid: user.id
+    });
+
+    if (error) throw error;
+
+    return data[0] as SubscriptionLimits;
+  }
+
+  static async canUserCreateProject(): Promise<boolean> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase.rpc('can_user_create_project', {
+      user_uuid: user.id
+    });
+
+    if (error) throw error;
+    return data;
+  }
+
+  static async canUserAddEnvVars(projectId: string, newVarCount: number = 1): Promise<boolean> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase.rpc('can_user_add_env_vars', {
+      user_uuid: user.id,
+      project_uuid: projectId,
+      new_var_count: newVarCount
+    });
+
+    if (error) throw error;
+    return data;
+  }
+
+  static async getCurrentProjectCount(): Promise<number> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('projects')
+      .select('id', { count: 'exact' })
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+    return data?.length || 0;
+  }
+}
