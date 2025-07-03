@@ -95,7 +95,7 @@ const TermsOfService = () => {
             <section>
               <h2 className="text-xl font-semibold text-white mb-3">9. Contact Information</h2>
               <p>
-                For questions regarding these Terms of Service, please contact me at msbahsarfaraz@gmail.com
+                For questions regarding these Terms of Service, please contact us at msbahsarfaraz@gmail.com
               </p>
             </section>
           </CardContent>
