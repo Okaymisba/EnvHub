@@ -94,14 +94,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 Start Securing Now
                 <Shield className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-gray-700 text-gray-900 hover:text-gray px-8 py-6 text-xl hover:scale-105 group duration-300 transition-all"
-                onClick={() => navigate('/demo')}
-              >
-                Watch Demo
-              </Button>
             </div>
             <div className="flex items-center justify-center gap-4 text-sm text-gray-400 animate-fade-in-up delay-300">
               <div className="flex items-center gap-2">
