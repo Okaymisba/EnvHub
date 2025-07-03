@@ -192,7 +192,7 @@ const Pricing = () => {
                   Is there a free trial for paid plans?
                 </h3>
                 <p className="text-gray-400">
-                  Yes! All paid plans come with a 14-day free trial. No credit card required to start.
+                  Nope! there is no free trial for paid plans.
                 </p>
               </div>
               <div>
@@ -200,7 +200,7 @@ const Pricing = () => {
                   Do you offer discounts for annual billing?
                 </h3>
                 <p className="text-gray-400">
-                  Yes! Save 20% when you choose annual billing on any paid plan.
+                  No, there is no annual billing.
                 </p>
               </div>
             </div>
