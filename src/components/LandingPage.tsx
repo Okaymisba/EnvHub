@@ -231,9 +231,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               <Button
                 onClick={onGetStarted}
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
-                         text-white px-8 py-6 text-xl font-bold shadow-xl
-                         transition-all duration-300 hover:scale-105"
+                className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
+           text-white px-4 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold shadow-xl
+           transition-all duration-300 hover:scale-105 flex items-center justify-center"
               >
                 Start Protecting Your Secrets
                 <Lock className="ml-2 w-5 h-5" />
