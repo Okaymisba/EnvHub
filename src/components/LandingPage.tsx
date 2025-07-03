@@ -176,7 +176,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               onClick={onGetStarted}
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
-                         text-white px-8 py-6 text-xl font-bold shadow-xl hover:shadow-purple-500/20
+                         text-white px-8 py-6 text-lg sm:text-xl font-bold shadow-xl
                          transition-all duration-300 hover:scale-105"
             >
               Secure Your Secrets Now
@@ -186,7 +186,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               onClick={() => navigate('/pricing')}
               variant="outline"
               size="lg"
-              className="border-gray-700 text-gray-900 hover:gray px-8 py-6 text-xl hover:scale-105 group duration-300 transition-all"
+              className="border-gray-700 text-gray-900 hover:gray px-8 py-6 text-lg sm:text-xl hover:scale-105 group duration-300 transition-all"
             >
               Pricing
             </Button>
@@ -236,16 +236,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               <p className="text-xl text-gray-300 mb-8">
                 Join thousands of developers who trust EnvHub to protect their sensitive data.
               </p>
-              <Button
-                onClick={onGetStarted}
-                size="lg"
-                className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
-           text-white px-4 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold shadow-xl
-           transition-all duration-300 hover:scale-105 flex items-center justify-center"
-              >
-                Start Protecting Your Secrets
-                <Lock className="ml-2 w-5 h-5" />
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  onClick={onGetStarted}
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
+                    text-white px-8 py-6 text-lg sm:text-xl font-bold shadow-xl
+                    transition-all duration-300 hover:scale-105 flex items-center"
+                >
+                  Start Protecting Your Secrets
+                  <Lock className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
               <p className="text-gray-400 mt-4">No credit card required • Set up in 2 minutes</p>
             </div>
           </Card>
