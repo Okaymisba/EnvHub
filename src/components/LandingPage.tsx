@@ -11,21 +11,21 @@ interface LandingPageProps {
 const features = [
   {
     icon: Shield,
-    title: "Zero-Knowledge Encryption",
-    description: "Your secrets are encrypted before they leave your device. Not even we can access them.",
+    title: "Military-Grade Encryption",
+    description: "End-to-end encryption with zero-trust architecture ensures your secrets are never exposed, even to us.",
     gradient: "from-blue-600 to-cyan-500"
   },
   {
-    icon: Zap,
-    title: "Instant Detection",
-    description: "Real-time alerts if your secrets are exposed or compromised.",
+    icon: GitBranch,
+    title: "CLI Integration",
+    description: "Seamlessly sync with your GitHub, GitLab, or Bitbucket repositories with EnvHub CLI.",
     gradient: "from-purple-600 to-pink-500"
   },
   {
-    icon: Database,
-    title: "Automated Rotation",
-    description: "Automatically rotate exposed secrets to prevent unauthorized access.",
-    gradient: "from-orange-600 to-red-500"
+    icon: Lock,
+    title: "Fine-Grained Access Control",
+    description: "Define who can access what with role-based permissions and just-in-time access approvals.",
+    gradient: "from-emerald-600 to-teal-500"
   }
 ];
 
@@ -52,8 +52,6 @@ const leakStats = [
     color: "text-yellow-400"
   }
 ];
-
-// ... (previous imports and interfaces remain the same)
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
   const navigate = useNavigate();
@@ -138,7 +136,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             {leakStats.map((stat, index) => (
               <Card key={index}
-                className="bg-slate-900/50 border-slate-800 hover:border-purple-500/50 transition-all duration-300
+                className="bg-black border border-slate-800 hover:border-purple-500/50 transition-all duration-300
                               animate-fade-in-up group backdrop-blur-sm"
                 style={{ animationDelay: `${index * 100 + 200}ms` }}>
                 <CardContent className="p-6">
@@ -196,31 +194,41 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         </div>
 
         {/* Features Section */}
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="bg-slate-900/50 border-slate-800 hover:border-purple-500/50
-                           transition-all duration-300 hover:scale-105 animate-fade-in-up backdrop-blur-sm"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <CardContent className="p-6">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${feature.gradient} rounded-xl 
-                                  flex items-center justify-center mb-4`}>
-                    <feature.icon className="w-6 h-6 text-white" />
+        <section className="py-20 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Enterprise-Grade Secret Management
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Everything you need to secure your application's sensitive data
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <div 
+                  key={index}
+                  className="relative group"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                >
+                  <div className="absolute -inset-0.5 bg-gradient-to-r rounded-xl opacity-70 group-hover:opacity-100 transition duration-300 group-hover:duration-200 blur" />
+                  <div className="relative h-full bg-black/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 group-hover:border-transparent transition-all duration-300">
+                    <div className={`inline-flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${feature.gradient} text-white`}>
+                      <feature.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                    <p className="text-gray-300">{feature.description}</p>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                  <p className="text-gray-300">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* CTA Section */}
         <div className="max-w-4xl mx-auto px-4 py-16">
-          <Card className="bg-slate-900/50 border-purple-500/20 p-8 backdrop-blur-sm">
+          <Card className="bg-black/50 border-purple-500/20 p-8 backdrop-blur-sm">
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
                 Don't Wait Until Your Secrets Are Exposed
@@ -246,7 +254,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         {/* Footer */}
         <footer className="border-t border-slate-800 py-8">
           <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400">© 2025 EnvHub by Misbah</p>
+            <p className="text-gray-400"> 2025 EnvHub by Misbah</p>
             <div className="flex gap-8">
               <button onClick={() => navigate('/pricing')} className="text-gray-400 hover:text-purple-400 transition-colors">
                 Pricing
