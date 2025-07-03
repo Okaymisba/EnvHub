@@ -38,12 +38,8 @@ export default function AboutUs() {
             <h2 className="text-3xl font-bold text-white mb-6">Our Story</h2>
             <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
               <p>
-                Founded in 2023, EnvHub was born out of frustration with existing environment variable management solutions.
+                Founded in 2025, EnvHub was born out of frustration with existing environment variable management solutions.
                 We saw a need for a more developer-friendly approach that didn't sacrifice security for convenience.
-              </p>
-              <p>
-                Today, thousands of developers and teams trust EnvHub to securely manage their environment variables
-                across multiple projects and environments.
               </p>
             </div>
           </section>
