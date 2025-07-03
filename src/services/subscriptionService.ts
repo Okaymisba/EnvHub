@@ -71,7 +71,7 @@ export class SubscriptionService {
     }
 
     // Pro plan
-    if (subscription.variant_name.toLowerCase().includes('pro')) {
+    if (subscription.product_name.toLowerCase().includes('pro')) {
       return {
         plan: 'Pro',
         projects: 10,
@@ -84,7 +84,7 @@ export class SubscriptionService {
     }
 
     // Team plan
-    if (subscription.variant_name.toLowerCase().includes('team')) {
+    if (subscription.product_name.toLowerCase().includes('team')) {
       return {
         plan: 'Team',
         projects: 50,
