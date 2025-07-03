@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Badge} from '@/components/ui/badge';
-import {ArrowLeft, Calendar, CreditCard, X} from 'lucide-react';
+import {ArrowLeft, Calendar, CreditCard, X, HelpCircle} from 'lucide-react';
 import {Subscription, SubscriptionService} from '@/services/subscriptionService';
 import {useToast} from '@/hooks/use-toast';
 import {createPortal} from "react-dom";
@@ -110,7 +110,7 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                     <CreditCard className="h-5 w-5"/>
                                     Current Plan
                                 </CardTitle>
-                                <Badge variant={subscription ? 'default' : 'secondary'}>
+                                <Badge variant={subscription ? 'default' : 'secondary'} className="bg-gradient-to-r from-purple-700 to-blue-700 text-gray-100">
                                     {limits.plan}
                                 </Badge>
                             </div>
@@ -138,26 +138,101 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                             </div>
 
                             {subscription && (
-                                <div className="pt-4 border-t border-gray-700">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-gray-400"/>
-                                            <span className="text-sm text-gray-400">
-                        {subscription.renews_at ? 'Renews' : 'Ends'} on: {' '}
-                                                {new Date(subscription.renews_at || subscription.ends_at || '').toLocaleDateString()}
-                      </span>
+                                <div className="pt-6 mt-6 border-t border-gray-700/50 relative">
+                                    <div className="absolute -top-3 left-0 right-0 flex justify-center">
+                                        <div className="bg-gradient-to-r from-purple-700 to-blue-700 text-gray-100 px-3 py-1 rounded-full border border-gray-700/50 shadow-lg">
+                                            <span className="text-xs font-medium ">SUBSCRIPTION STATUS</span>
                                         </div>
-                                        <Badge
-                                            variant={subscription.status === 'active' ? 'default' : 'destructive'}
-                                        >
-                                            {subscription.status_formatted}
-                                        </Badge>
                                     </div>
-                                    {subscription.card_brand && subscription.card_last_four && (
-                                        <p className="text-sm text-gray-400 mt-2">
-                                            Payment method: {subscription.card_brand} •••• {subscription.card_last_four}
-                                        </p>
-                                    )}
+                                    
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between p-4 bg-black/90 rounded-lg border border-gray-700/50 hover:border-purple-500/30 transition-all duration-300">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-600/20 to-blue-600/20">
+                                                    <Calendar className="h-5 w-5 text-purple-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-white">
+                                                        {subscription.renews_at ? 'Next Billing Date' : 'Expires On'}
+                                                    </p>
+                                                    <p className="text-sm text-white">
+                                                        {new Date(subscription.renews_at || subscription.ends_at || '').toLocaleDateString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric'
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Badge
+                                                variant={subscription.status === 'active' ? 'default' : 'destructive'}
+                                                className="px-3 py-1.5 text-xs font-semibold shadow-md  bg-gradient-to-r from-purple-700 to-blue-700 text-gray-100"
+                                            >
+                                                {subscription.status_formatted}
+                                            </Badge>
+                                        </div>
+
+                                        {subscription.card_brand && subscription.card_last_four && (
+                                            <div className="relative overflow-hidden rounded-xl bg-gradient-to-br bg-black/90 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 group">
+                                                {/* Card background pattern */}
+                                                <div className="absolute inset-0 opacity-30">
+                                                    <div className="absolute inset-0 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                                                </div>
+                                                
+                                                {/* Card content */}
+                                                <div className="relative p-6">
+                                                    <div className="flex justify-between items-start mb-6">
+                                                        <div className="flex items-center gap-2">
+                                                            {/* Card brand logo */}
+                                                            <div className="p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">
+                                                                <CreditCard className="h-6 w-6 text-blue-300" />
+                                                            </div>
+                                                            <span className="text-sm font-medium text-white">
+                                                                {subscription.card_brand.toUpperCase()}
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                    
+                                                    {/* Card number */}
+                                                    <div className="mb-6">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                            <span className="text-white font-mono tracking-widest text-lg">
+                                                                {subscription.card_last_four}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-xs text-white mt-1">Card number</p>
+                                                    </div>
+                                                    
+                                                    {/* Card footer */}
+                                                    <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                                        <div className="flex flex-col">
+                                                            <p className="text-lg text-white">Expires</p>
+                                                            <p className="text-sm text-white font-medium">••/••</p>
+                                                        </div>
+                                                        <div className="flex flex-col items-end">
+                                                            <div className="flex items-center gap-1">
+                                                                <p className="text-lg text-white">CVV</p>
+                                                                <HelpCircle className="h-3 w-3 text-white/50" />
+                                                            </div>
+                                                            <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Glow effect on hover */}
+                                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </CardContent>
