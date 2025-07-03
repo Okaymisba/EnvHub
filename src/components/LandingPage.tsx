@@ -257,6 +257,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               <button onClick={() => navigate('/terms')} className="text-gray-400 hover:text-purple-400 transition-colors">
                 Terms
               </button>
+              <button onClick={() => navigate('/about')} className="text-gray-400 hover:text-purple-400 transition-colors">
+                About us
+              </button>
             </div>
           </div>
         </footer>
