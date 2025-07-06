@@ -14,7 +14,7 @@ export default function AboutUs() {
                 />
                 <meta name="keywords" content="EnvHub, Environment Variables, Secure, Simple, Scalable"/>
                 <meta name="robots" content="index, follow"/>
-                <meta name="author" content="Misbah"/>
+                <meta name="author" content="EnvHub Team"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <meta name="url" content="https://envhub.net/about"/>
 
