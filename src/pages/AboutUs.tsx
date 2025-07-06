@@ -16,11 +16,12 @@ export default function AboutUs() {
                 <meta name="robots" content="index, follow"/>
                 <meta name="author" content="Misbah"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="url" content="https://envhub.net/about"/>
 
                 { /* Open Graph */ }
                 <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://envhub.net/"/>
-                <meta property="og:title" content="EnvHub - Secure Environment Variables Manager"/>
+                <meta property="og:url" content="https://envhub.net/about"/>
+                <meta property="og:title" content="About Us - EnvHub"/>
                 <meta
                     property="og:description"
                     content="Secure and simple environment variables management for developers and teams."
@@ -29,8 +30,8 @@ export default function AboutUs() {
 
                 { /* Twitter */ }
                 <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="twitter:url" content="https://envhub.net/"/>
-                <meta property="twitter:title" content="EnvHub - Secure Environment Variables Manager"/>
+                <meta property="twitter:url" content="https://envhub.net/about"/>
+                <meta property="twitter:title" content="About Us - EnvHub"/>
                 <meta
                     property="twitter:description"
                     content="Secure and simple environment variables management for developers and teams."
