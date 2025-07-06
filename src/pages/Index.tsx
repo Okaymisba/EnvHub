@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { AuthForm } from '@/components/AuthForm';
 import { Dashboard } from '@/components/Dashboard';
 import { LandingPage } from '@/components/LandingPage';
@@ -171,41 +172,69 @@ const Index = () => {
     );
   }
 
-  if (!user && !showAuth) {
-    return (
-      <LandingPage onGetStarted={() => setShowAuth(true)} />
-    );
-  }
-
-  if (!user && showAuth) {
-    return (
-      <div className="relative">
-        <button
-          onClick={() => setShowAuth(false)}
-          className="absolute top-4 left-4 z-10 text-gray-400 hover:text-white transition-colors duration-300"
-        >
-          ← Back to Home
-        </button>
-        <AuthForm
-          onLogin={handleLogin}
-          onSignup={handleSignup}
-          onGoogleAuth={handleGoogleAuth}
-          loading={loading}
-        />
-      </div>
-    );
-  }
-
   return (
-    <Dashboard
-      projects={projects}
-      sharedProjects={sharedProjects}
-      onCreateProject={handleCreateProject}
-      onProjectClick={handleProjectClick}
-      onLogout={handleLogout}
-      loading={loading}
-      user={user}
-    />
+    <>
+      <Helmet>
+        <title>EnvHub - Secure Environment Variables Manager</title>
+        <meta 
+          name="description" 
+          content="EnvHub is a secure and simple environment variables manager for developers. Keep your environment variables safe and accessible across your team."
+        />
+        <meta name="keywords" content="environment variables, .env, secrets management, secure config, devops, developer tools, share environment variables, share env"/>
+        <meta name="robots" content="index, follow"/>
+        <meta name="author" content="EnvHub Team"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://envhub.net/"/>
+        <meta property="og:title" content="EnvHub - Secure Environment Variables Manager"/>
+        <meta 
+          property="og:description" 
+          content="Secure and simple environment variables management for developers and teams."
+        />
+        <meta property="og:image" content="https://envhub.net/opengraph-image.png"/>
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image"/>
+        <meta property="twitter:url" content="https://envhub.net/"/>
+        <meta property="twitter:title" content="EnvHub - Secure Environment Variables Manager"/>
+        <meta 
+          property="twitter:description" 
+          content="Secure and simple environment variables management for developers and teams."
+        />
+        <meta property="twitter:image" content="https://envhub.net/opengraph-image.png"/>
+      </Helmet>
+      
+      {(!user && !showAuth) ? (
+        <LandingPage onGetStarted={() => setShowAuth(true)} />
+      ) : (!user && showAuth) ? (
+        <div className="relative">
+          <button
+            onClick={() => setShowAuth(false)}
+            className="absolute top-4 left-4 z-10 text-gray-400 hover:text-white transition-colors duration-300"
+          >
+            ← Back to Home
+          </button>
+          <AuthForm
+            onLogin={handleLogin}
+            onSignup={handleSignup}
+            onGoogleAuth={handleGoogleAuth}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        <Dashboard
+          projects={projects}
+          sharedProjects={sharedProjects}
+          onCreateProject={handleCreateProject}
+          onProjectClick={handleProjectClick}
+          onLogout={handleLogout}
+          loading={loading}
+          user={user}
+        />
+      )}
+    </>
   );
 };
 
