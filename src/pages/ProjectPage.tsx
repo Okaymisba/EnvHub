@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProjectDetails } from '@/components/ProjectDetails';
 import { AuthForm } from '@/components/AuthForm';
@@ -186,11 +186,54 @@ const ProjectPage = () => {
   }
 
   return (
-    <ProjectDetails
-      project={project}
-      onBack={handleBack}
-      loading={loading}
-    />
+    <>
+      <Helmet>
+        <title>{project ? `${project.name} - EnvHub` : 'Project - EnvHub'}</title>
+        <meta 
+          name="description" 
+          content={project 
+            ? `Manage environment variables for ${project.name} on EnvHub. Securely store and share your configuration.`
+            : 'Securely manage your environment variables with EnvHub.'
+          }
+        />
+        <meta name="robots" content="noindex, nofollow"/>
+        <meta name="author" content="EnvHub Team"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content={`https://envhub.net/project/${projectId}`}/>
+        <meta property="og:title" content={project ? `${project.name} - EnvHub` : 'Project - EnvHub'}/>
+        <meta 
+          property="og:description" 
+          content={project
+            ? `Manage environment variables for ${project.name} on EnvHub.`
+            : 'Securely manage your environment variables with EnvHub.'
+          }
+        />
+        <meta property="og:image" content="https://envhub.net/opengraph-project.png"/>
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image"/>
+        <meta property="twitter:url" content={`https://envhub.net/project/${projectId}`}/>
+        <meta property="twitter:title" content={project ? `${project.name} - EnvHub` : 'Project - EnvHub'}/>
+        <meta 
+          property="twitter:description" 
+          content={project
+            ? `Manage environment variables for ${project.name} on EnvHub.`
+            : 'Securely manage your environment variables with EnvHub.'
+          }
+        />
+        <meta property="twitter:image" content="https://envhub.net/opengraph-project.png"/>
+
+      </Helmet>
+
+      <ProjectDetails 
+        project={project} 
+        onBack={handleBack}
+        loading={loading}
+      />
+    </>
   );
 };
 
