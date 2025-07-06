@@ -248,7 +248,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         {/* Footer */}
         <footer className="border-t border-slate-800 py-8">
           <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400"> 2025 EnvHub by Misbah</p>
+            <p className="text-gray-400"> 2025 EnvHub</p>
             <div className="flex gap-8">
               <button onClick={() => navigate('/pricing')} className="text-gray-400 hover:text-purple-400 transition-colors">
                 Pricing
