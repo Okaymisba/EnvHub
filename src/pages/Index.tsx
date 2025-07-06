@@ -185,7 +185,7 @@ const Index = () => {
         <meta name="author" content="EnvHub Team"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph */}
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="https://envhub.net/"/>
         <meta property="og:title" content="EnvHub - Secure Environment Variables Manager"/>
@@ -204,6 +204,7 @@ const Index = () => {
           content="Secure and simple environment variables management for developers and teams."
         />
         <meta property="twitter:image" content="https://envhub.net/opengraph-image.png"/>
+
       </Helmet>
       
       {(!user && !showAuth) ? (
