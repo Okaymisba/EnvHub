@@ -20,6 +20,7 @@ const TermsOfService = () => {
         <meta name="robots" content="index, follow"/>
         <meta name="author" content="EnvHub Team"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="canonical" href="https://envhub.net/terms"/>
 
         {/* Open Graph */}
         <meta property="og:type" content="website"/>
