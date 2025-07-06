@@ -71,6 +71,7 @@ const Pricing = () => {
         <meta name="robots" content="index, follow"/>
         <meta name="author" content="EnvHub Team"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="url" content="https://envhub.net/pricing"/>
 
         {/* Open Graph */}
         <meta property="og:type" content="website"/>
