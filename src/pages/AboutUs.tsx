@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import {GitBranch, Lock, Shield} from 'lucide-react';
 import {Helmet} from "react-helmet-async";
+import React from "react";
 
 export default function AboutUs() {
     return (
@@ -16,16 +17,26 @@ export default function AboutUs() {
                 <meta name="author" content="Misbah"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-                <meta property="og:title" content="EnvHub - Secure, Simple, and Scalable Environment Variable Management"/>
-                <meta property="og:description" content="Secure, Simple, and Scalable Environment Variable Management"/>
+                { /* Open Graph */ }
                 <meta property="og:type" content="website"/>
                 <meta property="og:url" content="https://envhub.net/"/>
-                <meta property="og:image" content="https://envhub.net/opengraph-image-p98pqg.png"/>
+                <meta property="og:title" content="EnvHub - Secure Environment Variables Manager"/>
+                <meta
+                    property="og:description"
+                    content="Secure and simple environment variables management for developers and teams."
+                />
+                <meta property="og:image" content="https://envhub.net/opengraph-image.png"/>
 
+                { /* Twitter */ }
                 <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="twitter:title" content="EnvHub - Secure, Simple, and Scalable Environment Variable Management"/>
-                <meta property="twitter:description" content="Secure, Simple, and Scalable Environment Variable Management"/>
-                <meta property="twitter:image" content="https://envhub.net/opengraph-image-p98pqg.png"/>
+                <meta property="twitter:url" content="https://envhub.net/"/>
+                <meta property="twitter:title" content="EnvHub - Secure Environment Variables Manager"/>
+                <meta
+                    property="twitter:description"
+                    content="Secure and simple environment variables management for developers and teams."
+                />
+                <meta property="twitter:image" content="https://envhub.net/opengraph-image.png"/>
+
             </Helmet>
 
             <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
