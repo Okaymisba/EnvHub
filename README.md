@@ -13,7 +13,6 @@ EnvHub is a secure, user-friendly platform for managing environment variables ac
 
 - 🔒 **End-to-End Encryption** - Your environment variables are encrypted before they leave your machine
 - 👥 **Team Collaboration** - Securely share environment variables with your team members
-- 🚀 **Seamless Integration** - Easy integration with popular development tools and frameworks
 - 📱 **Cross-Platform** - Access your environment variables from anywhere, on any device
 - 🛡️ **Access Control** - Granular permissions for team members and projects
 - 📊 **Version History** - Track changes and roll back to previous versions when needed
