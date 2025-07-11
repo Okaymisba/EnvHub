@@ -19,11 +19,14 @@ EnvHub is a secure, user-friendly platform for managing environment variables ac
 
 ## 🚀 Getting Started
 
-### Prerequisites
+[//]: # (### Prerequisites)
 
-- Node.js 16.x or later
-- npm or yarn
-- A modern web browser (Chrome, Firefox, Safari, or Edge)
+[//]: # ()
+[//]: # (- Node.js 16.x or later)
+
+[//]: # (- npm or yarn)
+
+[//]: # (- A modern web browser &#40;Chrome, Firefox, Safari, or Edge&#41;)
 
 ### Installation
 
