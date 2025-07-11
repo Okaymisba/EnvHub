@@ -1,73 +1,91 @@
-# Welcome to your Lovable project
+<div align="center">
+<img src="https://envhub.net/favicon.ico" alt="EnvHub Logo" width="100">
+</div>
 
-## Project info
+# EnvHub - Secure Environment Variables Manager
 
-**URL**: https://lovable.dev/projects/55c7ef32-4cb7-421d-954a-556f3c24eaf7
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-## How can I edit this code?
+EnvHub is a secure, user-friendly platform for managing environment variables across your development projects. With end-to-end encryption and seamless team collaboration, never worry about leaking sensitive credentials again.
 
-There are several ways of editing your application.
+## ✨ Features
 
-**Use Lovable**
+- 🔒 **End-to-End Encryption** - Your environment variables are encrypted before they leave your machine
+- 👥 **Team Collaboration** - Securely share environment variables with your team members
+- 🚀 **Seamless Integration** - Easy integration with popular development tools and frameworks
+- 📱 **Cross-Platform** - Access your environment variables from anywhere, on any device
+- 🛡️ **Access Control** - Granular permissions for team members and projects
+- 📊 **Version History** - Track changes and roll back to previous versions when needed
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/55c7ef32-4cb7-421d-954a-556f3c24eaf7) and start prompting.
+## 🚀 Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 16.x or later
+- npm or yarn
+- A modern web browser (Chrome, Firefox, Safari, or Edge)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/okaymisba/envhub.git
+   cd envhub
+   ```
 
-Follow these steps:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+[//]: # ()
+[//]: # (3. Set up environment variables:)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+[//]: # (   ```bash)
 
-# Step 3: Install the necessary dependencies.
-npm i
+[//]: # (   cp .env.example .env.local)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+[//]: # (   # Edit .env.local with your configuration)
 
-**Edit a file directly in GitHub**
+[//]: # (   ```)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-**Use GitHub Codespaces**
+2. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📚 Documentation
 
-## What technologies are used for this project?
+For detailed documentation, please visit our [documentation website](https://docs.envhub.com).
 
-This project is built with:
+## 🤝 Contributing
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## How can I deploy this project?
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Simply open [Lovable](https://lovable.dev/projects/55c7ef32-4cb7-421d-954a-556f3c24eaf7) and click on Share -> Publish.
+## 📝 License
 
-## Can I connect a custom domain to my Lovable project?
+This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-Yes, you can!
+## 📧 Contact
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Misbah Sarfraz - [@myLinkedIn](https://www.linkedin.com/in/misbah-sarfaraz-a59854325/) - msbahsarfaraz@gmail.com
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Project Link: [https://github.com/okaymisba/envhub](https://github.com/yourusername/envhub)
+
+## 🙏 Acknowledgments
+
+- [Shadcn/UI](https://ui.shadcn.com/) for the amazing component library
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS
+- [React Query](https://react-query.tanstack.com/) for server state management
+- All the amazing open-source contributors
+
+---
