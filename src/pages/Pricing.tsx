@@ -104,14 +104,6 @@ const Pricing = () => {
         <div className="border-b border-gray-800">
           <div className="flex items-center justify-between p-6">
             <div className="flex items-center">
-              <Button
-                onClick={() => navigate('/')}
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-              </Button>
               <button
                 onClick={() => navigate('/')}
                 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent ml-2"
