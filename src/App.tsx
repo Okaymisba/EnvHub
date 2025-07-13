@@ -15,6 +15,7 @@ import TermsOfService from "./pages/TermsOfService";
 import ProjectPage from "./pages/ProjectPage";
 import Pricing from "./pages/Pricing";
 import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
                         <Route path="/about" element={<AboutUs/>}/>
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>
                         <Route path="/terms" element={<TermsOfService/>}/>
+                        <Route path="/contact" element={<Contact/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </BrowserRouter>
