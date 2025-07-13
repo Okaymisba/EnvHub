@@ -70,25 +70,17 @@ const Docs = () => {
     <div className="min-h-screen bg-gray-950 text-white">
       <Helmet>
         <title>Documentation - EnvHub</title>
-        <meta 
-          name="description" 
+        <meta
+          name="description"
           content="Complete documentation for EnvHub - Learn how to manage your environment variables securely with our comprehensive guides and API reference."
         />
       </Helmet>
 
       {/* Header */}
       <div className="border-b border-gray-800 bg-black/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/')}
-                className="text-gray-400 hover:text-white"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
-              </Button>
               <div className="flex items-center gap-2">
                 <GitBranch className="w-6 h-6 text-purple-400" />
                 <span className="text-lg font-bold">EnvHub Docs</span>
@@ -116,9 +108,9 @@ const Docs = () => {
           <Card className="bg-gray-900/50 border-gray-800 hover:border-purple-500/50 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Zap className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Quick Start</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">Quick Start</h3>
               <p className="text-gray-400 mb-4">Get up and running with EnvHub in minutes</p>
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
+              <Button variant="outline" className="border-gray-700 text-gray hover:bg-gray-800">
                 Start Here
               </Button>
             </CardContent>
@@ -127,9 +119,9 @@ const Docs = () => {
           <Card className="bg-gray-900/50 border-gray-800 hover:border-purple-500/50 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Terminal className="w-12 h-12 text-green-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">CLI Guide</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">CLI Guide</h3>
               <p className="text-gray-400 mb-4">Learn to use the EnvHub command line interface</p>
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
+              <Button variant="outline" className="border-gray-700 text-gray hover:bg-gray-800">
                 CLI Docs
               </Button>
             </CardContent>
@@ -138,9 +130,9 @@ const Docs = () => {
           <Card className="bg-gray-900/50 border-gray-800 hover:border-purple-500/50 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Shield className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Security</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">Security</h3>
               <p className="text-gray-400 mb-4">Understand our security measures and best practices</p>
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
+              <Button variant="outline" className="border-gray-700 text-gray hover:bg-gray-800">
                 Security Guide
               </Button>
             </CardContent>
@@ -152,8 +144,8 @@ const Docs = () => {
           {sections.map((section, index) => (
             <Card key={index} className="bg-gray-900/50 border-gray-800 hover:border-purple-500/50 transition-all duration-300">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <section.icon className="w-6 h-6 text-purple-400" />
+                <CardTitle className="flex items-center gap-3 text-purple-400">
+                  <section.icon className="w-6 h-6 text-purple-300" />
                   {section.title}
                 </CardTitle>
               </CardHeader>
@@ -178,7 +170,7 @@ const Docs = () => {
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-yellow-400 mb-4">Documentation Coming Soon</h3>
               <p className="text-gray-300 mb-6">
-                We're working hard to create comprehensive documentation for EnvHub. 
+                We're working hard to create comprehensive documentation for EnvHub.
                 In the meantime, feel free to explore the platform and reach out if you have any questions.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
