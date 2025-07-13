@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Shield, Zap, Database, Lock, AlertTriangle, TrendingUp, GitBranch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+import { Navbar } from '@/components/Navbar';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -62,6 +63,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
 
   return (
     <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
+      {/* Navbar */}
+      <Navbar onGetStarted={onGetStarted} />
+      
       {/* Background Effects - keep the same */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -70,7 +74,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       </div>
 
       {/* New Hero Section */}
-      <div className="relative z-10">
+      <div className="relative z-10 pt-16">
         <div className="max-w-6xl mx-auto px-4 pt-20">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-2 mb-6 animate-fade-in-up">
