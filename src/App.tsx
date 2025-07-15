@@ -34,7 +34,14 @@ const App = () => (
                         <Route path="/project/:projectId" element={<ProjectPage/>}/>
                         <Route path="/docs" element={<Docs/>}/>
                         <Route path="/docs/getting-started" element={<QuickStart/>}/>
-                        <Route path="/docs/cli-documentation" element={<CLIDocs/>}/>
+                        <Route path="/docs/installation" element={<QuickStart/>}/>
+                        <Route path="/docs/first-project" element={<QuickStart/>}/>
+                        <Route path="/docs/environment-setup" element={<QuickStart/>}/>
+                        <Route path="/docs/cli/installation" element={<CLIDocs/>}/>
+                        <Route path="/docs/cli/authentication" element={<CLIDocs/>}/>
+                        <Route path="/docs/cli/project-management" element={<CLIDocs/>}/>
+                        <Route path="/docs/cli/variables" element={<CLIDocs/>}/>
+                        <Route path="/docs/cli/advanced" element={<CLIDocs/>}/>
                         <Route path="/pricing" element={<Pricing/>}/>
                         <Route path="/about" element={<AboutUs/>}/>
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>

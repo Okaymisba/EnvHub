@@ -14,20 +14,20 @@ const Docs = () => {
       icon: Book,
       items: [
         { label: 'Quick Start Guide', path: '/docs/getting-started' },
-        { label: 'Installation', path: '/docs/getting-started' },
-        { label: 'Your First Project', path: '/docs/getting-started' },
-        { label: 'Environment Setup', path: '/docs/getting-started' }
+        { label: 'Installation', path: '/docs/installation' },
+        { label: 'Your First Project', path: '/docs/first-project' },
+        { label: 'Environment Setup', path: '/docs/environment-setup' }
       ]
     },
     {
       title: 'CLI Documentation',
       icon: Terminal,
       items: [
-        { label: 'Installation & Setup', path: '/docs/cli-documentation' },
-        { label: 'Authentication', path: '/docs/cli-documentation' },
-        { label: 'Project Management', path: '/docs/cli-documentation' },
-        { label: 'Environment Variables', path: '/docs/cli-documentation' },
-        { label: 'Advanced Commands', path: '/docs/cli-documentation' }
+        { label: 'Installation & Setup', path: '/docs/cli/installation' },
+        { label: 'Authentication', path: '/docs/cli/authentication' },
+        { label: 'Project Management', path: '/docs/cli/project-management' },
+        { label: 'Environment Variables', path: '/docs/cli/variables' },
+        { label: 'Advanced Commands', path: '/docs/cli/advanced' }
       ]
     },
     {
