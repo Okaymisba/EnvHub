@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Github, Globe, ShieldCheck } from 'lucide-react';
 
 export const OpenSourceSection = () => {
+  const [stars, setStars] = useState(0);
+
+  useEffect(() => {
+    const fetchStars = async () => {
+      try {
+        const response = await fetch('https://api.github.com/repos/Okaymisba/EnvHub');
+        if (!response.ok) throw new Error('Failed to fetch repository data');
+        const data = await response.json();
+        setStars(data.stargazers_count);
+      } catch (error) {
+        console.error('Error fetching stars:', error);
+      }
+    };
+
+    fetchStars();
+  }, []);
+
   return (
     <section className="py-20 px-4 md:px-8 lg:px-16">
       <div className="max-w-6xl mx-auto">
@@ -18,8 +35,8 @@ export const OpenSourceSection = () => {
           {/* GitHub Stats */}
           <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
             <Github className="w-8 h-8 mx-auto mb-4 text-purple-400" />
-            <h3 className="text-2xl font-semibold text-white mb-2">New Project</h3>
-            <p className="text-gray-400">Join us on our journey</p>
+            <h3 className="text-2xl font-semibold text-white mb-2">{stars} Stars</h3>
+            <p className="text-gray-400">Join our growing community</p>
           </div>
 
           {/* Security */}
@@ -31,9 +48,9 @@ export const OpenSourceSection = () => {
 
           {/* Global Access */}
           <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
-            <Github className="w-8 h-8 mx-auto mb-4 text-purple-400" />
-            <h3 className="text-2xl font-semibold text-white mb-2">0 Stars</h3>
-            <p className="text-gray-400">Be one of the first to star our project</p>
+            <Globe className="w-8 h-8 mx-auto mb-4 text-purple-400" />
+            <h3 className="text-2xl font-semibold text-white mb-2">Global Access</h3>
+            <p className="text-gray-400">Available on GitHub</p>
           </div>
         </div>
 
