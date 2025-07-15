@@ -195,7 +195,7 @@ const Docs = () => {
                   <Button
                     onClick={() => navigate('/')}
                     variant="outline"
-                    className="border-gray-700 text-gray-300 hover:bg-gray-800 animate-fade-in-up delay-1100"
+                    className="border-gray-700 text-gray hover:bg-gray-800 animate-fade-in-up delay-1100"
                   >
                     Try EnvHub Now
                   </Button>
