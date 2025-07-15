@@ -63,6 +63,50 @@ EnvHub is a secure, user-friendly platform for managing environment variables ac
 
 For detailed documentation, please visit our [documentation website](https://docs.envhub.com).
 
+## 🛠️ CLI Tool
+
+EnvHub comes with a powerful command-line interface (CLI) that complements the web interface for managing your environment variables. The CLI provides secure and efficient tools for working with environment variables directly from your terminal.
+
+### Installation
+
+Install using pip:
+```bash
+pip install envhub-cli
+```
+
+Or if your environment is externally managed:
+```bash
+pipx install envhub-cli
+```
+
+### Usage
+
+#### Authentication
+```bash
+# Login to your account
+envhub login
+
+# Logout from your account
+envhub logout
+
+# Check current logged-in user
+envhub whoami
+```
+
+#### Project Management
+```bash
+# Clone a project
+envhub clone <project-name>
+
+# Reset current folder
+envhub reset
+
+# Pull latest environment variables
+envhub pull
+```
+
+For more detailed CLI documentation, please visit the [EnvHub CLI repository](https://github.com/Okaymisba/EnvHub-CLI).
+
 ## 🤝 Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
