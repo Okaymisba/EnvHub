@@ -26,14 +26,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({ children, sections }) => {
       {/* Sidebar */}
       <aside className="w-64 bg-black">
         <div className="p-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mb-4 text-gray hover:bg-gray-800"
-            onClick={() => window.history.back()}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+          {/* Documentation Heading */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2">Documentation</h2>
+          </div>
 
           <nav className="space-y-4">
             {sections.map((section, sectionIndex) => (
@@ -48,7 +44,11 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({ children, sections }) => {
                     variant="ghost"
                     className={cn(
                       "w-full justify-start text-left text-sm text-gray-400",
-                      currentPath === item.path ? "bg-gray-800 text-white" : "hover:bg-gray-800"
+                      "hover:bg-gray-700 hover:text-white",
+                      "transition-all duration-200",
+                      "rounded-lg",
+                      "px-3 py-2",
+                      currentPath === item.path ? "bg-gray-800 text-white" : ""
                     )}
                     onClick={() => window.location.href = item.path}
                   >
