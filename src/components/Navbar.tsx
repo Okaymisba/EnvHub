@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
             <Button
               onClick={onGetStarted}
               variant="outline"
-              className="border-gray-700 text-gray hover:bg-gray-800 hover:border-purple-400"
+              className="border-gray-700 text-gray hover:bg-gray-300 hover:border-purple-400"
             >
               Sign In
             </Button>

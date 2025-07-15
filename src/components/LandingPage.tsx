@@ -8,6 +8,7 @@ import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { StatsSection } from '@/components/StatsSection';
 import { FeaturesSection } from '@/components/FeaturesSection';
+import { OpenSourceSection } from '@/components/OpenSourceSection';
 import { CTASection } from '@/components/CTASection';
 import { Footer } from '@/components/Footer';
 
@@ -33,6 +34,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         <HeroSection onGetStarted={onGetStarted} />
         <StatsSection onGetStarted={onGetStarted} />
         <FeaturesSection />
+        <OpenSourceSection />
         <CTASection onGetStarted={onGetStarted} />
         <Footer />
       </div>
