@@ -25,8 +25,18 @@ export const CLIGuide = () => {
         >
           <Copy className="w-4 h-4"/>
         </button>
-        <code>npm install -g envhub-cli</code>
+        <code>pip install envhub-cli</code>
       </pre>
+            <p>Or if your environment is externally managed, use the following command:</p>
+            <pre className="bg-slate-900/60 p-4 rounded-lg text-purple-300 font-mono relative">
+        <button
+            className="absolute top-2 right-2 bg-purple-900/30 p-1 rounded hover:bg-purple-900/50"
+            onClick={() => copyToClipboard('envhub install')}
+        >
+          <Copy className="w-4 h-4"/>
+        </button>
+        <code>pipx install envhub</code>
+                </pre>
 
             <h3 className="text-lg font-semibold text-white">Basic Commands</h3>
 
