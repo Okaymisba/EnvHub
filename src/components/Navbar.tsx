@@ -5,7 +5,16 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X, GitBranch } from 'lucide-react';
+import { 
+  Menu, 
+  X, 
+  GitBranch, 
+  Github, 
+  BookOpen, 
+  DollarSign, 
+  Info, 
+  Mail 
+} from 'lucide-react';
 
 interface NavbarProps {
   onGetStarted: () => void;
@@ -18,15 +27,36 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navItems = [
-    { label: 'Docs', path: '/docs' },
-    { label: 'Pricing', path: '/pricing' },
-    { label: 'About', path: '/about' },
-    { label: 'Contact', path: '/contact' },
+    { 
+      label: 'Docs', 
+      path: '/docs',
+      icon: <BookOpen className="w-4 h-4" />
+    },
+    { 
+      label: 'Pricing', 
+      path: '/pricing',
+      icon: <DollarSign className="w-4 h-4" />
+    },
+    { 
+      label: 'About', 
+      path: '/about',
+      icon: <Info className="w-4 h-4" />
+    },
+    { 
+      label: 'Contact', 
+      path: '/contact',
+      icon: <Mail className="w-4 h-4" />
+    },
+    {
+      label: 'GitHub',
+      path: 'https://github.com/Okaymisba/envsecure-vault-keeper',
+      icon: <Github className="w-4 h-4" />
+    }
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
-      <div className= "mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
@@ -39,9 +69,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
             {navItems.map((item) => (
               <button
                 key={item.path}
-                onClick={() => navigate(item.path)}
-                className="text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium"
+                onClick={() => {
+                  if (item.path.startsWith('http')) {
+                    window.open(item.path, '_blank');
+                  } else {
+                    navigate(item.path);
+                  }
+                }}
+                className="text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium flex items-center gap-2"
               >
+                {item.icon}
                 {item.label}
               </button>
             ))}
@@ -49,13 +86,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              onClick={onGetStarted}
-              variant="outline"
-              className="border-gray-700 text-gray hover:bg-gray-300 hover:border-purple-400"
-            >
-              Sign In
-            </Button>
             <Button
               onClick={onGetStarted}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
@@ -84,11 +114,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
               <button
                 key={item.path}
                 onClick={() => {
-                  navigate(item.path);
-                  setIsMenuOpen(false);
+                  if (item.path.startsWith('http')) {
+                    window.open(item.path, '_blank');
+                    setIsMenuOpen(false);
+                  } else {
+                    navigate(item.path);
+                    setIsMenuOpen(false);
+                  }
                 }}
-                className="block w-full text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium py-2"
+                className="block w-full text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium py-2 flex items-center gap-2"
               >
+                {item.icon}
                 {item.label}
               </button>
             ))}
