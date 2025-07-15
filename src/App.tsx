@@ -17,6 +17,8 @@ import Pricing from "./pages/Pricing";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Docs from "./pages/Docs";
+import { QuickStart } from "./pages/docs/QuickStart";
+import { CLIDocs } from "./pages/docs/CLIDocs";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
                         <Route path="/" element={<Index/>}/>
                         <Route path="/project/:projectId" element={<ProjectPage/>}/>
                         <Route path="/docs" element={<Docs/>}/>
+                        <Route path="/docs/getting-started" element={<QuickStart/>}/>
+                        <Route path="/docs/cli-documentation" element={<CLIDocs/>}/>
                         <Route path="/pricing" element={<Pricing/>}/>
                         <Route path="/about" element={<AboutUs/>}/>
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>
