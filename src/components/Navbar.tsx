@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
     },
     {
       label: 'GitHub',
-      path: 'https://github.com/Okaymisba/envsecure-vault-keeper',
+      path: 'https://github.com/Okaymisba/EnvHub',
       icon: <Github className="w-4 h-4" />
     }
   ];
