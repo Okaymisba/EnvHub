@@ -31,7 +31,7 @@ export const CLIGuide = () => {
             <pre className="bg-slate-900/60 p-4 rounded-lg text-purple-300 font-mono relative">
         <button
             className="absolute top-2 right-2 bg-purple-900/30 p-1 rounded hover:bg-purple-900/50"
-            onClick={() => copyToClipboard('envhub install')}
+            onClick={() => copyToClipboard('pipx install envhub')}
         >
           <Copy className="w-4 h-4"/>
         </button>
