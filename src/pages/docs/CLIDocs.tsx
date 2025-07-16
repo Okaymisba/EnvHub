@@ -24,9 +24,9 @@ const sections = [
     icon: Terminal,
     items: [
       { label: 'Installation', path: '/docs/cli/installation#installation' },
-      { label: 'Authentication', path: '/docs/cli/installation#authentication' },
-      { label: 'Project Management', path: '/docs/cli/installation#project-management' },
-      { label: 'Environment Variables', path: '/docs/cli/installation#environment-variables' }
+      { label: 'Authentication', path: '/docs/cli/authentication#authentication' },
+      { label: 'Project Management', path: '/docs/cli/project-management#project-management' },
+      { label: 'Environment Variables', path: '/docs/cli/variables#environment-variables' }
     ]
   },
   {
