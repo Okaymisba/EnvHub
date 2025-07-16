@@ -82,33 +82,16 @@ export const QuickStart = () => {
               <div className="animate-fade-in-up delay-100">
                 <h2 className="text-2xl font-semibold text-white mb-4">Installation</h2>
                 <p className="text-gray-400 mb-4">
-                  Install EnvHub using npm:
+                  Install EnvHub using pip:
                 </p>
                 <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                  <code>{`
-npm install -g @envhub/cli
-`}</code>
+                  <code>pip install envhub-cli</code>
                 </pre>
-              </div>
-
-              {/* Configuration */}
-              <div className="animate-fade-in-up delay-200">
-                <h2 className="text-2xl font-semibold text-white mb-4">Configuration</h2>
-                <p className="text-gray-400 mb-4">
-                  Create a .envhub.json file in your project root:
+                <p className="text-gray-400 mb-4 mt-4">
+                    If your environment is externally managed, use the following command:
                 </p>
-                <pre className="bg-gray-900 p-4 rounded-lg">
-                  <code>{`
-{
-  "version": "1.0",
-  "projects": {
-    "default": {
-      "envFile": ".env",
-      "encryptionKey": "your-secret-key"
-    }
-  }
-}
-`}</code>
+                <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
+                  <code>pipx install envhub-cli</code>
                 </pre>
               </div>
 
@@ -117,27 +100,49 @@ npm install -g @envhub/cli
                 <h2 className="text-2xl font-semibold text-white mb-4">Usage</h2>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Set Variables</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">Create a Project</h3>
                     <p className="text-gray-400 mb-4">
-                      Set environment variables using the CLI:
+                      First create a project in the web interface, then you can clone that project in development environment using the following command:
                     </p>
                     <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>{`
-envhub var set DATABASE_URL "postgres://user:pass@localhost/db"
-`}</code>
+                      <code>envhub clone {'<project-name>'}</code>
                     </pre>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">Add Variables</h3>
+                    <p className="text-gray-400 mb-4">
+                      Now after cloning the project, you can add variables using both the web interface and the CLI.
+                    </p>
+                    <p className="text-gray-400 mb-4">
+                      To add a variable using the cli, use the following command:
+                    </p>
+                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
+                      <code>envhub add</code>
+                    </pre>
+                    <p className="text-gray-400 mb-4 mt-4">
+                        Then you will be prompted to enter the variable name and value.
+                    </p>
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Export Variables</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">Decrypt and Run</h3>
                     <p className="text-gray-400 mb-4">
-                      Export variables to a .env file:
+                      To decrypt and run your environment variables, use the following command:
                     </p>
                     <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
                       <code>{`
-envhub var export > .env
+envhub decrypt -- <command-to-run>
 `}</code>
                     </pre>
+                    <p className="text-gray-400 mb-4 mt-4">
+                        For example, if you want to run a Node.js app, you can use the following command:
+                    </p>
+                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
+                      <code>envhub decrypt -- node app.js</code>
+                    </pre>
+                    <p className="text-gray-400 mb-4 mt-4">
+                      This will securely decrypt your environment variables at runtime, making them available to your Node.js application while keeping them protected in your codebase.
+                    </p>
                   </div>
                 </div>
               </div>
