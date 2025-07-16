@@ -2,7 +2,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import {HelmetProvider} from "react-helmet-async"; // ✅ Import this
+import {HelmetProvider} from "react-helmet-async"; // Import this
 import {Toaster} from "@/components/ui/toaster";
 import {Toaster as Sonner} from "@/components/ui/sonner";
 import {TooltipProvider} from "@/components/ui/tooltip";
@@ -37,11 +37,11 @@ const App = () => (
                         <Route path="/docs/installation" element={<QuickStart/>}/>
                         <Route path="/docs/first-project" element={<QuickStart/>}/>
                         <Route path="/docs/environment-setup" element={<QuickStart/>}/>
-                        <Route path="/docs/cli/installation" element={<CLIDocs/>}/>
-                        <Route path="/docs/cli/authentication" element={<CLIDocs/>}/>
-                        <Route path="/docs/cli/project-management" element={<CLIDocs/>}/>
-                        <Route path="/docs/cli/variables" element={<CLIDocs/>}/>
-                        <Route path="/docs/cli/advanced" element={<CLIDocs/>}/>
+                        <Route path="/docs/cli/installation" element={<CLIDocs initialSection="installation"/>}/>
+                        <Route path="/docs/cli/authentication" element={<CLIDocs initialSection="authentication"/>}/>
+                        <Route path="/docs/cli/project-management" element={<CLIDocs initialSection="project-management"/>}/>
+                        <Route path="/docs/cli/variables" element={<CLIDocs initialSection="environment-variables"/>}/>
+                        <Route path="/docs/cli/advanced" element={<CLIDocs initialSection="advanced"/>}/>
                         <Route path="/pricing" element={<Pricing/>}/>
                         <Route path="/about" element={<AboutUs/>}/>
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>

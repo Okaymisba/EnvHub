@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
-import {ArrowLeft, Book, Shield, Users} from 'lucide-react';
+import { ArrowLeft, Book, Shield, Users, Terminal, Key, Box, Cpu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DocsLayout from '@/components/DocsLayout';
-import { Terminal } from 'lucide-react';
+
+interface CLIDocsProps {
+  initialSection?: string;
+}
 
 const sections = [
   {
@@ -21,11 +24,10 @@ const sections = [
     title: 'CLI Documentation',
     icon: Terminal,
     items: [
-      { label: 'Installation & Setup', path: '/docs/cli/installation' },
-      { label: 'Authentication', path: '/docs/cli/authentication' },
-      { label: 'Project Management', path: '/docs/cli/project-management' },
-      { label: 'Environment Variables', path: '/docs/cli/variables' },
-      { label: 'Advanced Commands', path: '/docs/cli/advanced' }
+      { label: 'Installation', path: '/docs/cli/installation#installation' },
+      { label: 'Authentication', path: '/docs/cli/installation#authentication' },
+      { label: 'Project Management', path: '/docs/cli/installation#project-management' },
+      { label: 'Environment Variables', path: '/docs/cli/installation#environment-variables' }
     ]
   },
   {
@@ -50,73 +52,122 @@ const sections = [
   }
 ];
 
-export const CLIDocs = () => {
-  const navigate = useNavigate();
+const commandSections = [
+  {
+    id: 'installation',
+    title: 'Installation',
+    icon: Cpu,
+    description: 'Get started by installing the EnvHub CLI on your system.',
+    commands: [
+      {
+        name: 'Install via pip',
+        usage: 'pip install envhub-cli',
+        description: 'Install the EnvHub CLI using pip package manager.'
+      },
+      {
+        name: 'Install via pipx',
+        usage: 'pipx install envhub-cli',
+        description: 'For isolated Python environments, use pipx.'
+      },
+      {
+        name: 'Verify installation',
+        usage: 'envhub --version',
+        description: 'Check if the installation was successful.'
+      }
+    ]
+  },
+  {
+    id: 'authentication',
+    title: 'Authentication',
+    icon: Key,
+    description: 'Authenticate with the EnvHub service to manage your environment variables.',
+    commands: [
+      {
+        name: 'Login',
+        usage: 'envhub login',
+        description: 'Authenticate with your EnvHub account with your email and password.'
+      },
+      {
+        name: 'Logout',
+        usage: 'envhub logout',
+        description: 'Sign out from your current session.'
+      },
+      {
+        name: 'Whoami',
+        usage: 'envhub whoami',
+        description: 'Display the currently logged-in user.'
+      }
+    ]
+  },
+  {
+    id: 'project-management',
+    title: 'Project Management',
+    icon: Box,
+    description: 'Manage your existing projects after creating them in the web interface.',
+    commands: [
+      {
+        name: 'Project creation',
+        usage: 'envhub clone <project-name>',
+        description: 'You can create a new project from the web interface. Then, you can clone it to your local machine using the following command.'
+      },
+      {
+        name: 'Pull latest changes',
+        usage: 'envhub pull',
+        description: 'After cloning a project, you can pull the latest changes from the web interface using the following command.'
+      },
+      {
+        name: 'Delete a remote project',
+        usage: 'envhub reset',
+        description: 'You can delete the remote project form your local machine using the following command. This will reset that folder by deleting all the configurations of that project.'
+      }
+    ]
+  },
+  {
+    id: 'environment-variables',
+    title: 'Environment Variables',
+    icon: Terminal,
+    description: 'Manage environment variables for your projects.',
+    commands: [
+      {
+        name: 'Add variable',
+        usage: 'envhub add',
+        description: 'You can add a new environment variable using the following command. You will be prompted to enter a key and value.'
+      },
+      {
+        name: 'List variables',
+        usage: 'envhub list',
+        description: 'You can list all the environment variables for a project using the following command.'
+      },
+      {
+        name: 'Remove variable',
+        usage: 'envhub pull',
+        description: 'Unfortunately, you can only remove a variable using the web interface. after after removing it from the web interface, you can pull the latest changes from the web interface using the following command.'
+      },
+      {
+        name: 'Decrypt and Run',
+        usage: 'envhub decrypt -- <command-to-run>',
+        description: 'To decrypt and run your environment variables, use the following command. This will securely decrypt your environment variables at runtime, making them available to your Node.js application while keeping them protected in your codebase. '
+      }
+    ]
+  }
+];
 
-  const commands = [
-    {
-      name: 'login',
-      description: 'Authenticate with EnvHub',
-      usage: 'envhub login',
-    },
-    {
-      name: 'project',
-      description: 'Project management commands',
-      subcommands: [
-        {
-          name: 'create',
-          description: 'Create a new project',
-          usage: 'envhub project create "Project Name"',
-        },
-        {
-          name: 'list',
-          description: 'List all projects',
-          usage: 'envhub project list',
-        },
-      ],
-    },
-    {
-      name: 'var',
-      description: 'Environment variable management',
-      subcommands: [
-        {
-          name: 'set',
-          description: 'Set an environment variable',
-          usage: 'envhub var set KEY "VALUE"',
-        },
-        {
-          name: 'get',
-          description: 'Get an environment variable',
-          usage: 'envhub var get KEY',
-        },
-        {
-          name: 'list',
-          description: 'List all variables',
-          usage: 'envhub var list',
-        },
-      ],
-    },
-    {
-      name: 'team',
-      description: 'Team management commands',
-      subcommands: [
-        {
-          name: 'invite',
-          description: 'Invite a team member',
-          usage: 'envhub team invite email@example.com',
-        },
-        {
-          name: 'list',
-          description: 'List team members',
-          usage: 'envhub team list',
-        },
-      ],
-    },
-  ];
+export const CLIDocs: React.FC<CLIDocsProps> = ({ initialSection }) => {
+  const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (initialSection && containerRef.current) {
+      const section = document.getElementById(initialSection);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [initialSection]);
 
   return (
     <DocsLayout sections={sections}>
-      <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
+      <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans" ref={containerRef}>
         <Helmet>
           <title>CLI Documentation - EnvHub</title>
           <meta
@@ -134,87 +185,66 @@ export const CLIDocs = () => {
         {/* Content */}
         <div className="relative z-10 pt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Content */}
-            <div className="space-y-12">
-              {/* Introduction */}
-              <div className="animate-fade-in-up">
-                <h1 className="text-4xl font-bold text-white mb-4">
-                  Command Line Interface Documentation
-                </h1>
-                <p className="text-gray-400 mb-8">
-                  The EnvHub CLI allows you to manage your environment variables securely from the command line. This documentation covers all available commands and their usage.
-                </p>
-              </div>
+            {/* Introduction */}
+            <div className="animate-fade-in-up mb-12">
+              <h1 className="text-4xl font-bold text-white mb-4">
+                EnvHub CLI Documentation
+              </h1>
+              <p className="text-gray-400 text-lg">
+                Comprehensive guide to using the EnvHub Command Line Interface for managing your environment variables.
+              </p>
+            </div>
 
-              {/* Command Reference */}
-              <div className="animate-fade-in-up delay-100">
-                <h2 className="text-2xl font-semibold text-white mb-6">Command Reference</h2>
-                <div className="space-y-8">
-                  {commands.map((command) => (
-                    <div key={command.name} className="space-y-4 animate-fade-in-up delay-200">
-                      <h3 className="text-xl font-semibold text-white mb-2">{command.name}</h3>
-                      <p className="text-gray-400 mb-4">{command.description}</p>
-
-                      {command.subcommands ? (
-                        <div className="space-y-4">
-                          {command.subcommands.map((subcommand) => (
-                            <div key={subcommand.name} className="space-y-2 animate-fade-in-up delay-300">
-                              <h4 className="text-lg font-semibold text-white mb-2">
-                                {subcommand.name}
-                              </h4>
-                              <p className="text-gray-400 mb-2">{subcommand.description}</p>
-                              <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                                <code>{`
-${subcommand.usage}
-`}</code>
-                              </pre>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                          <code>{`
-${command.usage}
-`}</code>
-                        </pre>
-                      )}
+            {/* Table of Contents */}
+            <div className="mb-16">
+              <h2 className="text-2xl font-semibold text-white mb-6">Table of Contents</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {commandSections.map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="flex items-center p-4 bg-gray-900/50 rounded-lg hover:bg-gray-800/50 transition-colors"
+                  >
+                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
+                      <section.icon className="w-6 h-6 text-purple-400" />
                     </div>
-                  ))}
-                </div>
+                    <div>
+                      <h3 className="text-white font-medium">{section.title}</h3>
+                      <p className="text-gray-400 text-sm">{section.description}</p>
+                    </div>
+                  </a>
+                ))}
               </div>
+            </div>
 
-              {/* Advanced Usage */}
-              <div className="animate-fade-in-up delay-100">
-                <h2 className="text-2xl font-semibold text-white mb-6">Advanced Usage</h2>
-                <div className="space-y-6">
-                  {/* Environment Management */}
-                  <div className="animate-fade-in-up delay-200">
-                    <h3 className="text-xl font-semibold text-white mb-2">Environment Management</h3>
-                    <p className="text-gray-400 mb-4">
-                      Manage different environments using the --env flag:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>{`
-envhub var set DATABASE_URL "dev-url" --env development
-envhub var set DATABASE_URL "prod-url" --env production
-`}</code>
-                    </pre>
+            {/* Command Sections */}
+            <div className="space-y-20">
+              {commandSections.map((section) => (
+                <section key={section.id} id={section.id} className="scroll-mt-20">
+                  <div className="flex items-center mb-6">
+                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
+                      <section.icon className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-white">{section.title}</h2>
                   </div>
-
-                  {/* Variable Export */}
-                  <div className="animate-fade-in-up delay-200">
-                    <h3 className="text-xl font-semibold text-white mb-2">Variable Export</h3>
-                    <p className="text-gray-400 mb-4">
-                      Export variables to a .env file:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>{`
-envhub var export > .env
-`}</code>
-                    </pre>
+                  
+                  <p className="text-gray-400 mb-8">{section.description}</p>
+                  
+                  <div className="space-y-6">
+                    {section.commands.map((command, index) => (
+                      <div key={`${section.id}-${index}`} className="bg-gray-900/50 rounded-lg p-6">
+                        <h3 className="text-lg font-medium text-white mb-2">{command.name}</h3>
+                        <p className="text-gray-400 mb-4">{command.description}</p>
+                        <div className="bg-black/50 p-4 rounded-lg overflow-x-auto">
+                          <code className="text-purple-300 font-mono text-sm">
+                            {command.usage}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              </div>
+                </section>
+              ))}
             </div>
           </div>
         </div>
