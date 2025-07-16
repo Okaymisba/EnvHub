@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import DocsLayout from '@/components/DocsLayout';
 import { Book, Terminal, Shield, Users, Zap, GitBranch } from 'lucide-react';
+
+interface QuickStartProps {
+  initialSection?: string;
+}
 
 const sections = [
   {
     title: 'Getting Started',
     icon: Book,
     items: [
-      { label: 'Quick Start Guide', path: '/docs/getting-started' },
-      { label: 'Installation', path: '/docs/installation' },
-      { label: 'Your First Project', path: '/docs/first-project' },
-      { label: 'Environment Setup', path: '/docs/environment-setup' }
+      { label: 'Introduction', path: '/docs/getting-started/introduction#introduction' },
+      { label: 'Installation', path: '/docs/getting-started/installation#installation' },
+      { label: 'Usage', path: '/docs/getting-started/usage#usage' }
     ]
   },
   {
@@ -46,10 +49,92 @@ const sections = [
   }
 ];
 
-export const QuickStart = () => {
+const quickStartSections = [
+  {
+    id: 'introduction',
+    title: 'Introduction',
+    icon: Zap,
+    description: 'Get started with EnvHub in minutes. This guide will walk you through the essential steps to set up and use EnvHub effectively.',
+    content: (
+      <div className="space-y-4">
+        <p className="text-gray-400">
+          EnvHub makes it easy to manage your environment variables securely across different environments and team members.
+        </p>
+      </div>
+    )
+  },
+  {
+    id: 'installation',
+    title: 'Installation',
+    icon: Terminal,
+    description: 'Install EnvHub CLI on your system to get started.',
+    content: (
+      <div className="space-y-4">
+        <p className="text-gray-400">Install EnvHub using pip:</p>
+        <pre className="bg-gray-900 p-4 rounded-lg text-gray-300 overflow-x-auto">
+          <code>pip install envhub-cli</code>
+        </pre>
+        <p className="text-gray-400">If your environment is externally managed, use pipx:</p>
+        <pre className="bg-gray-900 p-4 rounded-lg text-gray-300 overflow-x-auto">
+          <code>pipx install envhub-cli</code>
+        </pre>
+      </div>
+    )
+  },
+  {
+    id: 'usage',
+    title: 'Basic Usage',
+    icon: GitBranch,
+    description: 'Learn how to use EnvHub for your projects.',
+    content: (
+      <div className="space-y-6">
+        <div className="bg-gray-900/50 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-white mb-2">Clone a Project</h3>
+          <p className="text-gray-400 mb-4">First, create a project in the web interface, then clone it to your local environment:</p>
+          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto">
+            <code className="text-purple-300 font-mono text-sm">envhub clone {'<project-name>'}</code>
+          </div>
+        </div>
+
+        <div className="bg-gray-900/50 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-white mb-2">Add Variables</h3>
+          <p className="text-gray-400 mb-4">Add environment variables using the CLI:</p>
+          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto mb-4">
+            <code className="text-purple-300 font-mono text-sm">envhub add</code>
+          </div>
+          <p className="text-gray-400">You'll be prompted to enter the variable name and value.</p>
+        </div>
+
+        <div className="bg-gray-900/50 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-white mb-2">Run with Environment Variables</h3>
+          <p className="text-gray-400 mb-4">Securely run your application with environment variables:</p>
+          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto mb-4">
+            <code className="text-purple-300 font-mono text-sm">envhub decrypt -- node app.js</code>
+          </div>
+          <p className="text-gray-400">
+            This will decrypt your environment variables at runtime, making them available to your application while keeping them secure in your codebase.
+          </p>
+        </div>
+      </div>
+    )
+  }
+];
+
+export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (initialSection && containerRef.current) {
+      const section = document.getElementById(initialSection);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [initialSection]);
+
   return (
     <DocsLayout sections={sections}>
-      <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
+      <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans" ref={containerRef}>
         <Helmet>
           <title>Quick Start - EnvHub</title>
           <meta
@@ -67,84 +152,50 @@ export const QuickStart = () => {
         {/* Content */}
         <div className="relative z-10 pt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Content */}
-            <div className="space-y-12">
-              {/* Introduction */}
-              <div className="animate-fade-in-up">
-                <h1 className="text-4xl font-bold text-white mb-4">Quick Start Guide</h1>
-                <p className="text-gray-400 mb-8">
-                  Get started with EnvHub in minutes. This guide will walk you through the essential steps to set up and use EnvHub effectively.
-                </p>
-              </div>
+            {/* Introduction */}
+            <div className="animate-fade-in-up mb-12">
+              <h1 className="text-4xl font-bold text-white mb-4">Quick Start Guide</h1>
+              <p className="text-gray-400 text-lg">
+                Get up and running with EnvHub in minutes. Follow this guide to set up and start using EnvHub effectively.
+              </p>
+            </div>
 
-              {/* Installation */}
-              <div className="animate-fade-in-up delay-100">
-                <h2 className="text-2xl font-semibold text-white mb-4">Installation</h2>
-                <p className="text-gray-400 mb-4">
-                  Install EnvHub using pip:
-                </p>
-                <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                  <code>pip install envhub-cli</code>
-                </pre>
-                <p className="text-gray-400 mb-4 mt-4">
-                    If your environment is externally managed, use the following command:
-                </p>
-                <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                  <code>pipx install envhub-cli</code>
-                </pre>
+            {/* Table of Contents */}
+            <div className="mb-16">
+              <h2 className="text-2xl font-semibold text-white mb-6">Table of Contents</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {quickStartSections.map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="flex items-center p-4 bg-gray-900/50 rounded-lg hover:bg-gray-800/50 transition-colors"
+                  >
+                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
+                      <section.icon className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium">{section.title}</h3>
+                      <p className="text-gray-400 text-sm">{section.description}</p>
+                    </div>
+                  </a>
+                ))}
               </div>
+            </div>
 
-              {/* Usage */}
-              <div className="animate-fade-in-up delay-300">
-                <h2 className="text-2xl font-semibold text-white mb-4">Usage</h2>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Create a Project</h3>
-                    <p className="text-gray-400 mb-4">
-                      First create a project in the web interface, then you can clone that project in development environment using the following command:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>envhub clone {'<project-name>'}</code>
-                    </pre>
+            {/* Sections */}
+            <div className="space-y-20">
+              {quickStartSections.map((section) => (
+                <section key={section.id} id={section.id} className="scroll-mt-20">
+                  <div className="flex items-center mb-6">
+                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
+                      <section.icon className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-white">{section.title}</h2>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Add Variables</h3>
-                    <p className="text-gray-400 mb-4">
-                      Now after cloning the project, you can add variables using both the web interface and the CLI.
-                    </p>
-                    <p className="text-gray-400 mb-4">
-                      To add a variable using the cli, use the following command:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>envhub add</code>
-                    </pre>
-                    <p className="text-gray-400 mb-4 mt-4">
-                        Then you will be prompted to enter the variable name and value.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Decrypt and Run</h3>
-                    <p className="text-gray-400 mb-4">
-                      To decrypt and run your environment variables, use the following command:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>{`
-envhub decrypt -- <command-to-run>
-`}</code>
-                    </pre>
-                    <p className="text-gray-400 mb-4 mt-4">
-                        For example, if you want to run a Node.js app, you can use the following command:
-                    </p>
-                    <pre className="bg-gray-900 p-4 rounded-lg text-gray-300">
-                      <code>envhub decrypt -- node app.js</code>
-                    </pre>
-                    <p className="text-gray-400 mb-4 mt-4">
-                      This will securely decrypt your environment variables at runtime, making them available to your Node.js application while keeping them protected in your codebase.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                  <p className="text-gray-400 mb-8">{section.description}</p>
+                  {section.content}
+                </section>
+              ))}
             </div>
           </div>
         </div>

@@ -14,10 +14,9 @@ const sections = [
     title: 'Getting Started',
     icon: Book,
     items: [
-      { label: 'Quick Start Guide', path: '/docs/getting-started' },
-      { label: 'Installation', path: '/docs/installation' },
-      { label: 'Your First Project', path: '/docs/first-project' },
-      { label: 'Environment Setup', path: '/docs/environment-setup' }
+      { label: 'Introduction', path: '/docs/getting-started/introduction#introduction' },
+      { label: 'Installation', path: '/docs/getting-started/installation#installation' },
+      { label: 'Usage', path: '/docs/getting-started/usage#usage' }
     ]
   },
   {
