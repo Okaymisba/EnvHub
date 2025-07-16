@@ -2,9 +2,9 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
   X, 
@@ -15,16 +15,62 @@ import {
   Info, 
   Mail 
 } from 'lucide-react';
+import { ProfileDropdown } from './ProfileDropdown';
+import { SupabaseService } from '@/services/supabaseService';
+import { supabase } from "@/integrations/supabase/client";
 
-interface NavbarProps {
-  onGetStarted: () => void;
-}
 
-export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
+export const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const isDocsPage = location.pathname.startsWith('/docs');
+
+  useEffect(() => {
+    // Check current user on mount
+    const checkUser = async () => {
+      try {
+        const { data } = await SupabaseService.getCurrentUser();
+        setUser(data?.user || null);
+      } catch (error) {
+        console.error('Error checking user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUser();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setUser(session?.user || null);
+        }
+    );
+
+    return () => {
+      if (authListener?.subscription) {
+        authListener.subscription.unsubscribe();
+      }
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await SupabaseService.signOut();
+      setUser(null);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const handleGetStarted = () => {
+    navigate('/signin');
+  };
 
   const navItems = [
     { 
@@ -54,6 +100,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
     }
   ];
 
+  if (loading) {
+    return null; // Or a loading spinner
+  }
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,39 +115,44 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => {
-                  if (item.path.startsWith('http')) {
-                    window.open(item.path, '_blank');
-                  } else {
-                    navigate(item.path);
-                  }
-                }}
-                className="text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium flex items-center gap-2"
-              >
-                {item.icon}
-                {item.label}
-              </button>
-            ))}
-          </div>
-
+          {!user && (
+            <div className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => {
+                    if (item.path.startsWith('http')) {
+                      window.open(item.path, '_blank');
+                    } else {
+                      navigate(item.path);
+                    }
+                  }}
+                  className="text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium flex items-center gap-2"
+                >
+                  {item.icon}
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              onClick={onGetStarted}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
-            >
-              Get Started
-            </Button>
+            {isDocsPage && user ? (
+              <ProfileDropdown user={user} onLogout={handleLogout} />
+            ) : (
+              <Button
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
+              >
+                {user ? 'Dashboard' : 'Get Started'}
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              onClick={toggleMenu}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-300 hover:text-white transition-colors"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -106,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-black/95 backdrop-blur-md border-b border-gray-800">
           <div className="px-4 py-6 space-y-4">
@@ -116,38 +171,33 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
                 onClick={() => {
                   if (item.path.startsWith('http')) {
                     window.open(item.path, '_blank');
-                    setIsMenuOpen(false);
                   } else {
                     navigate(item.path);
                     setIsMenuOpen(false);
                   }
                 }}
-                className="block w-full text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 font-medium py-2 flex items-center gap-2"
+                className="text-gray-300 hover:bg-gray-800 hover:text-white block w-full text-left px-4 py-2 rounded-md text-base font-medium flex items-center gap-2"
               >
                 {item.icon}
                 {item.label}
               </button>
             ))}
             <div className="pt-4 space-y-3">
-              <Button
-                onClick={() => {
-                  onGetStarted();
-                  setIsMenuOpen(false);
-                }}
-                variant="outline"
-                className="w-full border-gray-700 text-white hover:bg-gray-800 hover:border-purple-400"
-              >
-                Sign In
-              </Button>
-              <Button
-                onClick={() => {
-                  onGetStarted();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
-              >
-                Get Started
-              </Button>
+              {isDocsPage && user ? (
+                <div className="px-3 py-2">
+                  <ProfileDropdown user={user} onLogout={handleLogout} />
+                </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    handleGetStarted();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
+                >
+                  {user ? 'Dashboard' : 'Get Started'}
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -155,3 +205,5 @@ export const Navbar: React.FC<NavbarProps> = ({ onGetStarted }) => {
     </nav>
   );
 };
+
+export default Navbar;
