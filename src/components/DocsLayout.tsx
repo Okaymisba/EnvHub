@@ -24,7 +24,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({ children, sections }) => {
   return (
     <div className="flex min-h-screen bg-black">
       {/* Sidebar */}
-      <aside className="w-64 bg-black">
+      <aside className="w-64 bg-black flex-shrink-0">
         <div className="p-4">
           {/* Documentation Heading */}
           <div className="mb-8">
@@ -60,6 +60,9 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({ children, sections }) => {
           </nav>
         </div>
       </aside>
+
+      {/* Vertical Divider */}
+      <div className="h-auto min-h-full w-px bg-gray-700 flex-shrink-0" />
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-black">
