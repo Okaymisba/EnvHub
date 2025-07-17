@@ -10,6 +10,7 @@ import { Github } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import {FcGoogle} from "react-icons/fc";
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -115,9 +116,9 @@ export default function Signup() {
             onClick={handleGoogleAuth}
             disabled={loading}
             variant="outline"
-            className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+            className="w-full bg-black text-white border-gray-800 hover:bg-gray-100 hover:border-gray-700 transition-colors duration-200"
           >
-            <Github className="mr-2 h-4 w-4" />
+            <FcGoogle className="mr-2 h-4 w-4" />
             Continue with Google
           </Button>
 

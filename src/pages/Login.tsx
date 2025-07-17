@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Github } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -136,9 +136,9 @@ export default function Login() {
             onClick={handleGoogleAuth}
             disabled={loading}
             variant="outline"
-            className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+            className="w-full bg-black text-white border-gray-800 hover:bg-gray-100 hover:border-gray-700 transition-colors duration-200"
           >
-            <Github className="mr-2 h-4 w-4" />
+            <FcGoogle className="mr-2 h-4 w-4" />
             Continue with Google
           </Button>
 
