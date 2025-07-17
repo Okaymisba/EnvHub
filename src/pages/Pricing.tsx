@@ -1,82 +1,16 @@
-
 // Copyright (c) 2025 Misbah Sarfaraz msbahsarfaraz@gmail.com
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, X, Info, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import type { User } from '@supabase/supabase-js';
 
 const Pricing = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    // Get current user
-    const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getCurrentUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleUpgrade = async (variantId: number, productName: string) => {
-    // Check if user is authenticated
-    if (!user) {
-      // Redirect to auth page with return URL
-      navigate('/?auth=true&plan=' + productName.toLowerCase());
-      return;
-    }
-
-    try {
-      setLoading(true);
-      
-      // Create checkout session
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { variantId, productName }
-      });
-
-      if (error) {
-        console.error('Checkout error:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to create checkout session. Please try again.',
-          variant: 'destructive'
-        });
-        return;
-      }
-
-      if (data?.checkoutUrl) {
-        // Redirect to Stripe checkout
-        window.open(data.checkoutUrl, '_blank');
-      }
-    } catch (error) {
-      console.error('Upgrade error:', error);
-      toast({
-        title: 'Error',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const plans = [
     {
@@ -93,8 +27,7 @@ const Pricing = () => {
       ],
       buttonText: 'Get Started Free',
       popular: false,
-      buttonVariant: 'outline' as const,
-      variantId: null
+      buttonVariant: 'outline' as const
     },
     {
       name: 'Pro',
@@ -108,10 +41,9 @@ const Pricing = () => {
         { text: 'No ads', included: true },
         { text: 'Invite up to 5 members (then $0.10 per member)', included: true }
       ],
-      buttonText: user ? 'Upgrade to Pro' : 'Start Pro Trial',
+      buttonText: 'Start Pro Trial',
       popular: true,
-      buttonVariant: 'default' as const,
-      variantId: 881719
+      buttonVariant: 'default' as const
     },
     {
       name: 'Team',
@@ -125,24 +57,11 @@ const Pricing = () => {
         { text: 'No ads', included: true },
         { text: 'Invite up to 25 members (then $0.10 per member)', included: true }
       ],
-      buttonText: user ? 'Upgrade to Team' : 'Start Team Trial',
+      buttonText: 'Start Team Trial',
       popular: false,
-      buttonVariant: 'outline' as const,
-      variantId: 881732
+      buttonVariant: 'outline' as const
     }
   ];
-
-  const handlePlanAction = (plan: typeof plans[0]) => {
-    if (plan.name === 'Free') {
-      if (!user) {
-        navigate('/?auth=true');
-      } else {
-        navigate('/');
-      }
-    } else if (plan.variantId) {
-      handleUpgrade(plan.variantId, plan.name);
-    }
-  };
 
   return (
     <>
@@ -266,10 +185,9 @@ const Pricing = () => {
                       : ''
                       }`}
                     variant={plan.buttonVariant}
-                    onClick={() => handlePlanAction(plan)}
-                    disabled={loading}
+                    onClick={() => navigate('/')}
                   >
-                    {loading && plan.variantId ? 'Processing...' : plan.buttonText}
+                    {plan.buttonText}
                   </Button>
                 </CardContent>
               </Card>
@@ -330,7 +248,7 @@ const Pricing = () => {
               Join thousands of developers who trust EnvHub with their secrets.
             </p>
             <Button
-              onClick={() => navigate('/?auth=true')}
+              onClick={() => navigate('/')}
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-4 text-xl font-bold"
             >
