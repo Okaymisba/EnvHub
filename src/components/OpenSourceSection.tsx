@@ -7,7 +7,7 @@ export const OpenSourceSection = () => {
   useEffect(() => {
     const fetchStars = async () => {
       try {
-        const response = await fetch('https://api.github.com/repos/Okaymisba/EnvHub');
+        const response = await fetch('https://api.github.com/repos/EnvHubOrg/EnvHub');
         if (!response.ok) throw new Error('Failed to fetch repository data');
         const data = await response.json();
         setStars(data.stargazers_count);
@@ -56,7 +56,7 @@ export const OpenSourceSection = () => {
 
         <div className="mt-12 text-center">
           <a
-            href="https://github.com/Okaymisba/EnvHub"
+            href="https://github.com/EnvHubOrg/EnvHub"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-gray rounded-lg hover:opacity-90 transition-opacity"

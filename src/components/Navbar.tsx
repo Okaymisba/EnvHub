@@ -95,7 +95,7 @@ export const Navbar = () => {
     },
     {
       label: 'GitHub',
-      path: 'https://github.com/Okaymisba/EnvHub',
+      path: 'https://github.com/EnvHubOrg/EnvHub',
       icon: <Github className="w-4 h-4" />
     }
   ];
