@@ -89,7 +89,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({ onGetStarted }) => {
           </span>
         </h2>
         <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
-          EnvHub provides military-grade encryption and real-time monitoring to protect your secrets before they become part of these statistics.
+          All environment variables are encrypted using AES-256-GCM before they leave your device with military-grade security measures
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200">
           <Button
