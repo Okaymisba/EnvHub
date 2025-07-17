@@ -69,10 +69,10 @@ const sections = [
     title: 'Team Collaboration',
     icon: Users,
     items: [
-      { label: 'Getting Started', path: '/docs/team/getting-started' },
-      { label: 'Managing Team Members', path: '/docs/team/members' },
-      { label: 'Access Control', path: '/docs/team/access-control' },
-      { label: 'Best Practices', path: '/docs/team/best-practices' }
+      { label: 'Getting Started', path: '/docs/team/getting-started#introduction' },
+      { label: 'Managing Team Members', path: '/docs/team/members#members' },
+      { label: 'Access Control', path: '/docs/team/access-control#access-control' },
+      { label: 'Best Practices', path: '/docs/team/best-practices#best-practices' }
     ]
   }
 ];

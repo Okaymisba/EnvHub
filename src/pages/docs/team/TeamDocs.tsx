@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import DocsLayout from '@/components/DocsLayout';
-import { Book, Terminal, Shield, Users, Zap, GitBranch } from 'lucide-react';
+import {Users, UserPlus, UserCog, Lock, Users2, Settings, Shield, Book, Terminal} from 'lucide-react';
 
-interface QuickStartProps {
+interface TeamDocsProps {
   initialSection?: string;
 }
 
@@ -49,78 +49,89 @@ const sections = [
   }
 ];
 
-const quickStartSections = [
+const teamSections = [
   {
     id: 'introduction',
-    title: 'Introduction',
-    icon: Zap,
-    description: 'Get started with EnvHub in minutes. This guide will walk you through the essential steps to set up and use EnvHub effectively.',
+    title: 'Introduction to Team Collaboration',
+    icon: Users,
+    description: 'Learn how to effectively collaborate with your team using EnvHub.',
     content: (
       <div className="space-y-4">
         <p className="text-gray-400">
-          EnvHub makes it easy to manage your environment variables securely across different environments and team members.
+          EnvHub's team collaboration features allow you to securely share environment variables with your team members while maintaining strict access controls.
         </p>
       </div>
     )
   },
   {
-    id: 'installation',
-    title: 'Installation',
-    icon: Terminal,
-    description: 'Install EnvHub CLI on your system to get started.',
-    content: (
-      <div className="space-y-4">
-        <p className="text-gray-400">Install EnvHub using pip:</p>
-        <pre className="bg-gray-900 p-4 rounded-lg text-gray-300 overflow-x-auto">
-          <code>pip install envhub-cli</code>
-        </pre>
-        <p className="text-gray-400">If your environment is externally managed, use pipx:</p>
-        <pre className="bg-gray-900 p-4 rounded-lg text-gray-300 overflow-x-auto">
-          <code>pipx install envhub-cli</code>
-        </pre>
-      </div>
-    )
+    id: 'members',
+    title: 'Managing Team Members',
+    icon: UserPlus,
+    description: 'Add, remove, and manage team members with different permission levels.',
+    features: [
+      {
+        title: 'Adding Team Members',
+        description: 'Invite new members to collaborate on your project.',
+        details: [
+          'Navigate to your project page',
+          'Click "Members" at the top right',
+          'Enter the email address, select a role (Admin/User), set the access password (This password will be used by the member to access the secrets) and then the project password (Just for the verification)',
+          'Click "Send"',
+          'The member will receive an invitation email in their inbox of the EnvHub'
+        ]
+      }
+      // {
+      //   title: 'Managing Permissions',
+      //   description: 'Update roles and permissions for team members.',
+      //   details: [
+      //     'Go to Team Settings',
+      //     'Find the team member',
+      //     'Click on the role dropdown',
+      //     'Select the new role (Owner/Admin/User)'
+      //   ]
+      // }
+    ]
   },
   {
-    id: 'usage',
-    title: 'Basic Usage',
-    icon: GitBranch,
-    description: 'Learn how to use EnvHub for your projects.',
-    content: (
-      <div className="space-y-6">
-        <div className="bg-gray-900/50 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-white mb-2">Clone a Project</h3>
-          <p className="text-gray-400 mb-4">First, create a project in the web interface, then clone it to your local environment:</p>
-          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto">
-            <code className="text-purple-300 font-mono text-sm">envhub clone {'<project-name>'}</code>
-          </div>
-        </div>
-
-        <div className="bg-gray-900/50 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-white mb-2">Add Variables</h3>
-          <p className="text-gray-400 mb-4">Add environment variables using the CLI:</p>
-          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto mb-4">
-            <code className="text-purple-300 font-mono text-sm">envhub add</code>
-          </div>
-          <p className="text-gray-400">You'll be prompted to enter the variable name and value.</p>
-        </div>
-
-        <div className="bg-gray-900/50 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-white mb-2">Run with Environment Variables</h3>
-          <p className="text-gray-400 mb-4">Securely run your application with environment variables:</p>
-          <div className="bg-black/50 p-4 rounded-lg overflow-x-auto mb-4">
-            <code className="text-purple-300 font-mono text-sm">envhub decrypt -- node app.js</code>
-          </div>
-          <p className="text-gray-400">
-            This will decrypt your environment variables at runtime, making them available to your application while keeping them secure in your codebase.
-          </p>
-        </div>
-      </div>
-    )
+    id: 'access-control',
+    title: 'Access Control',
+    icon: Lock,
+    description: 'Control what each team member can access and modify.',
+    features: [
+      {
+        title: 'Role-Based Access Control',
+        description: 'Control exactly who can view, edit, or manage your environment variables with three distinct permission levels.',
+        details: [
+          'Owner: Full control over all project settings, team management, and project deletion',
+          'Admin: Can manage environment variables and project settings, but cannot delete the project',
+          'User: Read-only access to environment variables, cannot make any modifications'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'best-practices',
+    title: 'Best Practices',
+    icon: UserCog,
+    description: 'Recommended practices for effective team collaboration.',
+    features: [
+      {
+        title: 'Security Best Practices',
+        description: 'Recommended practices for managing environment variables securely.',
+        details: [
+          'Use the principle of least privilege when assigning roles to team members',
+          'Keep your master password secure and never share it',
+          'Use strong, unique passwords for all service accounts',
+          'Regularly review and clean up unused environment variables',
+          'Limit the number of users with Owner and Admin privileges',
+          'Use environment-specific variables to separate development, staging, and production values'
+        ]
+      }
+    ]
   }
 ];
 
-export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
+const TeamDocs: React.FC<TeamDocsProps> = ({ initialSection }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -136,10 +147,10 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
     <DocsLayout sections={sections}>
       <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans" ref={containerRef}>
         <Helmet>
-          <title>Quick Start - EnvHub</title>
+          <title>Team Collaboration - EnvHub</title>
           <meta
             name="description"
-            content="Get started with EnvHub - Secure environment variable management made easy."
+            content="Learn how to collaborate with your team using EnvHub's secure environment variable management."
           />
         </Helmet>
 
@@ -152,11 +163,11 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
         {/* Content */}
         <div className="relative z-10 pt-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Introduction */}
+            {/* Header */}
             <div className="animate-fade-in-up mb-12">
-              <h1 className="text-4xl font-bold text-white mb-4">Quick Start Guide</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">Team Collaboration</h1>
               <p className="text-gray-400 text-lg">
-                Get up and running with EnvHub in minutes. Follow this guide to set up and start using EnvHub effectively.
+                Securely collaborate with your team by managing access to environment variables and project settings.
               </p>
             </div>
 
@@ -164,7 +175,7 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
             <div className="mb-16">
               <h2 className="text-2xl font-semibold text-white mb-6">Table of Contents</h2>
               <div className="space-y-4">
-                {quickStartSections.map((section) => (
+                {teamSections.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
@@ -184,7 +195,7 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
 
             {/* Sections */}
             <div className="space-y-16 pb-20">
-              {quickStartSections.map((section) => (
+              {teamSections.map((section) => (
                 <section key={section.id} id={section.id} className="scroll-mt-20">
                   <div className="flex items-center mb-6">
                     <div className="p-2 rounded-lg bg-purple-500/10 mr-4">
@@ -192,11 +203,27 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
                     </div>
                     <h2 className="text-3xl font-bold text-white">{section.title}</h2>
                   </div>
-                  
+
                   <p className="text-gray-300 text-lg mb-8">{section.description}</p>
-                  
+
                   <div className="space-y-8">
                     {section.content}
+                    {section.features?.map((feature, index) => (
+                      <div key={index} className="space-y-4">
+                        <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                        <p className="text-gray-400">{feature.description}</p>
+                        {feature.details && (
+                          <ul className="space-y-2 text-gray-400">
+                            {feature.details.map((detail, i) => (
+                              <li key={i} className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </section>
               ))}
@@ -207,3 +234,5 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
     </DocsLayout>
   );
 };
+
+export default TeamDocs;

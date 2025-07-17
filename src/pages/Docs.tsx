@@ -32,20 +32,20 @@ const Docs = () => {
       title: 'Security',
       icon: Shield,
       items: [
-        { label: 'Encryption Overview', path: '/docs/security/encryption' },
-        { label: 'Access Control', path: '/docs/security/access-control' },
-        { label: 'Best Practices', path: '/docs/security/best-practices' },
-        { label: 'Compliance', path: '/docs/security/compliance' }
+        { label: 'Encryption Overview', path: '/docs/security/encryption#encryption' },
+        { label: 'Access Control', path: '/docs/security/access-control#access-control' },
+        { label: 'Best Practices', path: '/docs/security/best-practices#best-practices' },
+        { label: 'Security Measures', path: '/docs/security/security-measures#security-measures' }
       ]
     },
     {
       title: 'Team Collaboration',
       icon: Users,
       items: [
-        { label: 'Getting Started', path: '/docs/team/getting-started' },
-        { label: 'Managing Team Members', path: '/docs/team/members' },
-        { label: 'Access Control', path: '/docs/team/access-control' },
-        { label: 'Best Practices', path: '/docs/team/best-practices' }
+        { label: 'Getting Started', path: '/docs/team/getting-started#introduction' },
+        { label: 'Managing Team Members', path: '/docs/team/members#members' },
+        { label: 'Access Control', path: '/docs/team/access-control#access-control' },
+        { label: 'Best Practices', path: '/docs/team/best-practices#best-practices' }
       ]
     }
   ];

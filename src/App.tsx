@@ -20,6 +20,7 @@ import Docs from "./pages/Docs";
 import { QuickStart } from "./pages/docs/QuickStart";
 import { CLIDocs } from "./pages/docs/CLIDocs";
 import SecurityDocs from "./pages/docs/security/SecurityDocs";
+import TeamDocs from "./pages/docs/team/TeamDocs";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,13 @@ const App = () => (
                         <Route path="/docs/security/access-control" element={<SecurityDocs initialSection="access-control"/>}/>
                         <Route path="/docs/security/best-practices" element={<SecurityDocs initialSection="best-practices"/>}/>
                         <Route path="/docs/security/security-measures" element={<SecurityDocs initialSection="security-measures"/>}/>
+                        
+                        {/* Team Documentation Routes */}
+                        <Route path="/docs/team" element={<TeamDocs/>}/>
+                        <Route path="/docs/team/getting-started" element={<TeamDocs initialSection="introduction"/>}/>
+                        <Route path="/docs/team/members" element={<TeamDocs initialSection="members"/>}/>
+                        <Route path="/docs/team/access-control" element={<TeamDocs initialSection="access-control"/>}/>
+                        <Route path="/docs/team/best-practices" element={<TeamDocs initialSection="best-practices"/>}/>
                         
                         {/* Other Pages */}
                         <Route path="/pricing" element={<Pricing/>}/>
