@@ -21,6 +21,8 @@ import { QuickStart } from "./pages/docs/QuickStart";
 import { CLIDocs } from "./pages/docs/CLIDocs";
 import SecurityDocs from "./pages/docs/security/SecurityDocs";
 import TeamDocs from "./pages/docs/team/TeamDocs";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Index/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/signup" element={<Signup/>}/>
                         <Route path="/project/:projectId" element={<ProjectPage/>}/>
                         <Route path="/docs" element={<Docs/>}/>
                         

@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AuthForm } from '@/components/AuthForm';
 import { Dashboard } from '@/components/Dashboard';
 import { LandingPage } from '@/components/LandingPage';
 import { Project } from '@/types/project';
@@ -18,7 +17,6 @@ const Index = () => {
   const [sharedProjects, setSharedProjects] = useState<(Project & { owner_email: string })[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [showAuth, setShowAuth] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -58,73 +56,6 @@ const Index = () => {
         variant: 'destructive'
       });
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogin = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      const result = await SupabaseService.signIn(email, password);
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
-      setUser(result.user);
-      await loadProjects();
-      toast({
-        title: 'Welcome back!',
-        description: 'Successfully signed in'
-      });
-    } catch (error: any) {
-      console.error('Login error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to sign in',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignup = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      const result = await SupabaseService.signUp(email, password);
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
-      toast({
-        title: 'Check your email',
-        description: 'Please verify your email to complete registration'
-      });
-    } catch (error: any) {
-      console.error('Signup error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to create account',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleAuth = async () => {
-    setLoading(true);
-    try {
-      const result = await SupabaseService.signInWithGoogle();
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
-      // Google auth will redirect, so we don't need to handle success here
-    } catch (error: any) {
-      console.error('Google auth error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to sign in with Google',
-        variant: 'destructive'
-      });
       setLoading(false);
     }
   };
@@ -211,23 +142,8 @@ const Index = () => {
 
       </Helmet>
       
-      {(!user && !showAuth) ? (
-        <LandingPage onGetStarted={() => setShowAuth(true)} />
-      ) : (!user && showAuth) ? (
-        <div className="relative">
-          <button
-            onClick={() => setShowAuth(false)}
-            className="absolute top-4 left-4 z-10 text-gray-400 hover:text-white transition-colors duration-300"
-          >
-            ← Back to Home
-          </button>
-          <AuthForm
-            onLogin={handleLogin}
-            onSignup={handleSignup}
-            onGoogleAuth={handleGoogleAuth}
-            loading={loading}
-          />
-        </div>
+      {!user ? (
+        <LandingPage onGetStarted={() => navigate('/login')} />
       ) : (
         <Dashboard
           projects={projects}

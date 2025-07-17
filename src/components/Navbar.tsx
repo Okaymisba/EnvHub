@@ -33,8 +33,8 @@ export const Navbar = () => {
     // Check current user on mount
     const checkUser = async () => {
       try {
-        const { data } = await SupabaseService.getCurrentUser();
-        setUser(data?.user || null);
+        const user = await SupabaseService.getCurrentUser();
+        setUser(user || null);
       } catch (error) {
         console.error('Error checking user:', error);
       } finally {
@@ -69,7 +69,7 @@ export const Navbar = () => {
   };
 
   const handleGetStarted = () => {
-    navigate('/signin');
+    navigate('/login');
   };
 
   const navItems = [
