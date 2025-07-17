@@ -2,7 +2,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.0';
@@ -69,7 +68,6 @@ serve(async (req) => {
         renews_at: subscription.attributes.renews_at,
         ends_at: subscription.attributes.ends_at,
         trial_ends_at: subscription.attributes.trial_ends_at,
-        price: subscription.attributes.total_formatted,
         setup_fee: subscription.attributes.setup_fee_formatted,
         is_usage_based: subscription.attributes.is_usage_based,
         subscription_item_id: subscription.attributes.subscription_item_id,
@@ -78,6 +76,7 @@ serve(async (req) => {
         variant_name: subscription.attributes.variant_name,
         product_id: subscription.attributes.product_id,
         product_name: subscription.attributes.product_name,
+        price: subscription.attributes.product_name.toLowerCase() === 'team' ? '10' : '4',
         card_brand: subscription.attributes.card_brand,
         card_last_four: subscription.attributes.card_last_four,
         updated_at: new Date().toISOString()
