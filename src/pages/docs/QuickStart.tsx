@@ -151,7 +151,7 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
 
         {/* Content */}
         <div className="relative z-10 pt-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Introduction */}
             <div className="animate-fade-in-up mb-12">
               <h1 className="text-4xl font-bold text-white mb-4">Quick Start Guide</h1>
@@ -163,19 +163,19 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
             {/* Table of Contents */}
             <div className="mb-16">
               <h2 className="text-2xl font-semibold text-white mb-6">Table of Contents</h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 {quickStartSections.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
-                    className="flex items-center p-4 bg-gray-900/50 rounded-lg hover:bg-gray-800/50 transition-colors"
+                    className="group flex items-start p-4 rounded-lg hover:bg-gray-900/50 transition-colors"
                   >
-                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
-                      <section.icon className="w-6 h-6 text-purple-400" />
+                    <div className="p-2 rounded-lg bg-purple-500/10 mr-4 group-hover:bg-purple-500/20 transition-colors">
+                      <section.icon className="w-5 h-5 text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-white font-medium">{section.title}</h3>
-                      <p className="text-gray-400 text-sm">{section.description}</p>
+                      <h3 className="font-medium text-white">{section.title}</h3>
+                      <p className="text-sm text-gray-400 mt-1">{section.description}</p>
                     </div>
                   </a>
                 ))}
@@ -183,17 +183,21 @@ export const QuickStart: React.FC<QuickStartProps> = ({ initialSection }) => {
             </div>
 
             {/* Sections */}
-            <div className="space-y-20">
+            <div className="space-y-16 pb-20">
               {quickStartSections.map((section) => (
                 <section key={section.id} id={section.id} className="scroll-mt-20">
                   <div className="flex items-center mb-6">
-                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
-                      <section.icon className="w-6 h-6 text-purple-400" />
+                    <div className="p-2 rounded-lg bg-purple-500/10 mr-4">
+                      <section.icon className="w-5 h-5 text-purple-400" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-white">{section.title}</h2>
+                    <h2 className="text-3xl font-bold text-white">{section.title}</h2>
                   </div>
-                  <p className="text-gray-400 mb-8">{section.description}</p>
-                  {section.content}
+                  
+                  <p className="text-gray-300 text-lg mb-8">{section.description}</p>
+                  
+                  <div className="space-y-8">
+                    {section.content}
+                  </div>
                 </section>
               ))}
             </div>

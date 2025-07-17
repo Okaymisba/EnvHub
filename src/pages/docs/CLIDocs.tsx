@@ -183,7 +183,7 @@ export const CLIDocs: React.FC<CLIDocsProps> = ({ initialSection }) => {
 
         {/* Content */}
         <div className="relative z-10 pt-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Introduction */}
             <div className="animate-fade-in-up mb-12">
               <h1 className="text-4xl font-bold text-white mb-4">
@@ -197,48 +197,46 @@ export const CLIDocs: React.FC<CLIDocsProps> = ({ initialSection }) => {
             {/* Table of Contents */}
             <div className="mb-16">
               <h2 className="text-2xl font-semibold text-white mb-6">Table of Contents</h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 {commandSections.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
-                    className="flex items-center p-4 bg-gray-900/50 rounded-lg hover:bg-gray-800/50 transition-colors"
+                    className="group flex items-start p-4 rounded-lg hover:bg-gray-900/50 transition-colors"
                   >
-                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
-                      <section.icon className="w-6 h-6 text-purple-400" />
+                    <div className="p-2 rounded-lg bg-blue-500/10 mr-4 group-hover:bg-blue-500/20 transition-colors">
+                      <section.icon className="w-5 h-5 text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-white font-medium">{section.title}</h3>
-                      <p className="text-gray-400 text-sm">{section.description}</p>
+                      <h3 className="font-medium text-white">{section.title}</h3>
+                      <p className="text-sm text-gray-400 mt-1">{section.description}</p>
                     </div>
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Command Sections */}
-            <div className="space-y-20">
+            {/* Sections */}
+            <div className="space-y-16 pb-20">
               {commandSections.map((section) => (
                 <section key={section.id} id={section.id} className="scroll-mt-20">
                   <div className="flex items-center mb-6">
-                    <div className="p-2 bg-purple-500/10 rounded-lg mr-4">
-                      <section.icon className="w-6 h-6 text-purple-400" />
+                    <div className="p-2 rounded-lg bg-blue-500/10 mr-4">
+                      <section.icon className="w-5 h-5 text-purple-400" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-white">{section.title}</h2>
+                    <h2 className="text-3xl font-bold text-white">{section.title}</h2>
                   </div>
                   
-                  <p className="text-gray-400 mb-8">{section.description}</p>
+                  <p className="text-gray-300 text-lg mb-8">{section.description}</p>
                   
                   <div className="space-y-6">
                     {section.commands.map((command, index) => (
-                      <div key={`${section.id}-${index}`} className="bg-gray-900/50 rounded-lg p-6">
-                        <h3 className="text-lg font-medium text-white mb-2">{command.name}</h3>
-                        <p className="text-gray-400 mb-4">{command.description}</p>
-                        <div className="bg-black/50 p-4 rounded-lg overflow-x-auto">
-                          <code className="text-purple-300 font-mono text-sm">
-                            {command.usage}
-                          </code>
+                      <div key={index} className="space-y-4">
+                        <h3 className="text-xl font-semibold text-white">{command.name}</h3>
+                        <div className="bg-gray-900/50 p-4 rounded-lg overflow-x-auto">
+                          <code className="text-gray-300 font-mono">{command.usage}</code>
                         </div>
+                        <p className="text-gray-400">{command.description}</p>
                       </div>
                     ))}
                   </div>
