@@ -52,7 +52,7 @@ const App = () => (
                         <Route path="/docs/security/encryption" element={<SecurityDocs initialSection="encryption"/>}/>
                         <Route path="/docs/security/access-control" element={<SecurityDocs initialSection="access-control"/>}/>
                         <Route path="/docs/security/best-practices" element={<SecurityDocs initialSection="best-practices"/>}/>
-                        <Route path="/docs/security/compliance" element={<SecurityDocs initialSection="compliance"/>}/>
+                        <Route path="/docs/security/security-measures" element={<SecurityDocs initialSection="security-measures"/>}/>
                         
                         {/* Other Pages */}
                         <Route path="/pricing" element={<Pricing/>}/>

@@ -17,6 +17,14 @@ interface SecurityFeature {
   title: string;
   description: string;
   details?: string[];
+  technicalDetails?: {
+    algorithm: string;
+    keyDerivation: string;
+    keySize: string;
+    nonceSize: string;
+    saltSize: string;
+    authenticationTag: string;
+  };
 }
 
 interface SecuritySection {
@@ -54,7 +62,7 @@ const sections = [
       { label: 'Encryption Overview', path: '/docs/security/encryption#encryption' },
       { label: 'Access Control', path: '/docs/security/access-control#access-control' },
       { label: 'Best Practices', path: '/docs/security/best-practices#best-practices' },
-      { label: 'Compliance', path: '/docs/security/compliance#compliance' }
+      { label: 'Security Measures', path: '/docs/security/security-measures#security-measures' }
     ]
   },
   {
@@ -78,12 +86,22 @@ const securitySections: SecuritySection[] = [
     features: [
       {
         title: 'End-to-End Encryption',
-        description: 'All environment variables are encrypted using AES-256-GCM before they leave your device.',
+        description: 'All environment variables are encrypted using AES-256-GCM before they leave your device with military-grade security measures.',
         details: [
-          'Zero-Knowledge Architecture: We never see your unencrypted data',
-          'Client-Side Encryption: Data is encrypted before reaching our servers',
-          'Secure Key Management: Your encryption keys never leave your control'
-        ]
+          'Zero-Knowledge Architecture: We never see your unencrypted data - encryption/decryption happens entirely in your browser',
+          'Client-Side Encryption: Data is encrypted using AES-256-GCM before reaching our servers',
+          'Secure Key Derivation: Uses PBKDF2 with 100,000 iterations and SHA-256 for key strengthening',
+          'Cryptographic Best Practices: Implements proper nonce and salt generation for each encryption operation',
+          'Authenticated Encryption: Uses AES-GCM which provides both confidentiality and authenticity',
+        ],
+        technicalDetails: {
+          algorithm: 'AES-256-GCM (Galois/Counter Mode)',
+          keyDerivation: 'PBKDF2 with 100,000 iterations and SHA-256',
+          keySize: '256 bits',
+          nonceSize: '96 bits (12 bytes)',
+          saltSize: '128 bits (16 bytes)',
+          authenticationTag: '128 bits (16 bytes)'
+        }
       }
     ]
   },
@@ -95,11 +113,11 @@ const securitySections: SecuritySection[] = [
     features: [
       {
         title: 'Role-Based Access Control',
-        description: 'Control exactly who can view, edit, or manage your environment variables.',
+        description: 'Control exactly who can view, edit, or manage your environment variables with three distinct permission levels.',
         details: [
-          'Admin: Full access to all project settings and environment variables',
-          'Developer: Can read and write environment variables',
-          'Viewer: Read-only access to environment variables'
+          'Owner: Full control over all project settings, team management, and project deletion',
+          'Admin: Can manage environment variables and project settings, but cannot delete the project',
+          'User: Read-only access to environment variables, cannot make any modifications'
         ]
       }
     ]
@@ -114,26 +132,31 @@ const securitySections: SecuritySection[] = [
         title: 'Security Best Practices',
         description: 'Recommended practices for managing environment variables securely.',
         details: [
-          'Use the principle of least privilege when assigning roles',
-          'Rotate secrets and access tokens regularly',
-          'Regularly review audit logs for suspicious activity'
+          'Use the principle of least privilege when assigning roles to team members',
+          'Keep your master password secure and never share it',
+          'Use strong, unique passwords for all service accounts',
+          'Regularly review and clean up unused environment variables',
+          'Limit the number of users with Owner and Admin privileges',
+          'Use environment-specific variables to separate development, staging, and production values'
         ]
       }
     ]
   },
   {
-    id: 'compliance',
-    title: 'Compliance',
+    id: 'security-measures',
+    title: 'Security Measures',
     icon: ShieldCheck,
-    description: 'Learn about our security certifications and compliance standards.',
+    description: 'Learn about our security practices and data protection measures.',
     features: [
       {
-        title: 'Compliance & Certifications',
-        description: 'EnvHub meets the highest security and compliance standards in the industry.',
+        title: 'Security & Data Protection',
+        description: 'We implement industry-standard security measures to protect your environment variables.',
         details: [
-          'GDPR Compliance: Tools to help meet data protection obligations',
-          'SOC 2 Type II: Regular security audits',
-          'Data Residency: Choose where your data is stored'
+          'End-to-end encryption for all sensitive data',
+          'Secure access controls with role-based permissions',
+          'Regular security updates and best practices implementation',
+          'Data minimization principles in place',
+          'Secure development lifecycle practices'
         ]
       }
     ]
@@ -232,6 +255,37 @@ const SecurityDocs: React.FC<SecurityDocsProps> = ({ initialSection }) => {
                               </li>
                             ))}
                           </ul>
+                        )}
+                        {feature.technicalDetails && (
+                          <div className="space-y-4">
+                            <h4 className="text-xl font-medium text-white">Technical Details</h4>
+                            <ul className="space-y-2 text-gray-400">
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Algorithm: {feature.technicalDetails.algorithm}</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Key Derivation: {feature.technicalDetails.keyDerivation}</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Key Size: {feature.technicalDetails.keySize}</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Nonce Size: {feature.technicalDetails.nonceSize}</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Salt Size: {feature.technicalDetails.saltSize}</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-purple-400 mr-2">•</span>
+                                <span>Authentication Tag: {feature.technicalDetails.authenticationTag}</span>
+                              </li>
+                            </ul>
+                          </div>
                         )}
                       </div>
                     ))}

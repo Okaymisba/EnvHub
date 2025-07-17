@@ -31,10 +31,10 @@ const sections = [
     title: 'Security',
     icon: Shield,
     items: [
-      { label: 'Encryption Overview', path: '/docs/security/encryption' },
-      { label: 'Access Control', path: '/docs/security/access-control' },
-      { label: 'Best Practices', path: '/docs/security/best-practices' },
-      { label: 'Compliance', path: '/docs/security/compliance' }
+      { label: 'Encryption Overview', path: '/docs/security/encryption#encryption' },
+      { label: 'Access Control', path: '/docs/security/access-control#access-control' },
+      { label: 'Best Practices', path: '/docs/security/best-practices#best-practices' },
+      { label: 'Security Measures', path: '/docs/security/security-measures#security-measures' }
     ]
   },
   {
