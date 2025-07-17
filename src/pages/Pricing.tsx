@@ -185,7 +185,7 @@ const Pricing = () => {
                       : ''
                       }`}
                     variant={plan.buttonVariant}
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/signup')}
                   >
                     {plan.buttonText}
                   </Button>
