@@ -20,7 +20,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
   return (
     <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
       {/* Navbar */}
-      <Navbar onGetStarted={onGetStarted} />
+      <Navbar />
       
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
