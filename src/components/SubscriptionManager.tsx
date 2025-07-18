@@ -130,7 +130,7 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                     <p className="text-lg font-semibold text-white">{limits.envVarsPerProject} each</p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-400">Team Members</p>
+                                    <p className="text-sm text-gray-400">Members Per Project</p>
                                     <p className="text-lg font-semibold text-white">{limits.teamMembers}</p>
                                 </div>
                                 <div>

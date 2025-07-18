@@ -83,9 +83,9 @@ export class SubscriptionService {
         plan: 'Free',
         projects: 2,
         envVarsPerProject: 20,
-        teamMembers: 0,
-        hasCliAccess: false,
-        cliEnvLimit: 5,
+        teamMembers: 1,
+        hasCliAccess: true,
+        cliEnvLimit: null,
         hasAds: true
       };
     }
@@ -120,9 +120,9 @@ export class SubscriptionService {
       plan: 'Free',
       projects: 2,
       envVarsPerProject: 20,
-      teamMembers: 0,
-      hasCliAccess: false,
-      cliEnvLimit: 5,
+      teamMembers: 1,
+      hasCliAccess: true,
+      cliEnvLimit: null,
       hasAds: true
     };
   }
