@@ -2,7 +2,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface Subscription {
@@ -51,14 +50,31 @@ export class SubscriptionService {
   }
 
   static async cancelSubscription(lemonSqueezyId: string): Promise<void> {
-    // This would typically call Lemon Squeezy API to cancel subscription
-    // For now, we'll just update the local status
-    const { error } = await supabase
-      .from('subscriptions')
-      .update({ status: 'cancelled', updated_at: new Date().toISOString() })
-      .eq('lemon_squeezy_id', lemonSqueezyId);
+    try {
+      console.log('Cancelling subscription...' + lemonSqueezyId);
+      const { error: cancelError } = await supabase.functions.invoke('cancel-subscription', {
+        body: { subscriptionId: lemonSqueezyId }
+      });
 
-    if (error) throw error;
+      if (cancelError) {
+        throw new Error('Failed to cancel subscription. Please try again or contact support.');
+      }
+
+      const { error: updateError } = await supabase
+          .from('subscriptions')
+          .update({
+            status: 'cancelled',
+            updated_at: new Date().toISOString()
+          })
+          .eq('lemon_squeezy_id', lemonSqueezyId);
+
+      if (updateError) {
+        throw new Error('Subscription was cancelled, but there was an error updating your account. Please contact support.');
+      }
+    } catch (error) {
+      console.error('Error cancelling subscription:', error);
+      throw new Error(error.message || 'An unexpected error occurred while cancelling your subscription.');
+    }
   }
 
   static getSubscriptionLimits(subscription: Subscription | null) {
