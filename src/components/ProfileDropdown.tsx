@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Mail, LogOut, CreditCard, BookOpen } from 'lucide-react';
+import { Mail, LogOut, CreditCard, BookOpen, DollarSign } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { Notification } from '@/types/notification';
 import { SupabaseService } from '@/services/supabaseService';
@@ -163,6 +163,13 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
         >
           <CreditCard className="mr-2 h-4 w-4" />
           Subscription
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => navigate('/pricing')}
+          className="text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 cursor-pointer transition-all duration-200"
+        >
+          <DollarSign className="mr-2 h-4 w-4" />
+          Pricing
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => navigate('/docs')}
