@@ -32,7 +32,7 @@ EnvHub is a secure, user-friendly platform for managing environment variables ac
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/EnvHubOrg/envhub.git
+   git clone https://github.com/Okaymisba/envhub.git
    cd envhub
    ```
 
@@ -105,7 +105,7 @@ envhub reset
 envhub pull
 ```
 
-For more detailed CLI documentation, please visit the [EnvHub CLI repository](https://github.com/EnvHubOrg/EnvHub-CLI).
+For more detailed CLI documentation, please visit the [EnvHub CLI repository](https://github.com/Okaymisba/EnvHub-CLI).
 
 ## 🤝 Contributing
 
@@ -125,7 +125,7 @@ This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE
 
 Misbah Sarfraz - [@myLinkedIn](https://www.linkedin.com/in/misbah-sarfaraz-a59854325/) - msbahsarfaraz@gmail.com
 
-Project Link: [https://github.com/EnvHubOrg/envhub](https://github.com/EnvHubOrg/envhub)
+Project Link: [https://github.com/Okaymisba/envhub](https://github.com/Okaymisba/envhub)
 
 ## 🙏 Acknowledgments
 
