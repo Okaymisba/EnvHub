@@ -370,6 +370,10 @@ export type Database = {
         Args: { user_uuid: string }
         Returns: boolean
       }
+      can_user_invite: {
+        Args: { user_uuid: string; project_uuid: string }
+        Returns: boolean
+      }
       get_project_version_count: {
         Args: { project_uuid: string }
         Returns: number

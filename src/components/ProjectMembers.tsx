@@ -21,9 +21,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Users, UserPlus, Crown, Shield, User } from 'lucide-react';
+import { Users, UserPlus, Crown, Shield, User, Info } from 'lucide-react';
 import { ProjectMember, Project, ProjectRole } from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
+import { SubscriptionLimitService } from '@/services/subscriptionLimitService';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProjectMembersProps {
@@ -44,10 +45,12 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
   const [inviteRole, setInviteRole] = useState<ProjectRole>('user');
   const [accessPassword, setAccessPassword] = useState('');
   const [projectPassword, setProjectPassword] = useState('');
+  const [subscriptionLimits, setSubscriptionLimits] = useState<any>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     loadMembers();
+    loadSubscriptionLimits();
   }, [project.id]);
 
   const loadMembers = async () => {
@@ -64,6 +67,15 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadSubscriptionLimits = async () => {
+    try {
+      const limits = await SubscriptionLimitService.getUserSubscriptionLimits();
+      setSubscriptionLimits(limits);
+    } catch (error) {
+      console.error('Failed to load subscription limits:', error);
     }
   };
 
@@ -96,6 +108,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
       setAccessPassword('');
       setProjectPassword('');
       setInviteRole('user');
+      loadMembers(); // Reload to update the count
     } catch (error: any) {
       toast({
         title: 'Invitation Failed',
@@ -117,6 +130,9 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
   };
 
   const canInvite = currentUserRole === 'owner' || currentUserRole === 'admin';
+  const memberCount = members.length;
+  const memberLimit = subscriptionLimits?.max_team_members || 0;
+  const canInviteMore = memberCount < memberLimit;
 
   return (
     <DropdownMenu>
@@ -142,6 +158,50 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
             <Users className="h-4 w-4 text-purple-400" />
             Project Members
           </h3>
+
+          {/* Subscription Usage Info */}
+          {subscriptionLimits && (
+            <div className="mb-4 p-3 bg-gradient-to-r from-purple-900/30 to-blue-900/20 rounded-lg border border-purple-800/50">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Info className="h-4 w-4 text-purple-400" />
+                  <span className="text-sm font-medium text-white">Member Usage</span>
+                </div>
+                <span className="text-xs text-gray-300 bg-black/40 px-2 py-1 rounded">
+                  {subscriptionLimits.plan}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-300">
+                  {memberCount} / {memberLimit} members
+                </span>
+                <div className="flex-1 mx-3">
+                  <div className="h-2 bg-black/60 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full transition-all duration-300 ${
+                        memberCount >= memberLimit 
+                          ? 'bg-red-500' 
+                          : memberCount / memberLimit > 0.8 
+                            ? 'bg-yellow-500' 
+                            : 'bg-green-500'
+                      }`}
+                      style={{ width: `${Math.min((memberCount / memberLimit) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+                <span className="text-xs text-gray-400">
+                  {memberLimit - memberCount} left
+                </span>
+              </div>
+              {!canInviteMore && (
+                <p className="text-xs text-red-400 mt-2 flex items-center gap-1">
+                  <Info className="h-3 w-3" />
+                  Member limit reached. Upgrade to invite more members.
+                </p>
+              )}
+            </div>
+          )}
+
           {loading ? (
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => (
@@ -168,11 +228,16 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
               {!showInviteForm ? (
                 <Button
                   onClick={() => setShowInviteForm(true)}
+                  disabled={!canInviteMore}
                   size="sm"
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg transition"
+                  className={`w-full font-semibold shadow rounded-lg transition ${
+                    canInviteMore 
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white' 
+                      : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  }`}
                 >
                   <UserPlus className="mr-2 h-4 w-4" />
-                  Invite Member
+                  {canInviteMore ? 'Invite Member' : 'Member Limit Reached'}
                 </Button>
               ) : (
                 <div className="space-y-3 relative">
