@@ -14,6 +14,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Users, UserPlus, Crown, Shield, User } from 'lucide-react';
 import { ProjectMember, Project, ProjectRole } from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
@@ -130,7 +137,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
         "
         align="end"
       >
-        <div className="p-4">
+        <div className="p-4 overflow-visible">
           <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
             <Users className="h-4 w-4 text-purple-400" />
             Project Members
@@ -168,7 +175,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                   Invite Member
                 </Button>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3 relative">
                   <div>
                     <Label className="text-gray-300 text-xs">Email</Label>
                     <Input
@@ -180,16 +187,37 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       autoComplete="off"
                     />
                   </div>
-                  <div>
+                  <div className="space-y-1 relative">
                     <Label className="text-gray-300 text-xs">Role</Label>
-                    <select
-                      value={inviteRole}
-                      onChange={(e) => setInviteRole(e.target.value as ProjectRole)}
-                      className="w-full bg-black/70 border border-purple-800 text-white text-sm h-8 rounded-lg px-2"
-                    >
-                      <option value="user">User</option>
-                      <option value="admin">Admin</option>
-                    </select>
+                    <div className="space-y-1">
+                      <p className="text-xs text-gray-400">
+                        {inviteRole === 'admin' 
+                          ? 'Can manage environment variables and project settings, but cannot delete the project' 
+                          : 'Read-only access to environment variables, cannot make any modifications'}
+                      </p>
+                      <Select 
+                        value={inviteRole} 
+                        onValueChange={(value) => setInviteRole(value as ProjectRole)}
+                      >
+                        <SelectTrigger className="w-full bg-black/70 border border-purple-800 text-white text-sm h-8 hover:bg-black/80 hover:border-purple-600 transition-colors">
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-900 border border-purple-800 z-[9999] text-white">
+                          <SelectItem 
+                            value="user"
+                            className="hover:bg-purple-900/70 focus:bg-purple-900/70 cursor-pointer text-white hover:text-white focus:text-white"
+                          >
+                            User
+                          </SelectItem>
+                          <SelectItem 
+                            value="admin"
+                            className="hover:bg-purple-900/70 focus:bg-purple-900/70 cursor-pointer text-white hover:text-white focus:text-white"
+                          >
+                            Admin
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div>
                     <Label className="text-gray-300 text-xs">Access Password</Label>
