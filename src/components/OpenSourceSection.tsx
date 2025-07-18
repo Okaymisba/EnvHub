@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Globe, ShieldCheck } from 'lucide-react';
+import { Globe, ShieldCheck } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 
 export const OpenSourceSection = () => {
   const [stars, setStars] = useState(0);
@@ -34,7 +35,7 @@ export const OpenSourceSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* GitHub Stats */}
           <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
-            <Github className="w-8 h-8 mx-auto mb-4 text-purple-400" />
+            <FaGithub className="w-8 h-8 mx-auto mb-4 text-purple-400" />
             <h3 className="text-2xl font-semibold text-white mb-2">{stars} Stars</h3>
             <p className="text-gray-400">Join our growing community</p>
           </div>
@@ -61,7 +62,7 @@ export const OpenSourceSection = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-gray rounded-lg hover:opacity-90 transition-opacity"
           >
-            <Github className="w-5 h-5 mr-2" />
+            <FaGithub className="w-5 h-5 mr-2" />
             View on GitHub
           </a>
         </div>

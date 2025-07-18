@@ -8,13 +8,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
   X, 
-  GitBranch, 
-  Github, 
+  GitBranch,
   BookOpen, 
   DollarSign, 
   Info, 
   Mail 
 } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SupabaseService } from '@/services/supabaseService';
 import { supabase } from "@/integrations/supabase/client";
@@ -96,7 +96,7 @@ export const Navbar = () => {
     {
       label: 'GitHub',
       path: 'https://github.com/Okaymisba/EnvHub',
-      icon: <Github className="w-4 h-4" />
+      icon: <FaGithub className="w-4 h-4" />
     }
   ];
 
