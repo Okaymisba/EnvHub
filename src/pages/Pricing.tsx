@@ -21,7 +21,7 @@ const Pricing = () => {
       features: [
         { text: '2 projects', included: true },
         { text: '20 environment variables per project', included: true },
-        { text: 'CLI access (limited)', included: true, tooltip: 'Can add up to 5 env variables through CLI' },
+        { text: 'Full CLI access', included: true},
         { text: 'Ads will be shown', included: false },
         { text: 'Team collaboration', included: false }
       ],
@@ -35,11 +35,11 @@ const Pricing = () => {
       period: 'per month',
       description: 'Great for individual developers',
       features: [
-        { text: '10 projects (then $0.50 per project)', included: true },
-        { text: '50 env variables each (then $0.005 per env)', included: true },
+        { text: '10 projects', included: true },
+        { text: '50 env variables each', included: true },
         { text: 'Full CLI access', included: true },
         { text: 'No ads', included: true },
-        { text: 'Invite up to 5 members (then $0.10 per member)', included: true }
+        { text: 'Up to 5 members per project (Including you)', included: true }
       ],
       buttonText: 'Start Pro Trial',
       popular: true,
@@ -51,11 +51,11 @@ const Pricing = () => {
       period: 'per month',
       description: 'Perfect for growing teams',
       features: [
-        { text: '50 projects (then $0.50 per project)', included: true },
-        { text: '200 env variables each (then $0.005 per env)', included: true },
+        { text: '50 projects', included: true },
+        { text: '200 env variables each', included: true },
         { text: 'Full CLI access', included: true },
         { text: 'No ads', included: true },
-        { text: 'Invite up to 25 members (then $0.10 per member)', included: true }
+        { text: 'Up to 25 members (Including you)', included: true }
       ],
       buttonText: 'Start Team Trial',
       popular: false,
@@ -166,15 +166,15 @@ const Pricing = () => {
                         <span className={`text-sm ${feature.included ? 'text-gray-200' : 'text-gray-500'}`}>
                           {feature.text}
                         </span>
-                        {feature.tooltip && (
-                          <div className="group relative">
-                            <Info className="w-4 h-4 text-gray-500 cursor-help" />
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                              {feature.tooltip}
-                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
-                            </div>
-                          </div>
-                        )}
+                        {/*{feature.tooltip && (*/}
+                        {/*  <div className="group relative">*/}
+                        {/*    <Info className="w-4 h-4 text-gray-500 cursor-help" />*/}
+                        {/*    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">*/}
+                        {/*      {feature.tooltip}*/}
+                        {/*      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>*/}
+                        {/*    </div>*/}
+                        {/*  </div>*/}
+                        {/*)}*/}
                       </li>
                     ))}
                   </ul>
