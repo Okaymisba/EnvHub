@@ -43,6 +43,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted }) => {
             Start Securing Now
             <Shield className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
+          <Button
+              onClick={() => window.open('https://www.youtube.com/watch?v=q3cveL8kY1k', '_blank', 'noopener,noreferrer')}
+              variant="outline"
+              size="lg"
+              className="border-gray-700 text-gray-900 hover:gray px-8 py-6 text-lg sm:text-xl hover:scale-105 group duration-300 transition-all"
+          >
+            Watch Demo
+          </Button>
         </div>
         <div className="flex items-center justify-center gap-4 text-sm text-gray-400 animate-fade-in-up delay-300">
           <div className="flex items-center gap-2">
