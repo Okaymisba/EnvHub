@@ -9,6 +9,7 @@ import { ProjectDetails } from '@/components/ProjectDetails';
 import { Project } from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
+import { Footer } from '@/components/Footer';
 
 const ProjectPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -98,7 +99,7 @@ const ProjectPage = () => {
   }
 
   return (
-    <>
+    <div>
       <Helmet>
         <title>{project ? `${project.name} - EnvHub` : 'Project - EnvHub'}</title>
         <meta 
@@ -141,12 +142,18 @@ const ProjectPage = () => {
 
       </Helmet>
 
-      <ProjectDetails 
-        project={project} 
-        onBack={handleBack}
-        loading={loading}
-      />
-    </>
+      {!loading && project && (
+        <ProjectDetails 
+          project={project} 
+          onBack={handleBack}
+          loading={loading}
+        />
+      )}
+      
+      <div className="mt-auto">
+        <Footer />
+      </div>
+    </div>
   );
 };
 
