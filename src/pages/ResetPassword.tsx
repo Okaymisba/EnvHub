@@ -1,10 +1,9 @@
-
 // Copyright (c) 2025 Misbah Sarfaraz msbahsarfaraz@gmail.com
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,32 +17,34 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [searchParams] = useSearchParams();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if we have the necessary parameters from the email link
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
-    const type = searchParams.get('type');
+    // Check if we have an active session
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setIsAuthenticated(true);
+      } else {
+        // If no session, check for OAuth callback
+        const { data, error } = await supabase.auth.getSession();
+        if (error || !data.session) {
+          toast({
+            title: "Session expired",
+            description: "This password reset link has expired. Please request a new one.",
+            variant: "destructive",
+          });
+          navigate('/login');
+        } else {
+          setIsAuthenticated(true);
+        }
+      }
+    };
 
-    if (type === 'recovery' && accessToken && refreshToken) {
-      // Set the session using the tokens from the URL
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    } else if (!type) {
-      // If no type parameter, this might be an invalid link
-      toast({
-        title: "Invalid reset link",
-        description: "This password reset link is invalid or has expired.",
-        variant: "destructive",
-      });
-      navigate('/login');
-    }
-  }, [searchParams, navigate, toast]);
+    checkSession();
+  }, [navigate, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,22 +75,23 @@ const ResetPassword = () => {
       });
 
       if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Password updated",
-          description: "Your password has been successfully updated.",
-        });
-        navigate('/');
+        throw error;
       }
-    } catch (error) {
+
       toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        title: "Password updated",
+        description: "Your password has been successfully updated.",
+      });
+      
+      // Sign out the user after password reset
+      await supabase.auth.signOut();
+      navigate('/login');
+      
+    } catch (error) {
+      console.error('Error updating password:', error);
+      toast({
+        title: "Error updating password",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       });
     } finally {
@@ -97,86 +99,95 @@ const ResetPassword = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-black relative overflow-x-hidden p-4">
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-[320px] h-[320px] bg-purple-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-0 right-0 w-[280px] h-[280px] bg-blue-900 opacity-10 rounded-full blur-3xl animate-pulse-slow"></div>
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Verifying your session...</CardTitle>
+            <CardDescription>Please wait while we verify your password reset link.</CardDescription>
+          </CardHeader>
+        </Card>
       </div>
-      
-      <Card className="w-full max-w-md bg-black/90 border border-purple-900 shadow-xl relative z-10">
-        <CardHeader className="space-y-1 text-center">
-          <div className="mx-auto w-14 h-14 flex items-center justify-center mb-4 shadow-2xl bg-gradient-to-br from-purple-800 to-blue-900 rounded-2xl">
-            <Lock className="h-6 w-6 text-white" />
+    );
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <div className="flex items-center justify-center mb-4">
+            <Lock className="w-12 h-12 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold text-white">
-            Reset Your Password
-          </CardTitle>
-          <CardDescription className="text-slate-400">
-            Enter your new password below
+          <CardTitle className="text-2xl text-center">Reset Your Password</CardTitle>
+          <CardDescription className="text-center">
+            Please enter your new password below.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                New Password
+              </label>
               <div className="relative">
                 <Input
+                  id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="New password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter new password"
                   required
-                  className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400 pr-10"
+                  className="pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
+
             <div className="space-y-2">
+              <label htmlFor="confirmPassword" className="text-sm font-medium">
+                Confirm New Password
+              </label>
               <div className="relative">
                 <Input
+                  id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm new password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
                   required
-                  className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400 pr-10"
+                  className="pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-            >
-              {loading ? 'Updating...' : 'Update Password'}
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Updating..." : "Update Password"}
             </Button>
           </form>
         </CardContent>
       </Card>
-      
-      <style>{`
-        .animate-pulse-slow {
-          animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3;}
-          50% { opacity: 0.6;}
-        }
-      `}</style>
     </div>
   );
 };
