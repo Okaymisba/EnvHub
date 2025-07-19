@@ -435,7 +435,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 <CardTitle className="text-white text-lg">📦 EnvHub CLI Guide</CardTitle>
               </CardHeader>
               <CardContent className="prose prose-invert max-w-none prose-pre:bg-transparent prose-code:bg-purple-950/60 prose-code:text-purple-300 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:border-purple-800/40">
-                <CLIGuide />
+                <CLIGuide project={project} />
               </CardContent>
             </Card>
           </div>
