@@ -107,6 +107,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div key={i} className="h-24 bg-gray-800 rounded animate-pulse"></div>
               ))}
             </div>
+          ) : projects.length === 0 && sharedProjects.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-center p-6">
+              <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M3 9h18" />
+                  <path d="M9 21V9" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-semibold text-white mb-2">No Projects Yet</h3>
+              <p className="text-gray-400 mb-6 max-w-md">Get started by creating your first project to manage your environment variables securely.</p>
+              <Button
+                onClick={() => setShowCreateDialog(true)}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Project
+              </Button>
+            </div>
           ) : (
             <div className={
               viewMode === 'grid'
