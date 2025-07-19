@@ -21,24 +21,23 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [token, setToken] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if we have the necessary parameters from the email link
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
+    // Get the token and type from the URL
+    const token = searchParams.get('token');
     const type = searchParams.get('type');
-
-    if (type === 'recovery' && accessToken && refreshToken) {
-      // Set the session using the tokens from the URL
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    } else if (!type) {
-      // If no type parameter, this might be an invalid link
+    
+    if (type === 'recovery' && token) {
+      setToken(token);
+      // Extract email from token if needed
+      const emailFromToken = ''; // You might need to decode the token to get the email
+      if (emailFromToken) setEmail(emailFromToken);
+    } else {
       toast({
         title: "Invalid reset link",
-        description: "This password reset link is invalid or has expired.",
+        description: "This password reset link is invalid or has expired. Please request a new one.",
         variant: "destructive",
       });
       navigate('/login');
@@ -48,6 +47,15 @@ const ResetPassword = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!token) {
+      toast({
+        title: "Error",
+        description: "Invalid reset token. Please request a new password reset link.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast({
         title: "Passwords don't match",
@@ -69,27 +77,30 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({
+      const { data, error } = await supabase.auth.verifyOtp({
+        token_hash: token,
+        type: 'recovery',
+      });
+
+      if (error) throw error;
+
+      // Now update the password
+      const { error: updateError } = await supabase.auth.updateUser({
         password: password
       });
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Password updated",
-          description: "Your password has been successfully updated.",
-        });
-        navigate('/');
-      }
-    } catch (error) {
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Password updated",
+        description: "Your password has been successfully updated. You can now log in with your new password.",
+      });
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Password reset error:', error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: error?.message || "An error occurred while resetting your password. Please try again.",
         variant: "destructive",
       });
     } finally {
