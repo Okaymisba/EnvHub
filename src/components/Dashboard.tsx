@@ -31,7 +31,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   user
 }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list'); // <-- default is now 'list'
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
   return (
       <div className="min-h-screen bg-black text-white flex flex-col relative overflow-x-hidden">
