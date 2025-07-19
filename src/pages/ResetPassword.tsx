@@ -35,7 +35,6 @@ const ResetPassword = () => {
         refresh_token: refreshToken,
       });
     } else if (!type) {
-      // If no type parameter, this might be an invalid link
       toast({
         title: "Invalid reset link",
         description: "This password reset link is invalid or has expired.",
