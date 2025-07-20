@@ -263,8 +263,12 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               <ArrowLeft className="mr-2 h-4 w-4" />
             </Button>
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-700 to-blue-800 rounded-full flex items-center justify-center shadow">
-                <span className="text-white font-mono text-sm">E</span>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center shadow">
+                <img
+                    src="/favicon.ico"
+                    alt="EnvHub Logo"
+                    className="w-6 h-6 object-contain"
+                />
               </div>
               <h1 className="text-xl font-bold text-white drop-shadow">{project.name}</h1>
             </div>

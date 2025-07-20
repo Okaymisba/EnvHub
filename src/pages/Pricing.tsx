@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, X, Info, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "@/components/Navbar.tsx";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -99,20 +100,21 @@ const Pricing = () => {
 
       </Helmet>
 
-      <div className="min-h-screen bg-black text-white">
-        {/* Header */}
-        <div className="border-b border-gray-800">
-          <div className="flex items-center justify-between p-6">
-            <div className="flex items-center">
-              <button
-                onClick={() => navigate('/')}
-                className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent ml-2"
-              >
-                EnvHub
-              </button>
-            </div>
-          </div>
-        </div>
+      <Navbar />
+      <div className="min-h-screen pt-16 bg-black text-white">
+        {/*/!* Header *!/*/}
+        {/*<div className="border-b border-gray-800">*/}
+        {/*  <div className="flex items-center justify-between p-6">*/}
+        {/*    <div className="flex items-center">*/}
+        {/*      <button*/}
+        {/*        onClick={() => navigate('/')}*/}
+        {/*        className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent ml-2"*/}
+        {/*      >*/}
+        {/*        EnvHub*/}
+        {/*      </button>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

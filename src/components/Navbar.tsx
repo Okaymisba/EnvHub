@@ -110,8 +110,12 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <GitBranch className="w-8 h-8 text-purple-400" />
-            <span className="text-xl font-bold text-white">EnvHub</span>
+            <img
+                src="/favicon.ico"
+                alt="EnvHub Logo"
+                className="w-6 h-6 object-contain"
+            />
+            <span className="text-2xl font-bold text-white">EnvHub</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -137,26 +141,26 @@ export const Navbar = () => {
           )}
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            {isDocsPage && user ? (
+            { user ? (
               <ProfileDropdown user={user} onLogout={handleLogout} />
             ) : (
               <Button
                 onClick={handleGetStarted}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
               >
-                {user ? 'Dashboard' : 'Get Started'}
+                Get Started
               </Button>
             )}
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button
+            {user ?(<ProfileDropdown user={user} onLogout={handleLogout} />):(<button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-300 hover:text-white transition-colors"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            </button>)}
           </div>
         </div>
       </div>
@@ -182,23 +186,6 @@ export const Navbar = () => {
                 {item.label}
               </button>
             ))}
-            <div className="pt-4 space-y-3">
-              {isDocsPage && user ? (
-                <div className="px-3 py-2">
-                  <ProfileDropdown user={user} onLogout={handleLogout} />
-                </div>
-              ) : (
-                <Button
-                  onClick={() => {
-                    handleGetStarted();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium"
-                >
-                  {user ? 'Dashboard' : 'Get Started'}
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       )}

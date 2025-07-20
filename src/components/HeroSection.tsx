@@ -1,11 +1,10 @@
-
 // Copyright (c) 2025 Misbah Sarfaraz msbahsarfaraz@gmail.com
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Shield, Lock, Zap, GitBranch } from 'lucide-react';
+import { Shield, Lock, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface HeroSectionProps {
@@ -19,7 +18,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted }) => {
     <div className="max-w-6xl mx-auto px-4 pt-20">
       <div className="text-center mb-16">
         <div className="flex items-center justify-center gap-2 mb-6 animate-fade-in-up">
-          <GitBranch className="w-8 h-8 text-purple-400" />
           <span className="text-lg text-gray-400 font-medium">Introducing EnvHub</span>
         </div>
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in-up">

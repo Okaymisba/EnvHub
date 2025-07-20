@@ -48,21 +48,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center space-x-3">
                 {/* SVG Lock Logo */}
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-800 to-blue-900 rounded-lg flex items-center justify-center">
-                  <svg width="28" height="28" viewBox="0 0 56 56" fill="none">
-                    <rect width="56" height="56" rx="16" fill="url(#paint0_linear)" />
-                    <path d="M18 26V20C18 15.58 21.58 12 26 12C30.42 12 34 15.58 34 20V26" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
-                    <rect x="14" y="26" width="28" height="18" rx="6" stroke="#fff" strokeWidth="2.5" />
-                    <circle cx="28" cy="35" r="3" fill="#fff" />
-                    <defs>
-                      <linearGradient id="paint0_linear" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#7C3AED" />
-                        <stop offset="1" stopColor="#2563EB" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
-                <h1 className="text-xl font-semibold">EnvHub</h1>
+                <img
+                    src="/favicon.ico"
+                    alt="EnvHub Logo"
+                    className="w-6 h-6 object-contain"
+                />
+                <h1 className="text-2xl font-semibold">EnvHub</h1>
               </div>
               <div className="flex items-center space-x-4">
                 <Button
