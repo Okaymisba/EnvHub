@@ -6,11 +6,9 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
+  DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
@@ -72,7 +70,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
 
   const loadSubscriptionLimits = async () => {
     try {
-      const limits = await SubscriptionLimitService.getUserSubscriptionLimits();
+      const limits = await SubscriptionLimitService.getSubscriptionLimitsForProject(project.id);
       setSubscriptionLimits(limits);
     } catch (error) {
       console.error('Failed to load subscription limits:', error);

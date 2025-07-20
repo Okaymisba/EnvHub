@@ -2,7 +2,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface SubscriptionLimits {
@@ -23,6 +22,32 @@ export class SubscriptionLimitService {
     });
 
     if (error) throw error;
+
+    return data[0] as SubscriptionLimits;
+  }
+
+  static async getSubscriptionLimitsForProject(projectId: string): Promise<SubscriptionLimits> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data: projectData, error: projectError } = await supabase
+      .from('projects')
+      .select('user_id')
+      .eq('id', projectId)
+      .single();
+
+    if (projectError || !projectData) {
+      throw new Error('Project not found or access denied');
+    }
+
+    const { data, error } = await supabase.rpc('get_user_subscription_limits', {
+      user_uuid: projectData.user_id
+    });
+
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      throw new Error('Failed to fetch subscription limits');
+    }
 
     return data[0] as SubscriptionLimits;
   }
