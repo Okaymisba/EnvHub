@@ -11,10 +11,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import {FcGoogle} from "react-icons/fc";
+import { Check, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -28,6 +32,54 @@ export default function Signup() {
     };
     checkAuth();
   }, [navigate]);
+
+  const validatePassword = (pass: string) => {
+    const minLength = pass.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(pass);
+    const hasLowerCase = /[a-z]/.test(pass);
+    const hasNumbers = /\d/.test(pass);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+    const isMatching = confirmPassword === pass;
+    
+    const isValid = minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar && isMatching;
+    setIsPasswordValid(isValid);
+    
+    if (!minLength) return 'Password must be at least 8 characters long';
+    if (!hasUpperCase) return 'Password must contain at least one uppercase letter';
+    if (!hasLowerCase) return 'Password must contain at least one lowercase letter';
+    if (!hasNumbers) return 'Password must contain at least one number';
+    if (!hasSpecialChar) return 'Password must contain at least one special character';
+    if (confirmPassword && !isMatching) return 'Passwords do not match';
+    return '';
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordError(validatePassword(newPassword));
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
+    setConfirmPassword(newConfirmPassword);
+    setPasswordError(validatePassword(password));
+  };
+
+  const isFormValid = () => {
+    const isEmailValid = email && email.includes('@');
+    const isPasswordFilled = password.length > 0;
+    const isConfirmPasswordMatching = password === confirmPassword && confirmPassword.length > 0;
+
+    const hasMinLength = password.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    const isPasswordValid = hasMinLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
+
+    return isEmailValid && isPasswordValid && isConfirmPasswordMatching;
+  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,19 +142,12 @@ export default function Signup() {
       <Card className="w-full max-w-md bg-black/90 border border-purple-900 shadow-xl relative z-10">
         <CardHeader className="space-y-1 text-center">
           {/* SVG Lock Logo */}
-          <div className="mx-auto w-14 h-14 flex items-center justify-center mb-4 shadow-2xl bg-gradient-to-br from-purple-800 to-blue-900 rounded-2xl">
-            <svg width="40" height="40" viewBox="0 0 56 56" fill="none" className="mx-auto">
-              <rect width="56" height="56" rx="16" fill="url(#paint0_linear)" />
-              <path d="M18 26V20C18 15.58 21.58 12 26 12C30.42 12 34 15.58 34 20V26" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
-              <rect x="14" y="26" width="28" height="18" rx="6" stroke="#fff" strokeWidth="2.5" />
-              <circle cx="28" cy="35" r="3" fill="#fff" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#7C3AED" />
-                  <stop offset="1" stopColor="#2563EB" />
-                </linearGradient>
-              </defs>
-            </svg>
+          <div className="flex justify-center mb-4">
+            <img
+                src="/favicon.ico"
+                alt="EnvHub Logo"
+                className="w-12 h-12 object-contain"
+            />
           </div>
           <CardTitle className="text-2xl font-bold text-white">
             Create Account
@@ -143,21 +188,86 @@ export default function Signup() {
               />
             </div>
             <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="Password (min. 6 characters)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400"
-              />
+              <div className="relative">
+                <Input
+                  type="password"
+                  placeholder="Create Password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  required
+                  className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400 pr-10"
+                />
+                {password && !passwordError && (
+                  <CheckCircle2 className="h-5 w-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2" />
+                )}
+              </div>
+              
+              <div className="space-y-2 mt-2">
+                <div className="flex items-center text-sm">
+                  <div className={`w-4 h-4 mr-2 flex items-center justify-center rounded-full ${password.length >= 8 ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    {password.length >= 8 && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={password.length >= 8 ? 'text-green-400' : 'text-gray-400'}>8+ characters</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className={`w-4 h-4 mr-2 flex items-center justify-center rounded-full ${/[A-Z]/.test(password) ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    {/[A-Z]/.test(password) && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={/[A-Z]/.test(password) ? 'text-green-400' : 'text-gray-400'}>Uppercase letter</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className={`w-4 h-4 mr-2 flex items-center justify-center rounded-full ${/[a-z]/.test(password) ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    {/[a-z]/.test(password) && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={/[a-z]/.test(password) ? 'text-green-400' : 'text-gray-400'}>Lowercase letter</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className={`w-4 h-4 mr-2 flex items-center justify-center rounded-full ${/\d/.test(password) ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    {/\d/.test(password) && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={/\d/.test(password) ? 'text-green-400' : 'text-gray-400'}>Number</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className={`w-4 h-4 mr-2 flex items-center justify-center rounded-full ${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    {/[!@#$%^&*(),.?":{}|<>]/.test(password) && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-400' : 'text-gray-400'}>Special character</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="relative">
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                  required
+                  className={`bg-black/80 border-slate-700 text-white placeholder:text-slate-400 pr-10 ${
+                    confirmPassword && password === confirmPassword ? 'border-green-500' : ''
+                  }`}
+                />
+                {confirmPassword && password === confirmPassword && (
+                  <CheckCircle2 className="h-5 w-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2" />
+                )}
+              </div>
+              {confirmPassword && password !== confirmPassword && (
+                <div className="flex items-center text-red-400 text-sm">
+                  <XCircle className="h-4 w-4 mr-1" />
+                  <span>Passwords do not match</span>
+                </div>
+              )}
             </div>
 
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              disabled={!isFormValid() || loading}
+              className={`w-full ${
+                isFormValid() 
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700' 
+                  : 'bg-gray-600 cursor-not-allowed'
+              }`}
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </Button>

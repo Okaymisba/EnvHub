@@ -110,19 +110,12 @@ export default function Login() {
       <Card className="w-full max-w-md bg-black/90 border border-purple-900 shadow-xl relative z-10">
         <CardHeader className="space-y-1 text-center">
           {/* SVG Lock Logo */}
-          <div className="mx-auto w-14 h-14 flex items-center justify-center mb-4 shadow-2xl bg-gradient-to-br from-purple-800 to-blue-900 rounded-2xl">
-            <svg width="40" height="40" viewBox="0 0 56 56" fill="none" className="mx-auto">
-              <rect width="56" height="56" rx="16" fill="url(#paint0_linear)" />
-              <path d="M18 26V20C18 15.58 21.58 12 26 12C30.42 12 34 15.58 34 20V26" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
-              <rect x="14" y="26" width="28" height="18" rx="6" stroke="#fff" strokeWidth="2.5" />
-              <circle cx="28" cy="35" r="3" fill="#fff" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#7C3AED" />
-                  <stop offset="1" stopColor="#2563EB" />
-                </linearGradient>
-              </defs>
-            </svg>
+          <div className="flex justify-center mb-4">
+            <img
+                src="/favicon.ico"
+                alt="EnvHub Logo"
+                className="w-12 h-12 object-contain"
+            />
           </div>
           <CardTitle className="text-2xl font-bold text-white">
             Welcome Back
