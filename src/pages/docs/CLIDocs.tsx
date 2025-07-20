@@ -84,7 +84,7 @@ const commandSections = [
       {
         name: 'Login',
         usage: 'envhub login',
-        description: 'Authenticate with your EnvHub account with your email and password.'
+        description: 'Authenticate with your EnvHub account using your email and password. If you created your account with Google, first set up a CLI password by selecting "CLI Setup" from the profile dropdown menu.'
       },
       {
         name: 'Logout',
