@@ -72,7 +72,8 @@ export const CLISetup = () => {
             CLI Access Setup
           </CardTitle>
           <CardDescription className="text-slate-400">
-            Set up your CLI access by creating a password for your account
+            Set up your CLI access by creating a password for your account.
+            You can also use this password to log in to your account.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -93,16 +94,6 @@ export const CLISetup = () => {
           >
             {loading ? 'Sending email...' : 'Send Password Reset Email'}
           </Button>
-
-          <div className="text-center">
-            <span className="text-slate-400">Back to </span>
-            <button
-              onClick={() => navigate('/')}
-              className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
-            >
-              Dashboard
-            </button>
-          </div>
 
           {/* Terms and Privacy Links */}
           <div className="text-center text-xs text-slate-500 space-y-1 mt-6">
