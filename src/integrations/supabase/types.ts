@@ -353,6 +353,23 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          name: string
+          email: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          name: string
+          email: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

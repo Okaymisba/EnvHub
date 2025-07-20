@@ -89,6 +89,14 @@ export class SupabaseService {
     if (error) throw error;
   }
 
+  static async insertFeedback(name: string, email: string, message: string): Promise<void> {
+    const { error } = await supabase
+      .from('feedback')
+      .insert({ name, email, message });
+
+    if (error) throw error;
+  }
+
   static async acceptInvitation(invitationId: string): Promise<void> {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
