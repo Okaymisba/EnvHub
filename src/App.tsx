@@ -1,4 +1,3 @@
-
 // Copyright (c) 2025 Misbah Sarfaraz msbahsarfaraz@gmail.com
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -25,6 +24,7 @@ import TeamDocs from "./pages/docs/team/TeamDocs";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ResetPassword from "./pages/ResetPassword";
+import CLISetup from "./pages/CLISetup";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +75,7 @@ const App = () => (
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>
                         <Route path="/terms" element={<TermsOfService/>}/>
                         <Route path="/contact" element={<Contact/>}/>
+                        <Route path="/cli" element={<CLISetup/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </BrowserRouter>

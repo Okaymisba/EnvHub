@@ -20,6 +20,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Inbox } from '@/components/Inbox';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { useNavigate } from 'react-router-dom';
+import { Terminal } from 'lucide-react';
+import {supabase} from "@/integrations/supabase/client.ts";
 
 interface ProfileDropdownProps {
   user: any;
@@ -31,11 +33,23 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
   const [showSubscription, setShowSubscription] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [provider, setProvider] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     loadNotifications();
+    const fetchUserProvider = async () => {
+      try {
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        setProvider(currentUser?.app_metadata?.provider || null);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setProvider(null);
+      }
+    };
+
+    fetchUserProvider();
   }, []);
 
   const loadNotifications = async () => {
@@ -185,6 +199,15 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user, onLogout
           <FaGithub className="mr-2 h-4 w-4" />
           GitHub
         </DropdownMenuItem>
+        {user && provider === 'google' && (
+          <DropdownMenuItem
+            onClick={() => navigate('/cli')}
+            className="text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 cursor-pointer transition-all duration-200"
+          >
+            <Terminal className="mr-2 h-4 w-4" />
+            Setup CLI Access
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator className="bg-slate-800" />
         <DropdownMenuItem 
           onClick={onLogout}
