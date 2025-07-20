@@ -33,6 +33,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <div className="relative z-10 pt-16">
         <HeroSection onGetStarted={onGetStarted} />
         <StatsSection onGetStarted={onGetStarted} />
+          {/* Demo Video Section */}
+          <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+              <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-white sm:text-4xl">
+                      See It In Action
+                  </h2>
+                  <p className="mt-4 text-xl text-gray-300 max-w-2xl mx-auto">
+                      Watch our quick demo to see how EnvHub can streamline your environment variable management.
+                  </p>
+              </div>
+              <div className="relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-2xl bg-black">
+                  <div className="relative pt-[56.25%] w-full h-0">
+                      <iframe
+                          className="absolute top-0 left-0 w-full h-full"
+                          src="https://www.youtube.com/embed/q3cveL8kY1k"
+                          title="EnvSecure Demo Video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                      ></iframe>
+                  </div>
+              </div>
+          </section>
         <FeaturesSection />
         <OpenSourceSection />
         <CTASection onGetStarted={onGetStarted} />
