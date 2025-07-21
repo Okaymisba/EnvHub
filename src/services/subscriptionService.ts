@@ -81,9 +81,9 @@ export class SubscriptionService {
     if (!subscription || subscription.status !== 'active') {
       return {
         plan: 'Free',
-        projects: 2,
-        envVarsPerProject: 20,
-        teamMembers: 1,
+        projects: 10,
+        envVarsPerProject: 50,
+        teamMembers: 5,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: true
@@ -94,9 +94,9 @@ export class SubscriptionService {
     if (subscription.product_name.toLowerCase().includes('pro')) {
       return {
         plan: 'Pro',
-        projects: 10,
-        envVarsPerProject: 50,
-        teamMembers: 5,
+        projects: 250,
+        envVarsPerProject: 500,
+        teamMembers: 50,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: false
@@ -107,9 +107,9 @@ export class SubscriptionService {
     if (subscription.product_name.toLowerCase().includes('team')) {
       return {
         plan: 'Team',
-        projects: 50,
-        envVarsPerProject: 200,
-        teamMembers: 25,
+        projects: 1000,
+        envVarsPerProject: 5000,
+        teamMembers: 500,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: false
@@ -118,9 +118,9 @@ export class SubscriptionService {
 
     return {
       plan: 'Free',
-      projects: 2,
-      envVarsPerProject: 20,
-      teamMembers: 1,
+      projects: 10,
+      envVarsPerProject: 50,
+      teamMembers: 5,
       hasCliAccess: true,
       cliEnvLimit: null,
       hasAds: true

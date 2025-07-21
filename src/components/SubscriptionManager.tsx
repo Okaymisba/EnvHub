@@ -255,14 +255,14 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="text-3xl font-bold text-white mb-4">$4<span
+                                        <div className="text-3xl font-bold text-white mb-4">$5<span
                                             className="text-sm text-gray-400">/month</span></div>
                                         <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                                            <li>• 10 projects (then $0.50 per project)</li>
-                                            <li>• 50 env variables each (then $0.005 per env)</li>
+                                            <li>• 250 projects</li>
+                                            <li>• 500 env variables each</li>
+                                            <li>• Up to 50 team members per project</li>
                                             <li>• Full CLI access</li>
                                             <li>• No ads</li>
-                                            <li>• Up to 5 team members (then $0.10 per member)</li>
                                         </ul>
                                         <Button
                                             onClick={() => handleUpgrade(881719, 'Pro')}
@@ -282,14 +282,14 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="text-3xl font-bold text-white mb-4">$10<span
+                                        <div className="text-3xl font-bold text-white mb-4">$20<span
                                             className="text-sm text-gray-400">/month</span></div>
                                         <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                                            <li>• 50 projects (then $0.50 per project)</li>
-                                            <li>• 200 env variables each (then $0.005 per env)</li>
+                                            <li>• 1000 projects</li>
+                                            <li>• 5000 env variables each</li>
+                                            <li>• Up to 500 team members per project</li>
                                             <li>• Full CLI access</li>
                                             <li>• No ads</li>
-                                            <li>• Up to 25 team members (then $0.10 per member)</li>
                                         </ul>
                                         <Button
                                             onClick={() => handleUpgrade(881732, 'Team')}

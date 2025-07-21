@@ -52,6 +52,7 @@ serve(async (req) => {
           product_options: {
             name: productName,
             description: `${productName} subscription for ${user.email}`,
+            redirect_url: 'https://envhub.net/'
           },
           checkout_options: {
             embed: false,

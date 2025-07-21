@@ -20,6 +20,7 @@ export class SubscriptionLimitService {
     const { data, error } = await supabase.rpc('get_user_subscription_limits', {
       user_uuid: user.id
     });
+    console.log(data);
 
     if (error) throw error;
 
