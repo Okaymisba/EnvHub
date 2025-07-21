@@ -2,7 +2,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle, Crown } from 'lucide-react';
+import { AlertTriangle, Crown, CheckCircle2, XCircle, Eye, EyeOff } from 'lucide-react';
 import { SubscriptionLimitService, SubscriptionLimits } from '@/services/subscriptionLimitService';
 import { useToast } from '@/hooks/use-toast';
 
@@ -31,10 +30,15 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [canCreate, setCanCreate] = useState(true);
   const [limits, setLimits] = useState<SubscriptionLimits | null>(null);
   const [currentCount, setCurrentCount] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -64,16 +68,46 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
     }
   };
 
+  const validatePassword = (pass: string, confirmPass: string = '') => {
+    const minLength = pass.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(pass);
+    const hasLowerCase = /[a-z]/.test(pass);
+    const hasNumbers = /\d/.test(pass);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+    const isMatching = confirmPass === '' || pass === confirmPass;
+    
+    const isValid = minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar && isMatching;
+    setIsPasswordValid(isValid);
+    
+    if (!minLength) return 'Password must be at least 8 characters long';
+    if (!hasUpperCase) return 'Password must contain at least one uppercase letter';
+    if (!hasLowerCase) return 'Password must contain at least one lowercase letter';
+    if (!hasNumbers) return 'Password must contain at least one number';
+    if (!hasSpecialChar) return 'Password must contain at least one special character';
+    if (!isMatching) return 'Passwords do not match';
+    return '';
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordError(validatePassword(newPassword, confirmPassword));
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
+    setConfirmPassword(newConfirmPassword);
+    setPasswordError(validatePassword(password, newConfirmPassword));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !password.trim()) return;
+    if (!name.trim() || !password.trim() || !isPasswordValid) return;
 
-    if (!canCreate) {
-      toast({
-        title: 'Project Limit Reached',
-        description: `You've reached your ${limits?.plan} plan limit of ${limits?.max_projects} projects. Upgrade to create more projects.`,
-        variant: 'destructive'
-      });
+    // Final validation check
+    const finalValidation = validatePassword(password, confirmPassword);
+    if (finalValidation) {
+      setPasswordError(finalValidation);
       return;
     }
 
@@ -82,6 +116,7 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
       await onCreateProject(name.trim(), password);
       setName('');
       setPassword('');
+      setConfirmPassword('');
       onClose();
     } catch (error: any) {
       if (error.message?.includes('check_user_can_create_project')) {
@@ -100,6 +135,12 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const isFormValid = () => {
+    const isNameValid = name.trim().length > 0;
+    const isPasswordFilled = password.length > 0 && confirmPassword.length > 0;
+    return isNameValid && isPasswordFilled && isPasswordValid;
   };
 
   return (
@@ -168,19 +209,117 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
               <Label htmlFor="project-password" className="text-gray-300 mb-1 block text-sm font-medium">
                 Project Password
               </Label>
-              <Input
-                id="project-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter project password"
-                className="w-full bg-black/70 border border-purple-800 text-white placeholder:text-gray-500 rounded-lg px-3 py-2 focus:border-blue-600 focus:ring-0"
-                required
-                disabled={!canCreate}
-              />
-              <p className="text-xs text-white mt-2">
-                This password encrypts your secrets. Don't lose it!
-              </p>
+              <div className="relative">
+                <Input
+                  id="project-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={handlePasswordChange}
+                  placeholder="Enter project password"
+                  className={`w-full bg-black/70 border ${
+                    passwordError && !passwordError.includes('match') ? 'border-red-500' : 'border-purple-800'
+                  } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
+                  required
+                  disabled={!canCreate}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              <div className="mt-2">
+                <div className="bg-yellow-900/30 border border-yellow-700/50 rounded-lg p-3 mb-3">
+                  <p className="text-xs text-yellow-200 font-medium leading-relaxed">
+                    <span className="font-bold text-yellow-400">SECURITY NOTICE:</span> This master password is used to encrypt your secrets. For security reasons, we do not store your password in a way that it can be recovered. Please ensure you keep this password in a secure location, as it will be required to access your encrypted data.
+                  </p>
+                </div>
+                {password && (
+                  <div className="space-y-1">
+                    <div className="flex items-center">
+                      {password.length >= 8 ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span className="text-xs">At least 8 characters</span>
+                    </div>
+                    <div className="flex items-center">
+                      {/[A-Z]/.test(password) ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span className="text-xs">At least one uppercase letter</span>
+                    </div>
+                    <div className="flex items-center">
+                      {/[a-z]/.test(password) ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span className="text-xs">At least one lowercase letter</span>
+                    </div>
+                    <div className="flex items-center">
+                      {/\d/.test(password) ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span className="text-xs">At least one number</span>
+                    </div>
+                    <div className="flex items-center">
+                      {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span className="text-xs">At least one special character</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="confirm-password" className="text-gray-300 mb-1 block text-sm font-medium">
+                Confirm Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="confirm-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                  placeholder="Confirm your password"
+                  className={`w-full bg-black/70 border ${
+                    passwordError ? 'border-red-500' : 'border-purple-800'
+                  } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
+                  required
+                  disabled={!canCreate}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              {passwordError && (
+                <p className="text-red-400 text-xs mt-2">{passwordError}</p>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
               <Button
@@ -194,7 +333,7 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
               {canCreate ? (
                 <Button
                   type="submit"
-                  disabled={loading || !name.trim() || !password.trim()}
+                  disabled={loading || !isFormValid()}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition disabled:opacity-60"
                 >
                   {loading ? 'Creating...' : 'Create Project'}
