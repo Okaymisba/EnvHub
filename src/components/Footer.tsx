@@ -11,9 +11,9 @@ export const Footer: React.FC = () => {
   return (
     <footer className="border-t border-gray-800 text-gray-300 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        {/* Company Info */}
+          <div className="col-span-2 space-y-4 lg:col-span-2">
             <h3 className="text-white text-lg font-semibold">EnvHub</h3>
             <p className="text-sm">Secure environment variable management for modern development teams.</p>
             <div className="flex space-x-4">
@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Product */}
-          <div>
+          <div className="col-span-1">
             <h3 className="text-white text-sm font-semibold tracking-wider uppercase">Product</h3>
             <ul className="mt-4 space-y-2">
               <li><button onClick={() => navigate('/pricing')} className="text-sm hover:text-white transition-colors">Pricing</button></li>
@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Company */}
-          <div>
+          <div className="col-span-1">
             <h3 className="text-white text-sm font-semibold tracking-wider uppercase">Company</h3>
             <ul className="mt-4 space-y-2">
               <li><button onClick={() => navigate('/about')} className="text-sm hover:text-white transition-colors">About Us</button></li>
@@ -47,8 +47,55 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
+          {/* Community */}
+          <div className="col-span-1">
+            <h3 className="text-white text-sm font-semibold tracking-wider uppercase">Community</h3>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <a
+                  href="https://github.com/Okaymisba/EnvHub/discussions/categories/q-a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-white transition-colors flex items-center"
+                >
+                  <span>Need Help?</span>
+                </a>
+              </li>
+              <li>
+                <a
+                    href="https://github.com/Okaymisba/EnvHub/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:text-white transition-colors flex items-center"
+                >
+                  <span>Report a Problem</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/Okaymisba/EnvHub/discussions/categories/ideas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-white transition-colors flex items-center"
+                >
+                  <span>Feature Request</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/Okaymisba/EnvHub/discussions/categories/show-and-tell"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-white transition-colors flex items-center"
+                >
+                  <span>Show and Tell</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
           {/* Legal */}
-          <div>
+          <div className="col-span-1">
             <h3 className="text-white text-sm font-semibold tracking-wider uppercase">Legal</h3>
             <ul className="mt-4 space-y-2">
               <li><button onClick={() => navigate('/privacy')} className="text-sm hover:text-white transition-colors">Privacy Policy</button></li>
