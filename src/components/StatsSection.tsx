@@ -80,38 +80,6 @@ export const StatsSection: React.FC<StatsSectionProps> = ({ onGetStarted }) => {
         "90% of secrets remain valid for at least 5 days — and 70% are still live after 2 years."
         <footer className="text-gray-500 text-sm mt-2">— HelpNetSecurity</footer>
       </blockquote>
-
-      {/* Main Hero Section */}
-      <div className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in-up">
-          <span className="bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
-            Stop Being the Next Statistic
-          </span>
-        </h2>
-        <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
-          All environment variables are encrypted using AES-256-GCM before they leave your device with military-grade security measures
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200">
-          <Button
-            onClick={onGetStarted}
-            size="lg"
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700
-                       text-white px-8 py-6 text-lg sm:text-xl font-bold shadow-xl
-                       transition-all duration-300 hover:scale-105"
-          >
-            Secure Your Secrets Now
-            <Shield className="ml-2 w-5 h-5" />
-          </Button>
-          <Button
-            onClick={() => navigate('/pricing')}
-            variant="outline"
-            size="lg"
-            className="border-gray-700 text-gray-900 hover:gray px-8 py-6 text-lg sm:text-xl hover:scale-105 group duration-300 transition-all"
-          >
-            Pricing
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };
