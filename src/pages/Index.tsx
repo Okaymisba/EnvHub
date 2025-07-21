@@ -143,7 +143,7 @@ const Index = () => {
       </Helmet>
       
       {!user ? (
-        <LandingPage onGetStarted={() => navigate('/login')} />
+        <LandingPage onGetStarted={() => navigate('/signup')} />
       ) : (
         <Dashboard
           projects={projects}

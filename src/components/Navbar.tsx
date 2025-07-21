@@ -69,7 +69,7 @@ export const Navbar = () => {
   };
 
   const handleGetStarted = () => {
-    navigate('/login');
+    navigate('/signup');
   };
 
   const navItems = [
