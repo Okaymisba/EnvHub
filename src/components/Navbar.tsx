@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
-  X, 
-  GitBranch,
+  X,
   BookOpen, 
   DollarSign, 
   Info, 
-  Mail 
+  Mail,
+  PlayCircle
 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { ProfileDropdown } from './ProfileDropdown';
@@ -82,6 +82,12 @@ export const Navbar = () => {
       label: 'Pricing', 
       path: '/pricing',
       icon: <DollarSign className="w-4 h-4" />
+    },
+    { 
+      label: 'Demo', 
+      path: 'https://www.youtube.com/watch?v=q3cveL8kY1k',
+      icon: <PlayCircle className="w-4 h-4" />,
+      isExternal: true
     },
     { 
       label: 'About', 
