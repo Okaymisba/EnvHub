@@ -34,7 +34,7 @@ serve(async (req) => {
 
     const { variantId, productName } = await req.json();
 
-    const apiKey = Deno.env.get('LEMON_SQUEEZY_TEST_API_KEY');
+    const apiKey = Deno.env.get('LEMON_SQUEEZY_API_KEY');
     const storeId = Deno.env.get('LEMON_SQUEEZY_STORE_ID');
 
     if (!apiKey || !storeId) {

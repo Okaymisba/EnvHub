@@ -265,7 +265,7 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                             <li>• No ads</li>
                                         </ul>
                                         <Button
-                                            onClick={() => handleUpgrade(881719, 'Pro')}
+                                            onClick={() => handleUpgrade(905358, 'Pro')}
                                             disabled={upgrading}
                                             className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 group duration-300 transition-all"
                                         >
@@ -292,7 +292,7 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                             <li>• No ads</li>
                                         </ul>
                                         <Button
-                                            onClick={() => handleUpgrade(881732, 'Team')}
+                                            onClick={() => handleUpgrade(905359, 'Team')}
                                             disabled={upgrading}
                                             className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 group duration-300 transition-all"
                                         >
