@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added member management dialog for project owners to view and manage team members
+- Added ability to remove existing project members
+- Added functionality to cancel pending invitations
+
+
 ### Fixed
 
 - Minor UI alignment issues

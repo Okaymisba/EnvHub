@@ -105,6 +105,46 @@ export class SupabaseService {
     if (error) throw error;
   }
 
+  static async getPendingInvitations(projectId?: string): Promise<ProjectInvitation[]> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('project_invitations')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as ProjectInvitation[];
+  }
+
+  static async removeProjectMember(projectId: string, userId: string): Promise<void> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('project_members')
+      .delete()
+      .eq('project_id', projectId)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+  }
+
+  static async cancelProjectInvitation(projectId: string, invitationId: string): Promise<void> {
+    const user = await this.getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('project_invitations')
+      .delete()
+      .eq('project_id', projectId)
+      .eq('id', invitationId);
+
+    if (error) throw error;
+  }
+
   static async acceptInvitation(invitationId: string): Promise<void> {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
