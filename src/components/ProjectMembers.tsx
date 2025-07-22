@@ -218,17 +218,15 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
               />
               <button
                 type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200"
                 onClick={() => setShowAccessPassword(!showAccessPassword)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
               >
-                {showAccessPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showAccessPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-
+            <p className="text-xs text-yellow-400 mt-1">
+              Note: Please share this password with your team member. We're currently working on a secure way to transfer this password to the dedicated member.
+            </p>
             <div className="mt-2">
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <PasswordRequirement
