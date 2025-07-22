@@ -80,6 +80,14 @@ export class SupabaseService {
     }));
   }
 
+  static async insertFeedback(name: string, email: string, rating: number, message: string): Promise<void> {
+    const { error } = await supabase
+      .from('feedback')
+      .insert({ name, email, rating, message });
+
+    if (error) throw error;
+  }
+
   static async markNotificationAsRead(notificationId: string): Promise<void> {
     const { error } = await supabase
       .from('notifications')

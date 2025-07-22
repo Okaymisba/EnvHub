@@ -52,6 +52,14 @@ export const Footer: React.FC = () => {
             <h3 className="text-white text-sm font-semibold tracking-wider uppercase">Community</h3>
             <ul className="mt-4 space-y-2">
               <li>
+                <button
+                    onClick={() => navigate('/feedback')}
+                    className="text-sm hover:text-white transition-colors flex items-center w-full text-left"
+                >
+                  <span>Feedback</span>
+                </button>
+              </li>
+              <li>
                 <a
                   href="https://github.com/Okaymisba/EnvHub/discussions/categories/q-a"
                   target="_blank"

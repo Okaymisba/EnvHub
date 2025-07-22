@@ -16,6 +16,7 @@ import ProjectPage from "./pages/ProjectPage";
 import Pricing from "./pages/Pricing";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
+import Feedback from "./pages/FeedbackPage";
 import Docs from "./pages/Docs";
 import { QuickStart } from "./pages/docs/QuickStart";
 import { CLIDocs } from "./pages/docs/CLIDocs";
@@ -74,6 +75,7 @@ const App = () => (
                         <Route path="/about" element={<AboutUs/>}/>
                         <Route path="/privacy" element={<PrivacyPolicy/>}/>
                         <Route path="/terms" element={<TermsOfService/>}/>
+                        <Route path="/feedback" element={<Feedback/>}/>
                         <Route path="/contact" element={<Contact/>}/>
                         <Route path="/cli" element={<CLISetup/>}/>
                         <Route path="*" element={<NotFound/>}/>
