@@ -22,14 +22,14 @@ export interface Subscription {
 export class SubscriptionService {
   static async getCurrentSubscription(): Promise<Subscription | null> {
     const { data, error } = await supabase
-      .from('subscriptions')
-      .select('*')
-      .eq('status', 'active')
-      .single();
+        .from('subscriptions')
+        .select('*')
+        .not('status', 'eq', 'expired')
+        .single();
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return null; // No subscription found
+        return null;
       }
       throw error;
     }
@@ -60,17 +60,6 @@ export class SubscriptionService {
         throw new Error('Failed to cancel subscription. Please try again or contact support.');
       }
 
-      const { error: updateError } = await supabase
-          .from('subscriptions')
-          .update({
-            status: 'cancelled',
-            updated_at: new Date().toISOString()
-          })
-          .eq('lemon_squeezy_id', lemonSqueezyId);
-
-      if (updateError) {
-        throw new Error('Subscription was cancelled, but there was an error updating your account. Please contact support.');
-      }
     } catch (error) {
       console.error('Error cancelling subscription:', error);
       throw new Error(error.message || 'An unexpected error occurred while cancelling your subscription.');

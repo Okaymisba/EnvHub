@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Improved subscription flow
+- Improved UI styling and layout
+
 ### Added
 - Added confirmation dialogs for member removal and invitation cancellation
-
-### Changed
-- Improved UI styling and layout
 
 ## [0.2.0] - 2025-07-22
 
