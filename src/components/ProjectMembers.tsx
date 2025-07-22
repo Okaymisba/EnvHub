@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import { Users, UserPlus, Crown, Shield, User, Info, Eye, EyeOff, CheckCircle2, XCircle, Settings } from 'lucide-react';
+import { Users, Crown, Shield, User, Settings } from 'lucide-react';
 import { ProjectMember, Project, ProjectRole } from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
 import { SubscriptionLimitService } from '@/services/subscriptionLimitService';
@@ -32,6 +32,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isMembersDialogOpen, setIsMembersDialogOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<ProjectRole>('user');
@@ -179,8 +180,13 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
   const memberLimit = subscriptionLimits?.max_team_members || 0;
   const canInviteMore = memberCount < memberLimit;
 
+  const handleOpenMembersDialog = () => {
+    setIsDropdownOpen(false);
+    setIsMembersDialogOpen(true);
+  };
+
   return (
-      <DropdownMenu>
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
               variant="outline"
@@ -209,10 +215,7 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-gray-400 hover:text-white hover:bg-purple-900/30"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsMembersDialogOpen(true);
-                      }}
+                      onClick={handleOpenMembersDialog}
                       title="Manage members"
                   >
                     <Settings className="h-4 w-4" />
@@ -277,8 +280,8 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
             onOpenChange={setIsMembersDialogOpen}
             projectId={project.id}
             currentUserRole={currentUserRole}
-            onMemberRemoved={handleMemberRemoved}
-            onInvitationCancelled={handleInvitationCancelled}
+            onMemberRemoved={loadMembers}
+            onInvitationCancelled={loadMembers}
         />
       </DropdownMenu>
   );

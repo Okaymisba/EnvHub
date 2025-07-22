@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Users, Clock, UserMinus, User, Shield, Crown } from 'lucide-react';
+import { Users, Clock, UserMinus, User, Shield, Crown, X } from 'lucide-react';
 import {ProjectInvitation, ProjectMember, ProjectRole} from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
@@ -136,13 +136,26 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) {
+        onOpenChange(false);
+      }
+    }}>
       <DialogContent className="sm:max-w-[500px] bg-black/90 border border-purple-900 rounded-xl backdrop-blur-md">
-        <DialogHeader>
+        <DialogHeader className="relative">
           <DialogTitle className="text-white flex items-center gap-2">
             <Users className="h-5 w-5 text-purple-400" />
             Project Members Management
           </DialogTitle>
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              className="absolute right-0 top-0 p-1 h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10 rounded-full"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </DialogClose>
         </DialogHeader>
 
         <div className="flex border-b border-purple-900/50 mb-4">
