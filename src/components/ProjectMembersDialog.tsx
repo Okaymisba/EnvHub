@@ -3,9 +3,9 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Users, X, Clock, Trash2, User, Shield, Crown } from 'lucide-react';
+import { Users, Clock, UserMinus, User, Shield, Crown } from 'lucide-react';
 import {ProjectInvitation, ProjectMember, ProjectRole} from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
@@ -31,6 +31,12 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [pendingInvitations, setPendingInvitations] = useState<ProjectInvitation[]>([]);
   const [loading, setLoading] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => void;
+  }>({ open: false, title: '', description: '', onConfirm: () => {} });
   const { toast } = useToast();
 
   const isOwner = currentUserRole === 'owner';
@@ -62,46 +68,60 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
     }
   };
 
-  const handleRemoveMember = async (memberId: string) => {
+  const handleRemoveMember = async (memberId: string, email: string) => {
     if (!isOwner) return;
 
-    try {
-      await SupabaseService.removeProjectMember(projectId, memberId);
-      setMembers(members.filter(m => m.id !== memberId));
-      onMemberRemoved?.();
-      toast({
-        title: 'Success',
-        description: 'Member removed successfully',
-      });
-    } catch (error) {
-      console.error('Failed to remove member:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to remove member',
-        variant: 'destructive'
-      });
-    }
+    setConfirmDialog({
+      open: true,
+      title: 'Remove Member',
+      description: `Are you sure you want to remove ${email} from this project?`,
+      onConfirm: async () => {
+        try {
+          await SupabaseService.removeProjectMember(projectId, memberId);
+          setMembers(members.filter(m => m.user_id !== memberId));
+          onMemberRemoved?.();
+          toast({
+            title: 'Success',
+            description: 'Member removed successfully',
+          });
+        } catch (error) {
+          console.error('Failed to remove member:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to remove member',
+            variant: 'destructive'
+          });
+        }
+      }
+    });
   };
 
-  const handleCancelInvitation = async (invitationId: string) => {
+  const handleCancelInvitation = async (invitationId: string, email: string) => {
     if (!isOwner) return;
 
-    try {
-      await SupabaseService.cancelProjectInvitation(projectId, invitationId);
-      setPendingInvitations(pendingInvitations.filter(i => i.id !== invitationId));
-      onInvitationCancelled?.();
-      toast({
-        title: 'Success',
-        description: 'Invitation cancelled successfully',
-      });
-    } catch (error) {
-      console.error('Failed to cancel invitation:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to cancel invitation',
-        variant: 'destructive'
-      });
-    }
+    setConfirmDialog({
+      open: true,
+      title: 'Cancel Invitation',
+      description: `Are you sure you want to cancel the invitation for ${email}?`,
+      onConfirm: async () => {
+        try {
+          await SupabaseService.cancelProjectInvitation(projectId, invitationId);
+          setPendingInvitations(pendingInvitations.filter(i => i.id !== invitationId));
+          onInvitationCancelled?.();
+          toast({
+            title: 'Success',
+            description: 'Invitation cancelled successfully',
+          });
+        } catch (error) {
+          console.error('Failed to cancel invitation:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to cancel invitation',
+            variant: 'destructive'
+          });
+        }
+      }
+    });
   };
 
   const getRoleIcon = (role: ProjectRole) => {
@@ -173,11 +193,11 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-red-500 hover:bg-red-900/20 h-8 w-8"
-                      onClick={() => handleRemoveMember(member.user_id)}
+                      className="text-red-500 hover:bg-red-500 h-8 w-8"
+                      onClick={() => handleRemoveMember(member.user_id, member.email)}
                       title="Remove member"
                     >
-                      <X className="h-4 w-4" />
+                      <UserMinus className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
@@ -211,10 +231,10 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
                       variant="ghost"
                       size="icon"
                       className="text-red-500 hover:bg-red-900/20 h-8 w-8"
-                      onClick={() => handleCancelInvitation(invitation.id)}
+                      onClick={() => handleCancelInvitation(invitation.id, invitation.invited_email)}
                       title="Cancel invitation"
                     >
-                      <X className="h-4 w-4" />
+                      <UserMinus className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
@@ -228,6 +248,35 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
           )}
         </div>
       </DialogContent>
+      
+      {/* Confirmation Dialog */}
+      <Dialog open={confirmDialog.open} onOpenChange={(open) => setConfirmDialog(prev => ({ ...prev, open }))}>
+        <DialogContent className="sm:max-w-[425px] bg-black/90 border border-purple-900 rounded-xl backdrop-blur-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">{confirmDialog.title}</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              {confirmDialog.description}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                confirmDialog.onConfirm();
+                setConfirmDialog(prev => ({ ...prev, open: false }));
+              }}
+            >
+              Confirm
+            </Button>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" className="text-gray">
+                Cancel
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 };
