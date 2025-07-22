@@ -89,9 +89,9 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  static async insertFeedback(name: string, email: string, message: string): Promise<void> {
+  static async insertMessageForContact(name: string, email: string, message: string): Promise<void> {
     const { error } = await supabase
-      .from('feedback')
+      .from('contact')
       .insert({ name, email, message });
 
     if (error) throw error;

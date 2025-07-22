@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
 
     try {
 
-      await SupabaseService.insertFeedback(formData.name, formData.email, formData.message);
+      await SupabaseService.insertMessageForContact(formData.name, formData.email, formData.message);
 
       toast.success('Thank you for your message! We will get back to you soon.');
       setFormData({ name: '', email: '', message: '' });

@@ -353,7 +353,7 @@ export type Database = {
         }
         Relationships: []
       }
-      feedback: {
+      contact: {
         Row: {
           created_at: string
           id: string
