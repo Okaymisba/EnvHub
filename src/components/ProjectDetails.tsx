@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { PasswordUtils } from '@/utils/passwordUtils';
 import { CryptoUtils } from '@/utils/crypto';
 import {CLIGuide} from "@/components/cliGuideMarkdown.tsx";
+import {Footer} from "@/components/Footer.tsx";
 
 interface ProjectDetailsProps {
   project: Project;
@@ -600,6 +601,9 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           onProjectDeleted={onBack}
         />
       </main>
+      <footer className="w-full mt-auto">
+        <Footer />
+      </footer>
 
       {/* Animations for blobs */}
       <style>{`

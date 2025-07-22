@@ -149,10 +149,6 @@ const ProjectPage = () => {
           loading={loading}
         />
       )}
-      
-      <div className="mt-auto">
-        <Footer />
-      </div>
     </div>
   );
 };
