@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import {GitBranch, Lock, Shield} from 'lucide-react';
 import {Helmet} from "react-helmet-async";
 import React from "react";
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 export default function AboutUs() {
     return (
@@ -45,6 +47,7 @@ export default function AboutUs() {
             </Helmet>
 
             <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
+                <Navbar />
                 {/* Background Effects */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                     <div
@@ -152,6 +155,7 @@ export default function AboutUs() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </div>
         </>
     );
