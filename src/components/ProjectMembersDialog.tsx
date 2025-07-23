@@ -243,7 +243,7 @@ export const ProjectMembersDialog: React.FC<ProjectMembersDialogProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-red-500 hover:bg-red-900/20 h-8 w-8"
+                      className="text-red-500 hover:bg-red-500 h-8 w-8"
                       onClick={() => handleCancelInvitation(invitation.id, invitation.invited_email)}
                       title="Cancel invitation"
                     >
