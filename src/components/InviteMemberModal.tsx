@@ -69,6 +69,7 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
                                                                  onInvite,
                                                              }) => {
     const [emailError, setEmailError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const PasswordRequirement = ({ label, isValid }: { label: string; isValid: boolean }) => (
         <div className="flex items-center space-x-2">
@@ -105,11 +106,18 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
         }
     };
 
-    const handleInvite = () => {
-        if (!validateEmail(inviteEmail)) {
-            return;
+    const handleInvite = async () => {
+        if (!validateEmail(inviteEmail)) return;
+        if (!isPasswordValid) return;
+        if (accessPassword !== confirmAccessPassword) return;
+        if (!projectPassword.trim()) return;
+
+        setIsLoading(true);
+        try {
+            await onInvite();
+        } finally {
+            setIsLoading(false);
         }
-        onInvite();
     };
 
     return (
@@ -296,16 +304,16 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
                         onClick={() => {
                             onOpenChange(false);
                         }}
-                        className="border-gray-700 text-gray hover:bg-gray-800"
+                        className="border-gray-700 text-black hover:bg-gray-500 disabled:opacity-50 disabled:pointer-events-none"
                     >
-                        Cancel
+                        {isLoading ? 'Sending Invitation...' : 'Cancel'}
                     </Button>
                     <Button
                         onClick={handleInvite}
-                        disabled={!isPasswordValid || !projectPassword.trim() || !!emailError}
+                        disabled={!isPasswordValid || !projectPassword.trim() || !!emailError || isLoading}
                         className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white disabled:opacity-50 disabled:pointer-events-none"
                     >
-                        Send Invitation
+                        {isLoading ? 'Sending Invitation...' : 'Send Invitation'}
                     </Button>
                 </div>
             </DialogContent>
