@@ -301,12 +301,12 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
                 <div className="flex justify-end space-x-3">
                     <Button
                         variant="outline"
-                        onClick={() => {
-                            onOpenChange(false);
-                        }}
-                        className="border-gray-700 text-black hover:bg-gray-500 disabled:opacity-50 disabled:pointer-events-none"
+                        onClick={() => onOpenChange(false)}
+                        className={`border-gray-700 text-black hover:bg-gray-500 transition-opacity duration-200 ${
+                            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
                     >
-                        {isLoading ? 'Sending Invitation...' : 'Cancel'}
+                        Cancel
                     </Button>
                     <Button
                         onClick={handleInvite}
