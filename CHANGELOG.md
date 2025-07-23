@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.2.3] - 2025-07-22
+
+### Added
+- Implemented secure password transfer for invited members using one-time password (OTP) flow
+
+### Changed
+- Improved UI styling and layout
+
 ## [0.2.2] - 2025-07-22
 
 ### Changed
@@ -53,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.0...HEAD
+[0.2.3]: https://github.com/Okaymisba/EnvHub/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/Okaymisba/EnvHub/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/Okaymisba/EnvHub/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Okaymisba/EnvHub/compare/v0.1.0...v0.2.0
