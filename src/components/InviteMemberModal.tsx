@@ -8,7 +8,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog';
 import {
     Select,
@@ -17,7 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { UserPlus, Eye, EyeOff, CheckCircle2, XCircle } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle2, XCircle } from 'lucide-react';
 import { ProjectRole } from '@/types/project';
 
 interface InviteMemberModalProps {
@@ -115,20 +114,6 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogTrigger asChild>
-                <Button
-                    disabled={!canInviteMore}
-                    size="sm"
-                    className={`w-full font-semibold shadow rounded-lg transition ${
-                        canInviteMore
-                            ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white'
-                            : 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    }`}
-                >
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    {canInviteMore ? 'Invite Member' : 'Member Limit Reached'}
-                </Button>
-            </DialogTrigger>
             <DialogContent className="sm:max-w-[450px] bg-black border border-purple-800 text-white">
                 <DialogHeader>
                     <DialogTitle className="text-white">Invite Team Member</DialogTitle>

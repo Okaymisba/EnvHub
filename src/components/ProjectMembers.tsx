@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import { Users, Crown, Shield, User, Settings } from 'lucide-react';
+import {Users, Crown, Shield, User, Settings, UserPlus} from 'lucide-react';
 import { ProjectMember, Project, ProjectRole } from '@/types/project';
 import { SupabaseService } from '@/services/supabaseService';
 import { SubscriptionLimitService } from '@/services/subscriptionLimitService';
@@ -185,6 +185,14 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
     setIsMembersDialogOpen(true);
   };
 
+  const handleInviteClick = () => {
+    setIsDropdownOpen(false);
+    // Small delay to allow dropdown to close before opening modal
+    setTimeout(() => {
+      setIsInviteModalOpen(true);
+    }, 100);
+  };
+
   return (
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
         <DropdownMenuTrigger asChild>
@@ -246,34 +254,53 @@ export const ProjectMembers: React.FC<ProjectMembersProps> = ({
             {canInvite && (
                 <>
                   <DropdownMenuSeparator className="bg-purple-900/40 my-4" />
-                  <InviteMemberModal
-                      open={isInviteModalOpen}
-                      onOpenChange={setIsInviteModalOpen}
-                      inviteEmail={inviteEmail}
-                      setInviteEmail={setInviteEmail}
-                      inviteRole={inviteRole}
-                      setInviteRole={setInviteRole}
-                      accessPassword={accessPassword}
-                      setAccessPassword={setAccessPassword}
-                      confirmAccessPassword={confirmAccessPassword}
-                      setConfirmAccessPassword={setConfirmAccessPassword}
-                      projectPassword={projectPassword}
-                      setProjectPassword={setProjectPassword}
-                      showAccessPassword={showAccessPassword}
-                      setShowAccessPassword={setShowAccessPassword}
-                      showConfirmAccessPassword={showConfirmAccessPassword}
-                      setShowConfirmAccessPassword={setShowConfirmAccessPassword}
-                      showProjectPassword={showProjectPassword}
-                      setShowProjectPassword={setShowProjectPassword}
-                      passwordError={passwordError}
-                      isPasswordValid={isPasswordValid}
-                      canInviteMore={canInviteMore}
-                      onInvite={handleInvite}
-                  />
+                  <div className="px-2 py-1">
+                    <Button
+                        disabled={!canInviteMore}
+                        size="sm"
+                        className={`w-full font-semibold shadow rounded-lg transition ${
+                            canInviteMore
+                                ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white'
+                                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        }`}
+                        onClick={handleInviteClick}
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      {canInviteMore ? 'Invite Member' : 'Member Limit Reached'}
+                    </Button>
+                  </div>
                 </>
             )}
           </div>
         </DropdownMenuContent>
+
+        <InviteMemberModal
+            open={isInviteModalOpen}
+            onOpenChange={(open) => {
+              setIsDropdownOpen(false);
+              setIsInviteModalOpen(open);
+            }}
+            inviteEmail={inviteEmail}
+            setInviteEmail={setInviteEmail}
+            inviteRole={inviteRole}
+            setInviteRole={setInviteRole}
+            accessPassword={accessPassword}
+            setAccessPassword={setAccessPassword}
+            confirmAccessPassword={confirmAccessPassword}
+            setConfirmAccessPassword={setConfirmAccessPassword}
+            projectPassword={projectPassword}
+            setProjectPassword={setProjectPassword}
+            showAccessPassword={showAccessPassword}
+            setShowAccessPassword={setShowAccessPassword}
+            showConfirmAccessPassword={showConfirmAccessPassword}
+            setShowConfirmAccessPassword={setShowConfirmAccessPassword}
+            showProjectPassword={showProjectPassword}
+            setShowProjectPassword={setShowProjectPassword}
+            passwordError={passwordError}
+            isPasswordValid={isPasswordValid}
+            canInviteMore={canInviteMore}
+            onInvite={handleInvite}
+        />
 
         <ProjectMembersDialog
             open={isMembersDialogOpen}
