@@ -454,7 +454,7 @@ export class SupabaseService {
     const accessPasswordHash = await PasswordUtils.hashPassword(accessPassword);
 
     // Create invitation
-    const { error: inviteError } = await supabase
+    const { data: invitationData, error: inviteError } = await supabase
       .from('project_invitations')
       .insert({
         project_id: projectId,
@@ -463,9 +463,35 @@ export class SupabaseService {
         role: role,
         encrypted_project_password: `${encryptedProjectPassword.ciphertext}:${encryptedProjectPassword.salt}:${encryptedProjectPassword.nonce}:${encryptedProjectPassword.tag}`,
         access_password_hash: accessPasswordHash
-      });
+      })
+      .select()
+      .single();
 
     if (inviteError) throw inviteError;
+
+    const { data: projectData, error: projectError } = await supabase
+      .from('projects')
+      .select('name')
+      .eq('id', projectId)
+      .single();
+
+    if (projectError) throw projectError;
+
+    const { data: edgeFunctionData, error: edgeFunctionError } = await supabase.functions.invoke('send-project-invite', {
+      body: {
+        projectName: projectData.name,
+        project_id: projectId,
+        inviter_id: user.id,
+        invited_email: email,
+        role: role,
+        password: accessPassword
+      }
+    });
+
+    if (edgeFunctionError) {
+      console.error('Error sending invitation email:', edgeFunctionError);
+      console.log('Invitation error' + JSON.stringify(edgeFunctionError));
+    }
   }
 
   static async verifyUserAccess(

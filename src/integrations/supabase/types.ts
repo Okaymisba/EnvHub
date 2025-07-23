@@ -272,6 +272,48 @@ export type Database = {
         }
         Relationships: []
       }
+      secrets: {
+        Row: {
+          id: string
+          created_at: string
+          project_id: string
+          inviter_id: string
+          invited_email: string
+          role: string
+          encoded_password: string
+          views: number
+          max_views: number
+          expires_at: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          inviter_id: string
+          invited_email: string
+          role?: string
+          encoded_password?: string
+          views?: number
+          max_views?: number
+          expires_at?: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          inviter_id?: string
+          invited_email?: string
+          role?: string
+          encoded_password?: string
+          views?: number
+          max_views?: number
+          expires_at?: string
+          token?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           card_brand: string | null
