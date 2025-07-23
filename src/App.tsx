@@ -26,6 +26,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ResetPassword from "./pages/ResetPassword";
 import CLISetup from "./pages/CLISetup";
+import OneTimePassword from "@/pages/OneTimePasswordPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
                         <Route path="/signup" element={<Signup/>}/>
                         <Route path="/reset-password" element={<ResetPassword/>}/>
                         <Route path="/project/:projectId" element={<ProjectPage/>}/>
+                        <Route path="invitations/:token" element={<OneTimePassword/>}/>
                         <Route path="/docs" element={<Docs/>}/>
                         
                         {/* Getting Started Routes */}
