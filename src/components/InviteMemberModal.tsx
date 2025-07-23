@@ -199,7 +199,7 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
                             </button>
                         </div>
                         <p className="text-xs text-yellow-400 mt-1">
-                            Note: Please share this password with your team member. We're currently working on a secure way to transfer this password to the dedicated member.
+                            Note: The invited member will receive a secure, one-time access link via email. This link will provide them with secure access to the project password.
                         </p>
                         <div className="mt-2">
                             <div className="grid grid-cols-2 gap-2 text-xs">
