@@ -441,13 +441,29 @@ export class SupabaseService {
       throw new Error('Invalid project password');
     }
 
-    // Check if user exists by email
-    const { data: existingUsers, error: userError } = await supabase
+    const { data: existingMember, error: memberError } = await supabase
       .from('project_members')
       .select('user_id')
-      .eq('project_id', projectId);
+      .eq('project_id', projectId)
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    if (userError) throw userError;
+    if (memberError) throw memberError;
+    if (existingMember) {
+      throw new Error('This user is already a member of the project');
+    }
+
+    const { data: existingInvitation, error: invitationError } = await supabase
+      .from('project_invitations')
+      .select('id')
+      .eq('project_id', projectId)
+      .eq('invited_email', email)
+      .maybeSingle();
+
+    if (invitationError) throw invitationError;
+    if (existingInvitation) {
+      throw new Error('An invitation has already been sent to this email address');
+    }
 
     // Encrypt project password with the access password
     const encryptedProjectPassword = await CryptoUtils.encrypt(projectPassword, accessPassword);
