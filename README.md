@@ -111,11 +111,15 @@ For more detailed CLI documentation, please visit the [EnvHub CLI repository](ht
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. First, check the [existing issues](https://github.com/Okaymisba/EnvHub/issues) to see if there's something you'd like to work on or if a similar feature/bug is already being discussed.
+2. If you're planning to add a new feature or make significant changes, please open an issue first to discuss it with the maintainers.
+3. Fork the Project
+4. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+5. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+6. Push to the Branch (`git push origin feature/AmazingFeature`)
+7. Open a Pull Request and reference any related issues
+
+Please make sure your code follows the project's coding standards and includes appropriate tests. Also, update the documentation as needed.
 
 ## 📝 License
 
