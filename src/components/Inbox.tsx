@@ -115,7 +115,7 @@ export const Inbox: React.FC<InboxProps> = ({
                           onClick={() => handleReject(notification)}
                           variant="outline"
                           size="sm"
-                          className="border-gray-700 text-gray-300 hover:bg-gray-900"
+                          className="border-gray-700 text-black hover:bg-gray-300"
                         >
                           <X className="mr-1 h-4 w-4" />
                           Decline

@@ -40,7 +40,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         `}
         onClick={() => onProjectClick(project)}
       >
-        {/* Top row: name + view button (mobile), name only (desktop) */}
+        {/* Top row: name, name only (desktop) */}
         <div className="flex w-full items-center justify-between sm:justify-start gap-2 sm:gap-6">
           <div className="font-semibold text-white flex items-center gap-2 min-w-[120px]">
             {project.name}
@@ -49,18 +49,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 Shared
               </Badge>
             )}
-          </div>
-          {/* View button: right of name on mobile, at end on desktop */}
-          <div className="flex-shrink-0 sm:hidden">
-            <button
-              className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
-              onClick={e => {
-                e.stopPropagation();
-                onProjectClick(project);
-              }}
-            >
-              View <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
         {/* Details row: only on sm and up */}
@@ -79,18 +67,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="flex items-center gap-2 text-gray-400 text-sm min-w-[100px]">
             <FileText className="mr-1 h-4 w-4" />
             {project.version_count || 0} versions
-          </div>
-          {/* View button on the far right for desktop */}
-          <div className="flex-shrink-0 ml-auto">
-            <button
-              className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
-              onClick={e => {
-                e.stopPropagation();
-                onProjectClick(project);
-              }}
-            >
-              View <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>
@@ -135,17 +111,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <FileText className="mr-2 h-4 w-4" />
             {project.version_count || 0} versions
           </div>
-        </div>
-        <div className="mt-4 flex justify-end">
-          <button
-            className="flex items-center gap-1 px-4 py-2 rounded bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition"
-            onClick={e => {
-              e.stopPropagation();
-              onProjectClick(project);
-            }}
-          >
-            View <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </CardContent>
     </Card>
