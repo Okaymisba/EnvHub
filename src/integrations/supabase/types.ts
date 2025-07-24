@@ -455,6 +455,17 @@ export type Database = {
         Args: { _user_id: string; _project_id: string }
         Returns: boolean
       }
+      check_member_and_invitation: {
+        Args: { 
+          p_project_id: string
+          p_email: string
+        }
+        Returns: {
+          is_member: boolean
+          has_invitation: boolean
+          user_exists: boolean
+        }
+      }
     }
     Enums: {
       project_role: "owner" | "admin" | "user"

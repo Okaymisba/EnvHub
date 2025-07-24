@@ -441,28 +441,26 @@ export class SupabaseService {
       throw new Error('Invalid project password');
     }
 
-    const { data: existingMember, error: memberError } = await supabase
-      .from('project_members')
-      .select('user_id')
-      .eq('project_id', projectId)
-      .eq('user_id', user.id)
-      .maybeSingle();
+    // Check if user is already a member or has pending invitation
+    const { data: memberCheck, error: checkError } = await supabase
+      .rpc('check_member_and_invitation', {
+        p_project_id: projectId,
+        p_email: email
+      })
+      .single();
 
-    if (memberError) throw memberError;
-    if (existingMember) {
+    if (checkError) throw checkError;
+
+    if (memberCheck.is_member) {
       throw new Error('This user is already a member of the project');
     }
 
-    const { data: existingInvitation, error: invitationError } = await supabase
-      .from('project_invitations')
-      .select('id')
-      .eq('project_id', projectId)
-      .eq('invited_email', email)
-      .maybeSingle();
-
-    if (invitationError) throw invitationError;
-    if (existingInvitation) {
+    if (memberCheck.has_invitation) {
       throw new Error('An invitation has already been sent to this email address');
+    }
+
+    if (!memberCheck.user_exists) {
+      throw new Error('User does not exist');
     }
 
     // Encrypt project password with the access password
