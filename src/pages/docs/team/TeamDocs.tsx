@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import DocsLayout from '@/components/DocsLayout';
-import {Users, UserPlus, UserCog, Lock, Users2, Settings, Shield, Book, Terminal} from 'lucide-react';
+import {Users, UserPlus, UserCog, Lock, Shield, Book, Terminal} from 'lucide-react';
 
 interface TeamDocsProps {
   initialSection?: string;

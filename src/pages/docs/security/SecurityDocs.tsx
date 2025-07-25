@@ -4,7 +4,6 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Button } from '@/components/ui/button';
 import { Shield, Lock, ShieldCheck, Users, Book, Terminal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DocsLayout from '@/components/DocsLayout';

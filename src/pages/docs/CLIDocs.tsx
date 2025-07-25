@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Book, Shield, Users, Terminal, Key, Box, Cpu } from 'lucide-react';
+import { Book, Shield, Users, Terminal, Key, Box, Cpu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DocsLayout from '@/components/DocsLayout';
 
