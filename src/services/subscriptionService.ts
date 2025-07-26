@@ -67,7 +67,7 @@ export class SubscriptionService {
   }
 
   static getSubscriptionLimits(subscription: Subscription | null) {
-    if (!subscription || subscription.status !== 'active') {
+    if (!subscription || subscription.status == 'expired') {
       return {
         plan: 'Free',
         projects: 10,
