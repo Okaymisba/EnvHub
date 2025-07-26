@@ -10,6 +10,7 @@ export interface Project {
   user_id: string;
   password_hash?: string;
   version_count?: number;
+  api_key?: string;
 }
 
 export interface EnvVersion {

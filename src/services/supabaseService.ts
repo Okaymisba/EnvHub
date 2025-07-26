@@ -256,6 +256,7 @@ export class SupabaseService {
         created_at,
         user_id,
         password_hash,
+        api_key,
         env_versions(count)
       `)
       .eq('user_id', (await this.getCurrentUser())?.id)
@@ -283,6 +284,7 @@ export class SupabaseService {
           name,
           created_at,
           user_id,
+          api_key,
           env_versions(count)
         )
       `)
@@ -305,7 +307,8 @@ export class SupabaseService {
           created_at: project.created_at,
           user_id: project.user_id,
           version_count: project.env_versions?.[0]?.count || 0,
-          owner_email: ownerEmail || 'Unknown'
+          owner_email: ownerEmail || 'Unknown',
+          api_key: project.api_key
         };
       })
     );

@@ -599,6 +599,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           onClose={() => setIsSettingsOpen(false)}
           project={project}
           onProjectDeleted={onBack}
+          currentUserRole={currentUserRole}
         />
       </main>
       <footer className="w-full mt-auto">
