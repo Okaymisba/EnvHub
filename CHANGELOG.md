@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[//]: # (## [Unreleased])
+## [Unreleased]
+
+### Added
+- **API Key Management**: Enhanced ProjectSettings with comprehensive API key operations including generation, copying, and deletion
+- **Role-Based Access Control**: Implemented granular permission checks for API key management based on user roles
+- **Type Safety**: Added and updated TypeScript interfaces for API key related operations
+
+### Changed
+- **UI/UX**: Improved API key management interface with clear visual feedback for user actions
+- **Security**: Strengthened role validation for sensitive API key operations
 
 ## [0.2.4] - 2025-07-22
 
