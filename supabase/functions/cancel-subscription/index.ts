@@ -75,7 +75,7 @@ serve(async (req) => {
     }
 
     // Get API key from environment
-    const apiKey = Deno.env.get('LEMON_SQUEEZY_TEST_API_KEY');
+    const apiKey = Deno.env.get('LEMON_SQUEEZY_API_KEY');
     if (!apiKey) {
       return new Response('Missing API configuration', { status: 500, headers: corsHeaders });
     }
