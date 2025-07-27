@@ -238,10 +238,13 @@ export const CLIDocs: React.FC<CLIDocsProps> = ({ initialSection }) => {
                     {section.commands.map((command, index) => (
                       <div key={index} className="space-y-4">
                         <h3 className="text-xl font-semibold text-white">{command.name}</h3>
+                        <p className="text-gray-400">{command.description}</p>
                         <div className="bg-gray-900/50 p-4 rounded-lg overflow-x-auto">
                           <code className="text-gray-300 font-mono">{command.usage}</code>
                         </div>
-                        <p className="text-gray-400">{command.description}</p>
+                        {command.after_usage_description && (
+                          <p className="text-gray-400">{command.after_usage_description}</p>
+                        )}
                       </div>
                     ))}
                   </div>
