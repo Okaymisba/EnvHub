@@ -142,6 +142,12 @@ const commandSections = [
         description: 'Unfortunately, you can only remove a variable using the web interface. after after removing it from the web interface, you can pull the latest changes from the web interface using the following command.'
       },
       {
+        name: 'Decrypt and Store in .env',
+        usage: 'envhub decrypt',
+        description: 'To decrypt and store your environment variables in a .env file, use the following command. This will securely decrypt your environment variables and store them in a .env file. ',
+        after_usage_description: 'The .env file will be generated in your current working directory. Please ensure you execute this command from your target project directory. To synchronize and re-encrypt your environment variables, simply run `envhub pull`.'
+      },
+      {
         name: 'Decrypt and Run',
         usage: 'envhub decrypt -- <command-to-run>',
         description: 'To decrypt and run your environment variables, use the following command. This will securely decrypt your environment variables at runtime, making them available to your Node.js application while keeping them protected in your codebase. '
