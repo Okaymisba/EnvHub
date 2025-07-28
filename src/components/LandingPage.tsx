@@ -48,7 +48,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                       <iframe
                           className="absolute top-0 left-0 w-full h-full"
                           src="https://www.youtube.com/embed/q3cveL8kY1k"
-                          title="EnvSecure Demo Video"
+                          title="EnvHub Demo Video"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                       ></iframe>
