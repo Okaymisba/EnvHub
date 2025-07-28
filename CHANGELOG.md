@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **UI/UX**: Improved API key management interface with clear visual feedback for user actions
 - **Security**: Strengthened role validation for sensitive API key operations
+- **Validation**: Added project name input validation with live transformation feedback
 
 ## [0.2.4] - 2025-07-22
 
