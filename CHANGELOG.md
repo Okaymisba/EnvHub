@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API Key Management**: Enhanced ProjectSettings with comprehensive API key operations including generation, copying, and deletion
 - **Role-Based Access Control**: Implemented granular permission checks for API key management based on user roles
 - **Type Safety**: Added and updated TypeScript interfaces for API key related operations
+- Added documentation for the new features
 
 ### Changed
 - **UI/UX**: Improved API key management interface with clear visual feedback for user actions
