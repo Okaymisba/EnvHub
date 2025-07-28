@@ -4,7 +4,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, Lock, ShieldCheck, Users, Book, Terminal } from 'lucide-react';
+import {Shield, Lock, ShieldCheck, Users, Book, Terminal, CloudUpload} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DocsLayout from '@/components/DocsLayout';
 
@@ -52,6 +52,14 @@ const sections = [
       { label: 'Authentication', path: '/docs/cli/authentication#authentication' },
       { label: 'Project Management', path: '/docs/cli/project-management#project-management' },
       { label: 'Environment Variables', path: '/docs/cli/variables#environment-variables' }
+    ]
+  },
+  {
+    title: 'Deployment',
+    icon: CloudUpload,
+    items: [
+      { label: 'Overview', path: '/docs/deployment/overview#overview' },
+      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' }
     ]
   },
   {

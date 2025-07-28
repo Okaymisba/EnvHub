@@ -5,7 +5,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import DocsLayout  from '@/components/DocsLayout';
-import { Book, Terminal, Shield, Users, Zap, GitBranch } from 'lucide-react';
+import {Book, Terminal, Shield, Users, Zap, GitBranch, CloudUpload} from 'lucide-react';
 
 const Docs = () => {
   const sections = [
@@ -26,6 +26,14 @@ const Docs = () => {
         { label: 'Authentication', path: '/docs/cli/authentication#authentication' },
         { label: 'Project Management', path: '/docs/cli/project-management#project-management' },
         { label: 'Environment Variables', path: '/docs/cli/variables#environment-variables' }
+      ]
+    },
+    {
+      title: 'Deployment',
+      icon: CloudUpload,
+      items: [
+        { label: 'Overview', path: '/docs/deployment/overview#overview' },
+        { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' }
       ]
     },
     {
