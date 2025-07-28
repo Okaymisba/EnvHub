@@ -153,7 +153,7 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
             <DialogTitle className="text-2xl font-bold text-white text-center">
               Create New Project
             </DialogTitle>
-            <p className="text-gray-400 text-center mt-2 text-base">
+            <p className="text-white text-center mt-2 text-base">
               Secure your secrets with a project password. Only you and your team can access them.
             </p>
           </DialogHeader>
@@ -198,12 +198,25 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
               <Input
                 id="project-name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter project name"
+                onChange={(e) => {
+                  // Remove spaces and convert to lowercase
+                  const value = e.target.value.replace(/\s+/g, '');
+                  // Only allow alphanumeric characters, hyphens, and underscores
+                  const filteredValue = value.replace(/[^a-zA-Z0-9-_]/g, '');
+                  setName(filteredValue);
+                }}
+                placeholder="Enter project name (no spaces)"
                 className="w-full bg-black/70 border border-purple-800 text-white placeholder:text-gray-500 rounded-lg px-3 py-2 focus:border-blue-600 focus:ring-0"
                 required
                 disabled={!canCreate}
+                pattern="[a-zA-Z0-9-_]+"
+                title="Project name can only contain letters, numbers, hyphens, and underscores"
               />
+              {name && (
+                <p className="mt-1 text-s pt-1 text-white">
+                  Project name will be: <span className="text-green-400 font-mono">{name.toLowerCase().replace(/[^a-z0-9-]/g, '')}</span>
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="project-password" className="text-gray-300 mb-1 block text-sm font-medium">

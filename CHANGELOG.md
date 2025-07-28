@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.3.1] - 2025-07-28
+
+### Added
+- **API Key Management**: Enhanced ProjectSettings with comprehensive API key operations including generation, copying, and deletion
+- **Role-Based Access Control**: Implemented granular permission checks for API key management based on user roles
+- **Type Safety**: Added and updated TypeScript interfaces for API key related operations
+- Added documentation for the new features
+
+### Changed
+- **UI/UX**: Improved API key management interface with clear visual feedback for user actions
+- **Security**: Strengthened role validation for sensitive API key operations
+- **Validation**: Added project name input validation with live transformation feedback
+
 ## [0.2.4] - 2025-07-22
 
 ### Fixed
@@ -66,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...HEAD
+[0.3.5]: https://github.com/Okaymisba/EnvHub/compare/v0.3.4...v0.3.5
 [0.2.4]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/Okaymisba/EnvHub/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/Okaymisba/EnvHub/compare/v0.2.1...v0.2.2

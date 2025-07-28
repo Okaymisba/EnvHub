@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Book, Shield, Users, Terminal, Key, Box, Cpu } from 'lucide-react';
+import {Book, Shield, Users, Terminal, Key, Box, Cpu, CloudUpload} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DocsLayout from '@/components/DocsLayout';
 
@@ -27,6 +26,14 @@ const sections = [
       { label: 'Authentication', path: '/docs/cli/authentication#authentication' },
       { label: 'Project Management', path: '/docs/cli/project-management#project-management' },
       { label: 'Environment Variables', path: '/docs/cli/variables#environment-variables' }
+    ]
+  },
+  {
+    title: 'Deployment',
+    icon: CloudUpload,
+    items: [
+      { label: 'Overview', path: '/docs/deployment/overview#overview' },
+      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' }
     ]
   },
   {
@@ -143,6 +150,12 @@ const commandSections = [
         description: 'Unfortunately, you can only remove a variable using the web interface. after after removing it from the web interface, you can pull the latest changes from the web interface using the following command.'
       },
       {
+        name: 'Decrypt and Store in .env',
+        usage: 'envhub decrypt',
+        description: 'To decrypt and store your environment variables in a .env file, use the following command. This will securely decrypt your environment variables and store them in a .env file. ',
+        after_usage_description: 'The .env file will be generated in your current working directory. Please ensure you execute this command from your target project directory. To synchronize and re-encrypt your environment variables, simply run `envhub pull`.'
+      },
+      {
         name: 'Decrypt and Run',
         usage: 'envhub decrypt -- <command-to-run>',
         description: 'To decrypt and run your environment variables, use the following command. This will securely decrypt your environment variables at runtime, making them available to your Node.js application while keeping them protected in your codebase. '
@@ -233,10 +246,13 @@ export const CLIDocs: React.FC<CLIDocsProps> = ({ initialSection }) => {
                     {section.commands.map((command, index) => (
                       <div key={index} className="space-y-4">
                         <h3 className="text-xl font-semibold text-white">{command.name}</h3>
+                        <p className="text-gray-400">{command.description}</p>
                         <div className="bg-gray-900/50 p-4 rounded-lg overflow-x-auto">
                           <code className="text-gray-300 font-mono">{command.usage}</code>
                         </div>
-                        <p className="text-gray-400">{command.description}</p>
+                        {command.after_usage_description && (
+                          <p className="text-gray-400">{command.after_usage_description}</p>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -22,6 +22,7 @@ import { QuickStart } from "./pages/docs/QuickStart";
 import { CLIDocs } from "./pages/docs/CLIDocs";
 import SecurityDocs from "./pages/docs/security/SecurityDocs";
 import TeamDocs from "./pages/docs/team/TeamDocs";
+import DeploymentDocs from "./pages/docs/DeploymentDocs";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ResetPassword from "./pages/ResetPassword";
@@ -71,6 +72,11 @@ const App = () => (
                         <Route path="/docs/team/members" element={<TeamDocs initialSection="members"/>}/>
                         <Route path="/docs/team/access-control" element={<TeamDocs initialSection="access-control"/>}/>
                         <Route path="/docs/team/best-practices" element={<TeamDocs initialSection="best-practices"/>}/>
+                        
+                        {/* Deployment Documentation Routes */}
+                        <Route path="/docs/deployment" element={<DeploymentDocs/>}/>
+                        <Route path="/docs/deployment/overview" element={<DeploymentDocs initialSection="overview"/>}/>
+                        <Route path="/docs/deployment/deployment-guide" element={<DeploymentDocs initialSection="deployment-guide"/>}/>
                         
                         {/* Other Pages */}
                         <Route path="/pricing" element={<Pricing/>}/>
