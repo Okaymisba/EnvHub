@@ -76,7 +76,7 @@ serve(async (req) => {
         variant_name: subscription.attributes.variant_name,
         product_id: subscription.attributes.product_id,
         product_name: subscription.attributes.product_name,
-        price: subscription.attributes.product_name.toLowerCase() === 'team' ? '10' : '4',
+        price: subscription.attributes.product_name.toLowerCase() === 'team' ? '10' : '5',
         card_brand: subscription.attributes.card_brand,
         card_last_four: subscription.attributes.card_last_four,
         updated_at: new Date().toISOString()
