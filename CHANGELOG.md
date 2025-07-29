@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.3.2] - 2025-07-29
+
+### Changed
+- **Subscription Plans**: Reduced environment variables and team members limits across all tiers
+
 ## [0.3.1] - 2025-07-28
 
 ### Added
@@ -79,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...HEAD
-[0.3.5]: https://github.com/Okaymisba/EnvHub/compare/v0.3.4...v0.3.5
+[0.3.2]: https://github.com/Okaymisba/EnvHub/compare/v0.3.1...v0.3.2
+[0.3.1]: https://github.com/Okaymisba/EnvHub/compare/v0.2.4...v0.3.1
 [0.2.4]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/Okaymisba/EnvHub/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/Okaymisba/EnvHub/compare/v0.2.1...v0.2.2

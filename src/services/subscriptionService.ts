@@ -71,8 +71,8 @@ export class SubscriptionService {
       return {
         plan: 'Free',
         projects: 10,
-        envVarsPerProject: 50,
-        teamMembers: 5,
+        envVarsPerProject: 10,
+        teamMembers: 3,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: true
@@ -84,8 +84,8 @@ export class SubscriptionService {
       return {
         plan: 'Pro',
         projects: 250,
-        envVarsPerProject: 500,
-        teamMembers: 50,
+        envVarsPerProject: 50,
+        teamMembers: 10,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: false
@@ -97,8 +97,8 @@ export class SubscriptionService {
       return {
         plan: 'Team',
         projects: 1000,
-        envVarsPerProject: 5000,
-        teamMembers: 500,
+        envVarsPerProject: 100,
+        teamMembers: 20,
         hasCliAccess: true,
         cliEnvLimit: null,
         hasAds: false
@@ -108,8 +108,8 @@ export class SubscriptionService {
     return {
       plan: 'Free',
       projects: 10,
-      envVarsPerProject: 50,
-      teamMembers: 5,
+      envVarsPerProject: 10,
+      teamMembers: 3,
       hasCliAccess: true,
       cliEnvLimit: null,
       hasAds: true
