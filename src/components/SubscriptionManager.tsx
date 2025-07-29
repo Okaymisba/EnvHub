@@ -259,8 +259,8 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                             className="text-sm text-gray-400">/month</span></div>
                                         <ul className="space-y-2 text-sm text-gray-300 mb-6">
                                             <li>• 250 projects</li>
-                                            <li>• 500 env variables each</li>
-                                            <li>• Up to 50 team members per project</li>
+                                            <li>• 50 env variables per project</li>
+                                            <li>• Up to 10 team members per project</li>
                                             <li>• Full CLI access</li>
                                             <li>• No ads</li>
                                         </ul>
@@ -286,8 +286,8 @@ export const SubscriptionManager: React.FC<SubscriptionManagerProps> = ({onClose
                                             className="text-sm text-gray-400">/month</span></div>
                                         <ul className="space-y-2 text-sm text-gray-300 mb-6">
                                             <li>• 1000 projects</li>
-                                            <li>• 5000 env variables each</li>
-                                            <li>• Up to 500 team members per project</li>
+                                            <li>• 100 env variables per project</li>
+                                            <li>• Up to 20 team members per project</li>
                                             <li>• Full CLI access</li>
                                             <li>• No ads</li>
                                         </ul>

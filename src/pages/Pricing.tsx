@@ -21,8 +21,8 @@ const Pricing = () => {
       description: 'Perfect for getting started',
       features: [
         { text: '10 projects', included: true },
-        { text: '50 environment variables per project', included: true },
-        { text: 'Up to 5 members per project (Including you)', included: true },
+        { text: '10 environment variables per project', included: true },
+        { text: 'Up to 3 members per project (Including you)', included: true },
         { text: 'Full CLI access', included: true},
         { text: 'Role-based access control', included: true },
         { text: 'Community support only', included: true },
@@ -39,8 +39,8 @@ const Pricing = () => {
       description: 'Great for individual developers',
       features: [
         { text: '250 projects', included: true },
-        { text: '500 env variables each', included: true },
-        { text: 'Up to 50 members per project (Including you)', included: true },
+        { text: '50 env variables per project', included: true },
+        { text: 'Up to 10 members per project (Including you)', included: true },
         { text: 'Full CLI access', included: true },
         { text: 'Role-based access control', included: true },
         { text: 'Priority email support', included: true },
@@ -57,8 +57,8 @@ const Pricing = () => {
       description: 'Perfect for growing teams',
       features: [
         { text: '1000 projects', included: true },
-        { text: '5000 env variables each', included: true },
-        { text: 'Up to 500 members per project (Including you)', included: true },
+        { text: '100 env variables per project', included: true },
+        { text: 'Up to 20 members per project (Including you)', included: true },
         { text: 'Full CLI access', included: true },
         { text: 'Role-based access control', included: true },
         { text: 'Dedicated account manager', included: true },
