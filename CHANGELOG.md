@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added LinkedIn and X social media links to the footer component.
+- Enhanced OpenSourceSection cards with hover effects, animations, and external GitHub links.
 
 ## [0.3.2] - 2025-07-29
 
