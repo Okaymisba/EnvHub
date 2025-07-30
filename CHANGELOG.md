@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated meta tags for improved SEO and social sharing, including revised descriptions, authorship, and Open Graph/Twitter metadata.
+- Expanded sitemap with additional URLs for improved site coverage.
 
 ## [0.3.3] - 2025-07-30
 
