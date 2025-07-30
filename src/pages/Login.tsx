@@ -3,6 +3,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,131 +101,138 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black relative overflow-x-hidden p-4">
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-[320px] h-[320px] bg-purple-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-0 right-0 w-[280px] h-[280px] bg-blue-900 opacity-10 rounded-full blur-3xl animate-pulse-slow"></div>
-      </div>
+    <>
+      <Helmet>
+        <title>Login - EnvSecure Vault Keeper</title>
+        <meta name="description" content="Sign in to your EnvSecure Vault Keeper account to securely manage your environment variables and secrets." />
+        <meta name="keywords" content="envsecure, vault keeper, environment variables, secrets management, login, sign in" />
+      </Helmet>
+      <div className="min-h-screen flex items-center justify-center bg-black relative overflow-x-hidden p-4">
+        {/* Animated Background Blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-0 left-0 w-[320px] h-[320px] bg-purple-900 opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-0 right-0 w-[280px] h-[280px] bg-blue-900 opacity-10 rounded-full blur-3xl animate-pulse-slow"></div>
+        </div>
 
-      <Card className="w-full max-w-md bg-black/90 border border-purple-900 shadow-xl relative z-10">
-        <CardHeader className="space-y-1 text-center">
-          {/* SVG Lock Logo */}
-          <div className="flex justify-center mb-4">
-            <img
-                src="/favicon.ico"
-                alt="EnvHub Logo"
-                className="w-12 h-12 object-contain"
-            />
-          </div>
-          <CardTitle className="text-2xl font-bold text-white">
-            Welcome Back
-          </CardTitle>
-          <CardDescription className="text-slate-400">
-            Sign in to your EnvHub account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleGoogleAuth}
-            disabled={loading}
-            variant="outline"
-            className="w-full bg-black text-white border-gray-800 hover:bg-gray-100 hover:border-gray-700 transition-colors duration-200"
-          >
-            <FcGoogle className="mr-2 h-4 w-4" />
-            Continue with Google
-          </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-slate-600" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-800 px-2 text-slate-400">Or continue with</span>
-            </div>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400"
+        <Card className="w-full max-w-md bg-black/90 border border-purple-900 shadow-xl relative z-10">
+          <CardHeader className="space-y-1 text-center">
+            {/* SVG Lock Logo */}
+            <div className="flex justify-center mb-4">
+              <img
+                  src="/favicon.ico"
+                  alt="EnvHub Logo"
+                  className="w-12 h-12 object-contain"
               />
             </div>
-            <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400"
-              />
-            </div>
-
-            <div className="text-right">
-              <Button
-                type="button"
-                variant="link"
-                onClick={() => setShowForgotPassword(true)}
-                className="text-slate-400 hover:text-white text-sm p-0 h-auto"
-              >
-                Forgot password?
-              </Button>
-            </div>
-
+            <CardTitle className="text-2xl font-bold text-white">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              Sign in to your EnvHub account
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <Button
-              type="submit"
+              onClick={handleGoogleAuth}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              variant="outline"
+              className="w-full bg-black text-white border-gray-800 hover:bg-gray-100 hover:border-gray-700 transition-colors duration-200"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              <FcGoogle className="mr-2 h-4 w-4" />
+              Continue with Google
             </Button>
-          </form>
 
-          <div className="text-center">
-            <span className="text-slate-400">Don't have an account? </span>
-            <Link
-              to="/signup"
-              className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
-            >
-              Sign up
-            </Link>
-          </div>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-slate-600" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-slate-800 px-2 text-slate-400">Or continue with</span>
+              </div>
+            </div>
 
-          {/* Terms and Privacy Links */}
-          <div className="text-center text-xs text-slate-500 space-y-1">
-            <p>By continuing, you agree to our</p>
-            <div className="space-x-4">
-              <Link
-                to="/terms"
-                className="text-slate-400 hover:text-white underline underline-offset-2"
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400"
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-black/80 border-slate-700 text-white placeholder:text-slate-400"
+                />
+              </div>
+
+              <div className="text-right">
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-slate-400 hover:text-white text-sm p-0 h-auto"
+                >
+                  Forgot password?
+                </Button>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
               >
-                Terms of Service
-              </Link>
+                {loading ? 'Signing In...' : 'Sign In'}
+              </Button>
+            </form>
+
+            <div className="text-center">
+              <span className="text-slate-400">Don't have an account? </span>
               <Link
-                to="/privacy"
-                className="text-slate-400 hover:text-white underline underline-offset-2"
+                to="/signup"
+                className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
               >
-                Privacy Policy
+                Sign up
               </Link>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      <style>{`
-        .animate-pulse-slow {
-          animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3;}
-          50% { opacity: 0.6;}
-        }
-      `}</style>
-    </div>
+
+            {/* Terms and Privacy Links */}
+            <div className="text-center text-xs text-slate-500 space-y-1">
+              <p>By continuing, you agree to our</p>
+              <div className="space-x-4">
+                <Link
+                  to="/terms"
+                  className="text-slate-400 hover:text-white underline underline-offset-2"
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  to="/privacy"
+                  className="text-slate-400 hover:text-white underline underline-offset-2"
+                >
+                  Privacy Policy
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <style>{`
+          .animate-pulse-slow {
+            animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+          @keyframes pulse {
+            0%, 100% { opacity: 0.3;}
+            50% { opacity: 0.6;}
+          }
+        `}</style>
+      </div>
+    </>
   );
 }

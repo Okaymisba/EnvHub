@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added `<Helmet>` with meta tags for SEO and improved page titles on Signup page.
+- Added `<Helmet>` with meta tags for SEO and enhanced page titles on Login page.
+
 ### Changed
 - Updated meta tags for improved SEO and social sharing, including revised descriptions, authorship, and Open Graph/Twitter metadata.
-- Added `<Helmet>` with meta tags for SEO and improved page titles on Signup page.
 
 ## [0.3.3] - 2025-07-30
 
