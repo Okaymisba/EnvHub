@@ -40,9 +40,7 @@ export const OpenSourceSection = () => {
               rel="noopener noreferrer"
               className="block"
           >
-          <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group">
-            <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
-
+          <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group">
             <FaGithub className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
 
             <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
@@ -63,8 +61,7 @@ export const OpenSourceSection = () => {
               rel="noopener noreferrer"
               className="block"
           >
-            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group cursor-pointer">
-              <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
+            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group cursor-pointer">
               <ShieldCheck className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
               <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
                 Transparent Security
@@ -82,8 +79,7 @@ export const OpenSourceSection = () => {
               rel="noopener noreferrer"
               className="block"
           >
-            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group cursor-pointer">
-              <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
+            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group cursor-pointer">
               <Globe className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
               <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
                 Global Access
