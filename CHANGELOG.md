@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.3.4] - 2025-07-30
+
+### Added
+- Added `<Helmet>` with meta tags for SEO and improved page titles on Signup page.
+- Added `<Helmet>` with meta tags for SEO and enhanced page titles on Login page.
+- Added `<Helmet>` with meta tags for SEO and improved page titles on Feedback page.
+- Added `<Helmet>` with meta tags for SEO and improved page title on Contact page.
+
+### Changed
+- Updated meta tags for improved SEO and social sharing, including revised descriptions, authorship, and Open Graph/Twitter metadata.
+- Expanded sitemap with additional URLs for improved site coverage.
+
 ## [0.3.3] - 2025-07-30
 
 ### Added
@@ -93,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...HEAD
+[0.3.4]: https://github.com/Okaymisba/EnvHub/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/Okaymisba/EnvHub/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/Okaymisba/EnvHub/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/Okaymisba/EnvHub/compare/v0.2.4...v0.3.1
