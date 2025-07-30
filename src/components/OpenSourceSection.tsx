@@ -34,25 +34,66 @@ export const OpenSourceSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* GitHub Stats */}
-          <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
-            <FaGithub className="w-8 h-8 mx-auto mb-4 text-purple-400" />
-            <h3 className="text-2xl font-semibold text-white mb-2">{stars} Stars</h3>
-            <p className="text-gray-400">Join our growing community</p>
+          <a
+              href="https://github.com/okaymisba/EnvHub"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+          >
+          <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group">
+            <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
+
+            <FaGithub className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
+
+            <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
+              {stars} Stars
+            </h3>
+
+            <p className="text-gray-400 transition-colors duration-300 group-hover:text-gray-300">
+              Join our growing community
+            </p>
           </div>
+          </a>
+
 
           {/* Security */}
-          <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
-            <ShieldCheck className="w-8 h-8 mx-auto mb-4 text-fuchsia-400" />
-            <h3 className="text-2xl font-semibold text-white mb-2">Transparent Security</h3>
-            <p className="text-gray-400">MPL 2.0 License - Open for audit</p>
-          </div>
+          <a
+              href="https://github.com/okaymisba/EnvHub"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+          >
+            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group cursor-pointer">
+              <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
+              <ShieldCheck className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
+              <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
+                Transparent Security
+              </h3>
+              <p className="text-gray-400 transition-colors duration-300 group-hover:text-gray-300">
+                MPL 2.0 License - Open for audit
+              </p>
+            </div>
+          </a>
 
           {/* Global Access */}
-          <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-gray-900/70 transition-colors">
-            <Globe className="w-8 h-8 mx-auto mb-4 text-purple-400" />
-            <h3 className="text-2xl font-semibold text-white mb-2">Global Access</h3>
-            <p className="text-gray-400">Available on GitHub</p>
-          </div>
+          <a
+              href="https://github.com/okaymisba/EnvHub"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+          >
+            <div className="relative overflow-hidden bg-black rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gray-900/80 group cursor-pointer">
+              <span className="absolute inset-0 bg-gradient-to-br from-gray-700/20 via-white/10 to-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
+              <Globe className="w-10 h-10 mx-auto mb-4 text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
+              <h3 className="text-2xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-gray-300">
+                Global Access
+              </h3>
+              <p className="text-gray-400 transition-colors duration-300 group-hover:text-gray-300">
+                Available on GitHub
+              </p>
+            </div>
+          </a>
+
         </div>
 
         <div className="mt-12 text-center">
