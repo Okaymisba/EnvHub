@@ -43,8 +43,7 @@ jobs:
           set -a
           source .env
           set +a
-
-          echo "Deploying to: $RENDER_DEPLOY_HOOK_ENVHUB"
+        
           curl "$RENDER_DEPLOY_HOOK_ENVHUB"        
 
           rm -f .env
