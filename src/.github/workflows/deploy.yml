@@ -1,0 +1,41 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ main ]  # or master, depending on your main branch name
+
+env:
+  ENVHUB_API_KEY: ${{ secrets.ENVHUB_API_KEY }}
+  ENVHUB_PASSWORD: ${{ secrets.ENVHUB_PASSWORD }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential wget git python3-dev gcc
+
+      - name: Install pyinstaller
+        run: pip install pyinstaller
+
+      - name: Clone and build envhub
+        run: |
+          git clone https://github.com/Okaymisba/EnvHub-CLI.git envhub-src
+          cd envhub-src
+          pip install -e .
+          pyinstaller --onefile --name envhub envhub/__main__.py
+          sudo mv dist/envhub /usr/local/bin/
+          envhub --version
+
+      - name: Deploy to Render
+        run: |
+          envhub decrypt-prod -- curl "$RENDER_DEPLOY_HOOK_ENVHUB"
