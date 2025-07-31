@@ -37,5 +37,14 @@ jobs:
           envhub --version
 
       - name: Deploy to Render
-        run: |
-          envhub decrypt-prod -- curl "$RENDER_DEPLOY_HOOK_ENVHUB"
+        run: |        
+          envhub decrypt-prod
+          
+          set -a
+          source .env
+          set +a
+
+          echo "Deploying to: $RENDER_DEPLOY_HOOK_ENVHUB"
+          curl "$RENDER_DEPLOY_HOOK_ENVHUB"        
+
+          rm -f .env
