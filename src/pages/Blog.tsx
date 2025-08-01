@@ -16,7 +16,7 @@ const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950 text-white">
+    <div className="min-h-screen flex flex-col bg-black text-white">
       <Helmet>
         <title>Envhub Blog - Insights & Updates</title>
         <meta name="description" content="Stay updated with the latest insights, tutorials, and news about Envhub and modern development workflows." />
@@ -34,9 +34,9 @@ const Blog = () => {
       <Navbar />
       <main className="relative min-h-[calc(100vh-4rem)] pt-20 pb-28 px-4 sm:px-6 lg:px-8">
         {/* Background effects */}
-        <div className="absolute inset-0 overflow-hidden -z-10">
-          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-3xl animate-pulse-slow delay-200"></div>
         </div>
 
         <div className="max-w-7xl mx-auto">
