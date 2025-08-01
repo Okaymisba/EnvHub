@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[//]: # (## [Unreleased])
+## [Unreleased]
+
+### Changed
+- Updated blog page UI with dark theme and gradient effects
+- Enhanced background animations with smooth pulse effects
+- Improved responsive layout and spacing
+- Optimized z-index and event handling for better performance
 
 ## [0.4.0] - 2025-08-01
 
