@@ -2,15 +2,37 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Tag as TagIcon } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { blogPosts } from '@/types/blog';
 
-export const Blog = () => {
+const Blog = () => {
+  // Calculate reading time (in minutes)
+  const calculateReadingTime = (content: string): number => {
+    const wordsPerMinute = 200;
+    const words = content.trim().split(/\s+/).length;
+    return Math.ceil(words / wordsPerMinute);
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen flex flex-col bg-gray-950 text-white">
+      <Helmet>
+        <title>Envhub Blog - Insights & Updates</title>
+        <meta name="description" content="Stay updated with the latest insights, tutorials, and news about Envhub and modern development workflows." />
+        <meta name="keywords" content="envhub, environment variables, development, devops, programming, blog" />
+        <meta property="og:title" content="Envhub Blog - Insights & Updates" />
+        <meta property="og:description" content="Stay updated with the latest insights, tutorials, and news about Envhub and modern development workflows." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${window.location.origin}/blog`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Envhub Blog - Insights & Updates" />
+        <meta name="twitter:description" content="Stay updated with the latest insights, tutorials, and news about Envhub and modern development workflows." />
+        <link rel="canonical" href={`${window.location.origin}/blog`} />
+      </Helmet>
+      
       <Navbar />
-      <main className="relative min-h-[calc(100vh-4rem)] pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1">
         {/* Background effects */}
         <div className="absolute inset-0 overflow-hidden -z-10">
           <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
@@ -29,7 +51,7 @@ export const Blog = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => {
-              const readingTime = Math.ceil(post.content.split(' ').length / 200);
+              const readingTime = calculateReadingTime(post.content);
               
               return (
                 <motion.article 

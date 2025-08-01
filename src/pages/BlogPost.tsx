@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Misbah Sarfaraz msbahsarfaraz@gmail.com
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import { useParams, Link } from 'react-router-dom';
 import { blogPosts } from '@/types/blog';
 import ReactMarkdown from 'react-markdown';
@@ -5,6 +9,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, User, Tag as TagIcon } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import '@/styles/markdown.css';
 import Navbar from "@/components/Navbar.tsx";
 import {Footer} from "@/components/Footer.tsx";
@@ -16,7 +21,11 @@ export const BlogPost = () => {
   if (!post) {
     return (
       <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
-          <Navbar />
+        <Helmet>
+          <title>Post Not Found | Envhub Blog</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
+        <Navbar />
         <div className="max-w-6xl mx-auto px-4 pt-32 text-center">
           <h1 className="text-5xl font-bold text-white mb-6">Post Not Found</h1>
           <p className="text-xl text-gray-300 mb-8">The blog post you're looking for doesn't exist or has been moved.</p>
@@ -28,7 +37,7 @@ export const BlogPost = () => {
             Back to Blog
           </Link>
         </div>
-          <Footer />
+        <Footer />
       </div>
     );
   }
@@ -37,7 +46,30 @@ export const BlogPost = () => {
 
   return (
     <div className="w-full min-h-screen bg-black relative overflow-x-hidden font-sans">
-        <Navbar />
+      <Helmet>
+        <title>{post.title} | Envhub Blog</title>
+        <meta name="description" content={post.excerpt} />
+        <meta name="keywords" content={`${post.tags?.join(', ')}, envhub, environment variables, development`} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:url" content={`${window.location.origin}/blog/${post.slug}`} />
+        {post.coverImage && <meta property="og:image" content={post.coverImage} />}
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt} />
+        {post.coverImage && <meta name="twitter:image" content={post.coverImage} />}
+        
+        <link rel="canonical" href={`${window.location.origin}/blog/${post.slug}`} />
+        <meta name="article:published_time" content={new Date(post.publishedAt).toISOString()} />
+        <meta name="article:author" content={post.author.name} />
+      </Helmet>
+      
+      <Navbar />
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -171,7 +203,7 @@ export const BlogPost = () => {
           )}
         </motion.article>
       </div>
-        <Footer />
+      <Footer />
     </div>
   );
 };
