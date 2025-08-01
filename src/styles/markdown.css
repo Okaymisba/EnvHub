@@ -1,0 +1,72 @@
+/* Markdown Content Styling */
+.prose {
+  color: #e5e7eb;
+  line-height: 1.75;
+}
+
+/* Headings */
+.prose h1 { font-size: 2.25rem; font-weight: 700; color: white; margin: 1.5rem 0 1rem; }
+.prose h2 { font-size: 1.875rem; font-weight: 600; color: white; margin: 1.5rem 0 1rem; }
+.prose h3 { font-size: 1.5rem; font-weight: 600; color: white; margin: 1.5rem 0 1rem; }
+
+/* Paragraphs */
+.prose p { margin: 1rem 0; color: #e5e7eb; }
+
+/* Links */
+.prose a { color: #818cf8; text-decoration: none; }
+.prose a:hover { text-decoration: underline; }
+
+/* Code */
+.prose code {
+  background: rgba(55, 65, 81, 0.5);
+  color: #f472b6;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+/* Code blocks */
+.prose pre {
+  background: #1e1e1e;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+/* Lists */
+.prose ul, .prose ol { padding-left: 1.5rem; margin: 1rem 0; }
+.prose li { margin: 0.5rem 0; }
+
+/* Blockquotes */
+.prose blockquote {
+  border-left: 4px solid #8b5cf6;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #d1d5db;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+.prose th, .prose td {
+  border: 1px solid #374151;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+.prose th {
+  background: rgba(31, 41, 55, 0.5);
+  font-weight: 600;
+}
+
+/* Images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}

@@ -12,6 +12,7 @@ import {
   DollarSign, 
   Info, 
   Mail,
+  Newspaper,
   PlayCircle
 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
@@ -74,7 +75,7 @@ export const Navbar = () => {
 
   const navItems = [
     { 
-      label: 'Docs', 
+      label: 'Documentation', 
       path: '/docs',
       icon: <BookOpen className="w-4 h-4" />
     },
@@ -84,15 +85,14 @@ export const Navbar = () => {
       icon: <DollarSign className="w-4 h-4" />
     },
     { 
-      label: 'Demo', 
-      path: 'https://www.youtube.com/watch?v=q3cveL8kY1k',
-      icon: <PlayCircle className="w-4 h-4" />,
-      isExternal: true
-    },
-    { 
       label: 'About', 
       path: '/about',
       icon: <Info className="w-4 h-4" />
+    },
+    { 
+      label: 'Blog', 
+      path: '/blog',
+      icon: <Newspaper className="w-4 h-4" />
     },
     { 
       label: 'Contact', 
