@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.4.2] - 2025-08-01
+
+### Added
+- Added "Blog" option to ProfileDropdown with navigation functionality.
+
 ## [0.4.1] - 2025-08-01
 
 ### Changed
@@ -123,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...HEAD
+[0.4.2]: https://github.com/Okaymisba/EnvHub/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/Okaymisba/EnvHub/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Okaymisba/EnvHub/compare/v0.3.5...v0.4.0
 [0.3.5]: https://github.com/Okaymisba/EnvHub/compare/v0.3.4...v0.3.5
