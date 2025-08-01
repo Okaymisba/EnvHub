@@ -32,7 +32,7 @@ const Blog = () => {
       </Helmet>
       
       <Navbar />
-      <main className="flex-1">
+      <main className="relative min-h-[calc(100vh-4rem)] pt-20 pb-28 px-4 sm:px-6 lg:px-8">
         {/* Background effects */}
         <div className="absolute inset-0 overflow-hidden -z-10">
           <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
