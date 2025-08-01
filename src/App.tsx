@@ -17,6 +17,8 @@ import Pricing from "./pages/Pricing";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Feedback from "./pages/FeedbackPage";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Docs from "./pages/Docs";
 import { QuickStart } from "./pages/docs/QuickStart";
 import { CLIDocs } from "./pages/docs/CLIDocs";
@@ -45,6 +47,8 @@ const App = () => (
                         <Route path="/reset-password" element={<ResetPassword/>}/>
                         <Route path="/project/:projectId" element={<ProjectPage/>}/>
                         <Route path="invitations/:token" element={<OneTimePassword/>}/>
+                        <Route path="/blog" element={<Blog/>}/>
+                        <Route path="/blog/:slug" element={<BlogPost/>}/>
                         <Route path="/docs" element={<Docs/>}/>
                         
                         {/* Getting Started Routes */}
