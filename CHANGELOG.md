@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (## [Unreleased])
 
+## [0.4.1] - 2025-08-01
+
+### Changed
+- Updated blog page UI with dark theme and gradient effects
+- Enhanced background animations with smooth pulse effects
+- Improved responsive layout and spacing
+- Optimized z-index and event handling for better performance
+
 ## [0.4.0] - 2025-08-01
 
 ### Added
@@ -115,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation
 
 [unreleased]: https://github.com/Okaymisba/EnvHub/compare/v0.2.3...HEAD
+[0.4.1]: https://github.com/Okaymisba/EnvHub/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Okaymisba/EnvHub/compare/v0.3.5...v0.4.0
 [0.3.5]: https://github.com/Okaymisba/EnvHub/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/Okaymisba/EnvHub/compare/v0.3.3...v0.3.4
