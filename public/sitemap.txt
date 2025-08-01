@@ -3,6 +3,9 @@ https://envhub.net/
 https://envhub.net/login
 https://envhub.net/signup
 
+https://envhub.net/blog
+https://envhub.net/blog/why-i-created-envhub
+
 https://envhub.net/docs
 
 https://envhub.net/docs/getting-started
