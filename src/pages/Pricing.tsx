@@ -21,7 +21,7 @@ const Pricing = () => {
       description: 'Perfect for getting started',
       features: [
         { text: '10 projects', included: true },
-        { text: '10 environment variables per project', included: true },
+        { text: '20 environment variables per project', included: true },
         { text: 'Up to 3 members per project (Including you)', included: true },
         { text: 'Full CLI access', included: true},
         { text: 'Role-based access control', included: true },

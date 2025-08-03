@@ -71,7 +71,7 @@ export class SubscriptionService {
       return {
         plan: 'Free',
         projects: 10,
-        envVarsPerProject: 10,
+        envVarsPerProject: 20,
         teamMembers: 3,
         hasCliAccess: true,
         cliEnvLimit: null,
@@ -108,7 +108,7 @@ export class SubscriptionService {
     return {
       plan: 'Free',
       projects: 10,
-      envVarsPerProject: 10,
+      envVarsPerProject: 20,
       teamMembers: 3,
       hasCliAccess: true,
       cliEnvLimit: null,
