@@ -145,30 +145,53 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white">
-        <>
+      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Custom scrollbar styles */}
+        <style jsx global>{`
+          .scrollbar-custom::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+          }
+          .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+          }
+          .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.5);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+          }
+          .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 132, 252, 0.7);
+          }
+          .scrollbar-custom {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(168, 85, 247, 0.5) rgba(0, 0, 0, 0.1);
+          }
+        `}</style>
+        <div className="overflow-y-auto px-1 scrollbar-custom">
           {/* Animated background blob */}
           <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-900 opacity-20 rounded-full blur-3xl pointer-events-none" />
-          <DialogHeader className="relative z-10 px-6 pt-8 pb-2">
-            <DialogTitle className="text-2xl font-bold text-white text-center">
+          <DialogHeader className="relative z-10 px-4 pt-6 pb-2 sm:px-6">
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-white text-center">
               Create New Project
             </DialogTitle>
-            <p className="text-white text-center mt-2 text-base">
+            <p className="text-sm sm:text-base text-gray-300 text-center mt-2">
               Secure your secrets with a project password. Only you and your team can access them.
             </p>
           </DialogHeader>
 
           {limits && (
-            <div className="px-6 mb-4">
+            <div className="px-4 sm:px-6 mb-4">
               <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-white">Current Plan: {limits.plan}</span>
-                  <span className="text-sm text-white">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
+                  <span className="text-xs sm:text-sm text-gray-300">Current Plan: {limits.plan}</span>
+                  <span className="text-xs sm:text-sm text-gray-300">
                     Projects: {currentCount}/{limits.max_projects}
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(100, (currentCount / limits.max_projects) * 100)}%` }}
                   />
@@ -178,19 +201,19 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
           )}
 
           {!canCreate && limits && (
-            <div className="px-6 mb-4">
+            <div className="px-4 sm:px-6 mb-4">
               <Alert className="border-orange-600 bg-orange-900/20">
                 <AlertTriangle className="h-4 w-4 text-orange-400" />
-                <AlertDescription className="text-orange-200">
-                  You've reached your {limits.plan} plan limit of {limits.max_projects} projects. 
-                  <br />
+                <AlertDescription className="text-xs sm:text-sm text-orange-200">
+                  You've reached your {limits.plan} plan limit of {limits.max_projects} projects.
+                  <br className="hidden sm:block" />
                   <span className="text-orange-300 font-medium">Upgrade your plan to create more projects.</span>
                 </AlertDescription>
               </Alert>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="relative z-10 space-y-6 px-6 pb-8 pt-2">
+          <form onSubmit={handleSubmit} className="relative z-10 space-y-4 px-4 sm:px-6 pb-6 pt-2">
             <div>
               <Label htmlFor="project-name" className="text-gray-300 mb-1 block text-sm font-medium">
                 Project Name
@@ -369,7 +392,7 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
               )}
             </div>
           </form>
-        </>
+        </div>
       </DialogContent>
     </Dialog>
   );
