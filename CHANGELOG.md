@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Changed
+### Changed
 - Enhanced CreateProjectDialog UI/UX: improved responsiveness, added custom scrollbar styles, and refined component spacing for better usability.
 - Refined spacing in CardTitle components within ProjectDetails and EnvVariableForm for improved UI consistency.
 - Improved InviteMemberModal UI/UX: added custom scrollbar styles, optimized layout, and enhanced responsiveness.
