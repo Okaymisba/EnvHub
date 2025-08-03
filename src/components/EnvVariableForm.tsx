@@ -117,7 +117,7 @@ export const EnvVariableForm: React.FC<EnvVariableFormProps> = ({ onSave, loadin
   return (
     <Card className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-white flex items-center">
+        <CardTitle className="text-white flex items-center pb-4">
           <Plus className="mr-2 h-5 w-5 text-purple-400" />
           Add Environment Variables
         </CardTitle>

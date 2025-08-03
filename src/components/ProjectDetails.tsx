@@ -465,7 +465,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             ) : (
               <Card className="bg-black/80 border border-purple-900 shadow-xl rounded-2xl">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-white flex items-center pb-4">
                     <Plus className="mr-2 h-5 w-5" />
                     Add Environment Variables
                   </CardTitle>
