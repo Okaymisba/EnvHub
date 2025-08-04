@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Refined Pricing page: integrated Footer component, added animated background effects, and removed inline footer code for cleaner structure.
-- Updated Navbar: reordered menu items, added external links for GitHub and Demo with icons.
+- Enhanced Pricing page with new footer and visual effects
+- Improved Navbar layout and added quick-access links
+- Updated OpenGraph image URLs across some pages for better social sharing
 
 ## [0.5.0] - 2025-08-04
 
