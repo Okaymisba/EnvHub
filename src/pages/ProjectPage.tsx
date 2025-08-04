@@ -125,7 +125,7 @@ const ProjectPage = () => {
             : 'Securely manage your environment variables with EnvHub.'
           }
         />
-        <meta property="og:image" content="https://envhub.net/opengraph-project.png"/>
+        <meta property="og:image" content="https://envhub.net/opengraph-image.png"/>
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image"/>
@@ -138,7 +138,7 @@ const ProjectPage = () => {
             : 'Securely manage your environment variables with EnvHub.'
           }
         />
-        <meta property="twitter:image" content="https://envhub.net/opengraph-project.png"/>
+        <meta property="twitter:image" content="https://envhub.net/opengraph-image.png"/>
 
       </Helmet>
 
