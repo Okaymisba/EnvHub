@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, X, Info, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "@/components/Navbar.tsx";
+import {Footer} from "@/components/Footer.tsx";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -108,6 +109,11 @@ const Pricing = () => {
 
       <Navbar />
       <div className="min-h-screen pt-16 bg-black text-white">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-3xl animate-pulse-slow delay-200"></div>
+        </div>
         {/*/!* Header *!/*/}
         {/*<div className="border-b border-gray-800">*/}
         {/*  <div className="flex items-center justify-between p-6">*/}
@@ -264,31 +270,9 @@ const Pricing = () => {
             </Button>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="border-t border-slate-800 py-8 mt-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <p className="text-gray-600">
-                2025 EnvHub. All rights reserved.
-              </p>
-              <div className="flex space-x-6">
-                <button
-                  onClick={() => navigate('/privacy')}
-                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
-                >
-                  Privacy Policy
-                </button>
-                <button
-                  onClick={() => navigate('/terms')}
-                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
-                >
-                  Terms of Service
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <footer className="w-full mt-auto">
+          <Footer />
+        </footer>
       </div>
     </>
   );
