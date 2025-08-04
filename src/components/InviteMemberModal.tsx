@@ -122,199 +122,225 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[450px] bg-black border border-purple-800 text-white">
-                <DialogHeader>
-                    <DialogTitle className="text-white">Invite Team Member</DialogTitle>
-                    <DialogDescription className="text-gray-400">
-                        Invite a new member to collaborate on this project
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="email" className="text-gray-300">
-                            Email
-                        </Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            autoComplete="off"
-                            value={inviteEmail}
-                            onChange={handleEmailChange}
-                            onBlur={() => validateEmail(inviteEmail)}
-                            placeholder="user@example.com"
-                            className={`bg-black/70 border-purple-800 text-white ${
-                                emailError ? 'border-red-500' : ''
-                            }`}
-                        />
-                        {emailError && (
-                            <p className="text-xs text-red-500 mt-1">{emailError}</p>
-                        )}
-                    </div>
+            <DialogContent className="sm:max-w-[450px] bg-black border border-purple-800 text-white max-h-[90vh] overflow-hidden flex flex-col p-0">
+                <div className="overflow-y-auto px-1 scrollbar-custom">
+                    <style jsx global>{`
+                      .scrollbar-custom::-webkit-scrollbar {
+                        width: 6px;
+                        height: 6px;
+                      }
+                      .scrollbar-custom::-webkit-scrollbar-track {
+                        background: rgba(0, 0, 0, 0.1);
+                        border-radius: 10px;
+                      }
+                      .scrollbar-custom::-webkit-scrollbar-thumb {
+                        background: rgba(168, 85, 247, 0.5);
+                        border-radius: 10px;
+                        transition: all 0.3s ease;
+                      }
+                      .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+                        background: rgba(192, 132, 252, 0.7);
+                      }
+                      .scrollbar-custom {
+                        scrollbar-width: thin;
+                        scrollbar-color: rgba(168, 85, 247, 0.5) rgba(0, 0, 0, 0.1);
+                      }
+                    `}</style>
+                    <div className="p-6">
+                        <DialogHeader>
+                            <DialogTitle className="text-white">Invite Team Member</DialogTitle>
+                            <DialogDescription className="text-gray-400">
+                                Invite a new member to collaborate on this project
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email" className="text-gray-300">
+                                    Email
+                                </Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    autoComplete="off"
+                                    value={inviteEmail}
+                                    onChange={handleEmailChange}
+                                    onBlur={() => validateEmail(inviteEmail)}
+                                    placeholder="user@example.com"
+                                    className={`bg-black/70 border-purple-800 text-white ${
+                                        emailError ? 'border-red-500' : ''
+                                    }`}
+                                />
+                                {emailError && (
+                                    <p className="text-xs text-red-500 mt-1">{emailError}</p>
+                                )}
+                            </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="role" className="text-gray-300">
-                            Role
-                        </Label>
-                        <Select
-                            value={inviteRole}
-                            onValueChange={(value) => setInviteRole(value as ProjectRole)}
-                        >
-                            <SelectTrigger className="w-full bg-black/70 border border-purple-800 text-white">
-                                <SelectValue placeholder="Select role" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-black/70 border border-purple-800 text-white">
-                                <SelectItem value="user">User</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <p className="text-xs text-gray-400 mt-1">
-                            {inviteRole === 'admin'
-                                ? 'Admins can manage environment variables and project settings'
-                                : 'Users have read-only access to environment variables'}
-                        </p>
-                    </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="role" className="text-gray-300">
+                                    Role
+                                </Label>
+                                <Select
+                                    value={inviteRole}
+                                    onValueChange={(value) => setInviteRole(value as ProjectRole)}
+                                >
+                                    <SelectTrigger className="w-full bg-black/70 border border-purple-800 text-white">
+                                        <SelectValue placeholder="Select role" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-black/70 border border-purple-800 text-white">
+                                        <SelectItem value="user">User</SelectItem>
+                                        <SelectItem value="admin">Admin</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <p className="text-xs text-gray-400 mt-1">
+                                    {inviteRole === 'admin'
+                                        ? 'Admins can manage environment variables and project settings'
+                                        : 'Users have read-only access to environment variables'}
+                                </p>
+                            </div>
 
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                            <Label htmlFor="accessPassword" className="text-gray-300">
-                                Access Password
-                            </Label>
-                        </div>
-                        <div className="relative">
-                            <Input
-                                id="accessPassword"
-                                type={showAccessPassword ? 'text' : 'password'}
-                                value={accessPassword}
-                                autoComplete="new-password"
-                                onChange={(e) => setAccessPassword(e.target.value)}
-                                placeholder="Set a password for the new member"
-                                className="bg-black/70 border border-purple-800 text-white pr-10"
-                            />
-                            <button
-                                type="button"
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200"
-                                onClick={() => setShowAccessPassword(!showAccessPassword)}
-                            >
-                                {showAccessPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                            </button>
-                        </div>
-                        <p className="text-xs text-yellow-400 mt-1">
-                            Note: The invited member will receive a secure, one-time access link via email. This link will provide them with secure access to the project password.
-                        </p>
-                        <div className="mt-2">
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                                <PasswordRequirement
-                                    label="8+ characters"
-                                    isValid={accessPassword.length >= 8}
-                                />
-                                <PasswordRequirement
-                                    label="Uppercase letter"
-                                    isValid={/[A-Z]/.test(accessPassword)}
-                                />
-                                <PasswordRequirement
-                                    label="Lowercase letter"
-                                    isValid={/[a-z]/.test(accessPassword)}
-                                />
-                                <PasswordRequirement
-                                    label="Number"
-                                    isValid={/\d/.test(accessPassword)}
-                                />
-                                <PasswordRequirement
-                                    label="Special character"
-                                    isValid={/[!@#$%^&*(),.?":{}|<>]/.test(accessPassword)}
-                                />
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <Label htmlFor="accessPassword" className="text-gray-300">
+                                        Access Password
+                                    </Label>
+                                </div>
+                                <div className="relative">
+                                    <Input
+                                        id="accessPassword"
+                                        type={showAccessPassword ? 'text' : 'password'}
+                                        value={accessPassword}
+                                        autoComplete="new-password"
+                                        onChange={(e) => setAccessPassword(e.target.value)}
+                                        placeholder="Set a password for the new member"
+                                        className="bg-black/70 border border-purple-800 text-white pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200"
+                                        onClick={() => setShowAccessPassword(!showAccessPassword)}
+                                    >
+                                        {showAccessPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </button>
+                                </div>
+                                <p className="text-xs text-yellow-400 mt-1">
+                                    Note: The invited member will receive a secure, one-time access link via email. This link will provide them with secure access to the project password.
+                                </p>
+                                <div className="mt-2">
+                                    <div className="grid grid-cols-2 gap-2 text-xs">
+                                        <PasswordRequirement
+                                            label="8+ characters"
+                                            isValid={accessPassword.length >= 8}
+                                        />
+                                        <PasswordRequirement
+                                            label="Uppercase letter"
+                                            isValid={/[A-Z]/.test(accessPassword)}
+                                        />
+                                        <PasswordRequirement
+                                            label="Lowercase letter"
+                                            isValid={/[a-z]/.test(accessPassword)}
+                                        />
+                                        <PasswordRequirement
+                                            label="Number"
+                                            isValid={/\d/.test(accessPassword)}
+                                        />
+                                        <PasswordRequirement
+                                            label="Special character"
+                                            isValid={/[!@#$%^&*(),.?":{}|<>]/.test(accessPassword)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <Label htmlFor="confirmAccessPassword" className="text-gray-300">
+                                        Confirm Access Password
+                                    </Label>
+                                </div>
+                                <div className="relative">
+                                    <Input
+                                        id="confirmAccessPassword"
+                                        type={showConfirmAccessPassword ? 'text' : 'password'}
+                                        value={confirmAccessPassword}
+                                        autoComplete="new-password"
+                                        onChange={(e) => setConfirmAccessPassword(e.target.value)}
+                                        placeholder="Confirm the password"
+                                        className={`bg-black/70 border border-purple-800 text-white pr-10 ${
+                                            confirmAccessPassword && accessPassword !== confirmAccessPassword ? 'border-red-500' : ''
+                                        }`}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmAccessPassword(!showConfirmAccessPassword)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                                    >
+                                        {showConfirmAccessPassword ? (
+                                            <EyeOff className="h-4 w-4" />
+                                        ) : (
+                                            <Eye className="h-4 w-4" />
+                                        )}
+                                    </button>
+                                </div>
+                                {confirmAccessPassword && accessPassword !== confirmAccessPassword && (
+                                    <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+                                )}
+                                {confirmAccessPassword && accessPassword === confirmAccessPassword && accessPassword && (
+                                    <div className="flex items-center text-xs text-green-500 mt-1">
+                                        <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
+                                        Passwords match
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <Label htmlFor="projectPassword" className="text-gray-300">
+                                        Project Password
+                                    </Label>
+                                </div>
+                                <div className="relative">
+                                    <Input
+                                        id="projectPassword"
+                                        type={showProjectPassword ? 'text' : 'password'}
+                                        value={projectPassword}
+                                        autoComplete="off"
+                                        onChange={(e) => setProjectPassword(e.target.value)}
+                                        placeholder="Enter your project password"
+                                        className="bg-black/70 border border-purple-800 text-white pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowProjectPassword(!showProjectPassword)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                                    >
+                                        {showProjectPassword ? (
+                                            <EyeOff className="h-4 w-4" />
+                                        ) : (
+                                            <Eye className="h-4 w-4" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                            <Label htmlFor="confirmAccessPassword" className="text-gray-300">
-                                Confirm Access Password
-                            </Label>
-                        </div>
-                        <div className="relative">
-                            <Input
-                                id="confirmAccessPassword"
-                                type={showConfirmAccessPassword ? 'text' : 'password'}
-                                value={confirmAccessPassword}
-                                autoComplete="new-password"
-                                onChange={(e) => setConfirmAccessPassword(e.target.value)}
-                                placeholder="Confirm the password"
-                                className={`bg-black/70 border border-purple-800 text-white pr-10 ${
-                                    confirmAccessPassword && accessPassword !== confirmAccessPassword ? 'border-red-500' : ''
+                        <div className="flex justify-end space-x-3">
+                            <Button
+                                variant="outline"
+                                onClick={() => onOpenChange(false)}
+                                className={`border-gray-700 text-black hover:bg-gray-500 transition-opacity duration-200 ${
+                                    isLoading ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmAccessPassword(!showConfirmAccessPassword)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
                             >
-                                {showConfirmAccessPassword ? (
-                                    <EyeOff className="h-4 w-4" />
-                                ) : (
-                                    <Eye className="h-4 w-4" />
-                                )}
-                            </button>
-                        </div>
-                        {confirmAccessPassword && accessPassword !== confirmAccessPassword && (
-                            <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
-                        )}
-                        {confirmAccessPassword && accessPassword === confirmAccessPassword && accessPassword && (
-                            <div className="flex items-center text-xs text-green-500 mt-1">
-                                <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
-                                Passwords match
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                            <Label htmlFor="projectPassword" className="text-gray-300">
-                                Project Password
-                            </Label>
-                        </div>
-                        <div className="relative">
-                            <Input
-                                id="projectPassword"
-                                type={showProjectPassword ? 'text' : 'password'}
-                                value={projectPassword}
-                                autoComplete="off"
-                                onChange={(e) => setProjectPassword(e.target.value)}
-                                placeholder="Enter your project password"
-                                className="bg-black/70 border border-purple-800 text-white pr-10"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowProjectPassword(!showProjectPassword)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={handleInvite}
+                                disabled={!isPasswordValid || !projectPassword.trim() || !!emailError || isLoading}
+                                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white disabled:opacity-50 disabled:pointer-events-none"
                             >
-                                {showProjectPassword ? (
-                                    <EyeOff className="h-4 w-4" />
-                                ) : (
-                                    <Eye className="h-4 w-4" />
-                                )}
-                            </button>
+                                {isLoading ? 'Sending Invitation...' : 'Send Invitation'}
+                            </Button>
                         </div>
                     </div>
-                </div>
-                <div className="flex justify-end space-x-3">
-                    <Button
-                        variant="outline"
-                        onClick={() => onOpenChange(false)}
-                        className={`border-gray-700 text-black hover:bg-gray-500 transition-opacity duration-200 ${
-                            isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleInvite}
-                        disabled={!isPasswordValid || !projectPassword.trim() || !!emailError || isLoading}
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                        {isLoading ? 'Sending Invitation...' : 'Send Invitation'}
-                    </Button>
                 </div>
             </DialogContent>
         </Dialog>

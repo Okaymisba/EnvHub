@@ -145,231 +145,256 @@ export const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white">
-        <>
-          {/* Animated background blob */}
-          <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-900 opacity-20 rounded-full blur-3xl pointer-events-none" />
-          <DialogHeader className="relative z-10 px-6 pt-8 pb-2">
-            <DialogTitle className="text-2xl font-bold text-white text-center">
-              Create New Project
-            </DialogTitle>
-            <p className="text-white text-center mt-2 text-base">
-              Secure your secrets with a project password. Only you and your team can access them.
-            </p>
-          </DialogHeader>
+      <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <div className="overflow-y-auto px-1 scrollbar-custom">
+          {/* Custom scrollbar styles */}
+          <style jsx global>{`
+            .scrollbar-custom::-webkit-scrollbar {
+              width: 6px;
+              height: 6px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-track {
+              background: rgba(0, 0, 0, 0.1);
+              border-radius: 10px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb {
+              background: rgba(168, 85, 247, 0.5);
+              border-radius: 10px;
+              transition: all 0.3s ease;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+              background: rgba(192, 132, 252, 0.7);
+            }
+            .scrollbar-custom {
+              scrollbar-width: thin;
+              scrollbar-color: rgba(168, 85, 247, 0.5) rgba(0, 0, 0, 0.1);
+            }
+          `}</style>
+          <div className="p-6">
+            {/* Animated background blob */}
+            <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-900 opacity-20 rounded-full blur-3xl pointer-events-none" />
+            <DialogHeader className="relative z-10 pb-2">
+              <DialogTitle className="text-xl sm:text-2xl font-bold text-white text-center">
+                Create New Project
+              </DialogTitle>
+              <p className="text-sm sm:text-base text-gray-300 text-center mt-2">
+                Secure your secrets with a project password. Only you and your team can access them.
+              </p>
+            </DialogHeader>
 
-          {limits && (
-            <div className="px-6 mb-4">
-              <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-white">Current Plan: {limits.plan}</span>
-                  <span className="text-sm text-white">
-                    Projects: {currentCount}/{limits.max_projects}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(100, (currentCount / limits.max_projects) * 100)}%` }}
-                  />
+            {limits && (
+              <div className="px-4 sm:px-6 mb-4">
+                <div className="bg-black/90 border border-purple-900 shadow-2xl rounded-lg p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
+                    <span className="text-xs sm:text-sm text-gray-300">Current Plan: {limits.plan}</span>
+                    <span className="text-xs sm:text-sm text-gray-300">
+                      Projects: {currentCount}/{limits.max_projects}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min(100, (currentCount / limits.max_projects) * 100)}%` }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {!canCreate && limits && (
-            <div className="px-6 mb-4">
-              <Alert className="border-orange-600 bg-orange-900/20">
-                <AlertTriangle className="h-4 w-4 text-orange-400" />
-                <AlertDescription className="text-orange-200">
-                  You've reached your {limits.plan} plan limit of {limits.max_projects} projects. 
-                  <br />
-                  <span className="text-orange-300 font-medium">Upgrade your plan to create more projects.</span>
-                </AlertDescription>
-              </Alert>
-            </div>
-          )}
+            {!canCreate && limits && (
+              <div className="px-4 sm:px-6 mb-4">
+                <Alert className="border-orange-600 bg-orange-900/20">
+                  <AlertTriangle className="h-4 w-4 text-orange-400" />
+                  <AlertDescription className="text-xs sm:text-sm text-orange-200">
+                    You've reached your {limits.plan} plan limit of {limits.max_projects} projects.
+                    <br className="hidden sm:block" />
+                    <span className="text-orange-300 font-medium">Upgrade your plan to create more projects.</span>
+                  </AlertDescription>
+                </Alert>
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit} className="relative z-10 space-y-6 px-6 pb-8 pt-2">
-            <div>
-              <Label htmlFor="project-name" className="text-gray-300 mb-1 block text-sm font-medium">
-                Project Name
-              </Label>
-              <Input
-                id="project-name"
-                value={name}
-                onChange={(e) => {
-                  // Remove spaces and convert to lowercase
-                  const value = e.target.value.replace(/\s+/g, '');
-                  // Only allow alphanumeric characters, hyphens, and underscores
-                  const filteredValue = value.replace(/[^a-zA-Z0-9-_]/g, '');
-                  setName(filteredValue);
-                }}
-                placeholder="Enter project name (no spaces)"
-                className="w-full bg-black/70 border border-purple-800 text-white placeholder:text-gray-500 rounded-lg px-3 py-2 focus:border-blue-600 focus:ring-0"
-                required
-                disabled={!canCreate}
-                pattern="[a-zA-Z0-9-_]+"
-                title="Project name can only contain letters, numbers, hyphens, and underscores"
-              />
-              {name && (
-                <p className="mt-1 text-s pt-1 text-white">
-                  Project name will be: <span className="text-green-400 font-mono">{name.toLowerCase().replace(/[^a-z0-9-]/g, '')}</span>
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="project-password" className="text-gray-300 mb-1 block text-sm font-medium">
-                Project Password
-              </Label>
-              <div className="relative">
+            <form onSubmit={handleSubmit} className="relative z-10 space-y-4 px-4 sm:px-6 pb-6 pt-2">
+              <div>
+                <Label htmlFor="project-name" className="text-gray-300 mb-1 block text-sm font-medium">
+                  Project Name
+                </Label>
                 <Input
-                  id="project-password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={handlePasswordChange}
-                  placeholder="Enter project password"
-                  className={`w-full bg-black/70 border ${
-                    passwordError && !passwordError.includes('match') ? 'border-red-500' : 'border-purple-800'
-                  } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
+                  id="project-name"
+                  value={name}
+                  onChange={(e) => {
+                    // Remove spaces and convert to lowercase
+                    const value = e.target.value.replace(/\s+/g, '');
+                    // Only allow alphanumeric characters, hyphens, and underscores
+                    const filteredValue = value.replace(/[^a-zA-Z0-9-_]/g, '');
+                    setName(filteredValue);
+                  }}
+                  placeholder="Enter project name (no spaces)"
+                  className="w-full bg-black/70 border border-purple-800 text-white placeholder:text-gray-500 rounded-lg px-3 py-2 focus:border-blue-600 focus:ring-0"
                   required
                   disabled={!canCreate}
+                  pattern="[a-zA-Z0-9-_]+"
+                  title="Project name can only contain letters, numbers, hyphens, and underscores"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              <div className="mt-2">
-                <div className="bg-yellow-900/30 border border-yellow-700/50 rounded-lg p-3 mb-3">
-                  <p className="text-xs text-yellow-200 font-medium leading-relaxed">
-                    <span className="font-bold text-yellow-400">SECURITY NOTICE:</span> This master password is used to encrypt your secrets. For security reasons, we do not store your password in a way that it can be recovered. Please ensure you keep this password in a secure location, as it will be required to access your encrypted data.
+                {name && (
+                  <p className="mt-1 text-s pt-1 text-white">
+                    Project name will be: <span className="text-green-400 font-mono">{name.toLowerCase().replace(/[^a-z0-9-]/g, '')}</span>
                   </p>
-                </div>
-                {password && (
-                  <div className="space-y-1">
-                    <div className="flex items-center">
-                      {password.length >= 8 ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                      )}
-                      <span className="text-xs">At least 8 characters</span>
-                    </div>
-                    <div className="flex items-center">
-                      {/[A-Z]/.test(password) ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                      )}
-                      <span className="text-xs">At least one uppercase letter</span>
-                    </div>
-                    <div className="flex items-center">
-                      {/[a-z]/.test(password) ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                      )}
-                      <span className="text-xs">At least one lowercase letter</span>
-                    </div>
-                    <div className="flex items-center">
-                      {/\d/.test(password) ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                      )}
-                      <span className="text-xs">At least one number</span>
-                    </div>
-                    <div className="flex items-center">
-                      {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                      )}
-                      <span className="text-xs">At least one special character</span>
-                    </div>
-                  </div>
                 )}
               </div>
-            </div>
-            <div>
-              <Label htmlFor="confirm-password" className="text-gray-300 mb-1 block text-sm font-medium">
-                Confirm Password
-              </Label>
-              <div className="relative">
-                <Input
-                  id="confirm-password"
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
-                  placeholder="Confirm your password"
-                  className={`w-full bg-black/70 border ${
-                    passwordError ? 'border-red-500' : 'border-purple-800'
-                  } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
-                  required
-                  disabled={!canCreate}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
-                  tabIndex={-1}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+              <div>
+                <Label htmlFor="project-password" className="text-gray-300 mb-1 block text-sm font-medium">
+                  Project Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="project-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter project password"
+                    className={`w-full bg-black/70 border ${
+                      passwordError && !passwordError.includes('match') ? 'border-red-500' : 'border-purple-800'
+                    } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
+                    required
+                    disabled={!canCreate}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <div className="mt-2">
+                  <div className="bg-yellow-900/30 border border-yellow-700/50 rounded-lg p-3 mb-3">
+                    <p className="text-xs text-yellow-200 font-medium leading-relaxed">
+                      <span className="font-bold text-yellow-400">SECURITY NOTICE:</span> This master password is used to encrypt your secrets. For security reasons, we do not store your password in a way that it can be recovered. Please ensure you keep this password in a secure location, as it will be required to access your encrypted data.
+                    </p>
+                  </div>
+                  {password && (
+                    <div className="space-y-1">
+                      <div className="flex items-center">
+                        {password.length >= 8 ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        )}
+                        <span className="text-xs">At least 8 characters</span>
+                      </div>
+                      <div className="flex items-center">
+                        {/[A-Z]/.test(password) ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        )}
+                        <span className="text-xs">At least one uppercase letter</span>
+                      </div>
+                      <div className="flex items-center">
+                        {/[a-z]/.test(password) ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        )}
+                        <span className="text-xs">At least one lowercase letter</span>
+                      </div>
+                      <div className="flex items-center">
+                        {/\d/.test(password) ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        )}
+                        <span className="text-xs">At least one number</span>
+                      </div>
+                      <div className="flex items-center">
+                        {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        )}
+                        <span className="text-xs">At least one special character</span>
+                      </div>
+                    </div>
                   )}
-                </button>
+                </div>
               </div>
-              {passwordError && (
-                <p className="text-red-400 text-xs mt-2">{passwordError}</p>
-              )}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                className="flex-1 border-gray-700 text-gray-900 hover:bg-gray-800 rounded-lg py-2 transition"
-              >
-                Cancel
-              </Button>
-              {canCreate ? (
-                <Button
-                  type="submit"
-                  disabled={loading || !isFormValid()}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition disabled:opacity-60"
-                >
-                  {loading ? 'Creating...' : 'Create Project'}
-                </Button>
-              ) : (
+              <div>
+                <Label htmlFor="confirm-password" className="text-gray-300 mb-1 block text-sm font-medium">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    placeholder="Confirm your password"
+                    className={`w-full bg-black/70 border ${
+                      passwordError ? 'border-red-500' : 'border-purple-800'
+                    } text-white placeholder:text-gray-500 rounded-lg px-3 py-2 pr-10 focus:border-blue-600 focus:ring-0`}
+                    required
+                    disabled={!canCreate}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {passwordError && (
+                  <p className="text-red-400 text-xs mt-2">{passwordError}</p>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   type="button"
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition"
-                  onClick={() => {
-                    // This would open subscription manager - you can implement this
-                    toast({
-                      title: 'Upgrade Required',
-                      description: 'Please upgrade your plan to create more projects',
-                    });
-                  }}
+                  variant="outline"
+                  onClick={onClose}
+                  className="flex-1 border-gray-700 text-gray-900 hover:bg-gray-800 rounded-lg py-2 transition"
                 >
-                  <Crown className="mr-2 h-4 w-4" />
-                  Upgrade Plan
+                  Cancel
                 </Button>
-              )}
-            </div>
-          </form>
-        </>
+                {canCreate ? (
+                  <Button
+                    type="submit"
+                    disabled={loading || !isFormValid()}
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition disabled:opacity-60"
+                  >
+                    {loading ? 'Creating...' : 'Create Project'}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow rounded-lg py-2 transition"
+                    onClick={() => {
+                      // This would open subscription manager - you can implement this
+                      toast({
+                        title: 'Upgrade Required',
+                        description: 'Please upgrade your plan to create more projects',
+                      });
+                    }}
+                  >
+                    <Crown className="mr-2 h-4 w-4" />
+                    Upgrade Plan
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
