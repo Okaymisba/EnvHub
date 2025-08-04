@@ -84,25 +84,31 @@ export const Navbar = () => {
       path: '/pricing',
       icon: <DollarSign className="w-4 h-4" />
     },
-    { 
-      label: 'About', 
-      path: '/about',
-      icon: <Info className="w-4 h-4" />
-    },
-    { 
-      label: 'Blog', 
-      path: '/blog',
-      icon: <Newspaper className="w-4 h-4" />
-    },
-    { 
-      label: 'Contact', 
-      path: '/contact',
-      icon: <Mail className="w-4 h-4" />
-    },
     {
       label: 'GitHub',
       path: 'https://github.com/Okaymisba/EnvHub',
       icon: <FaGithub className="w-4 h-4" />
+    },
+    {
+      label: 'Demo',
+      path: 'https://www.youtube.com/watch?v=q3cveL8kY1k',
+      icon: <PlayCircle className="w-4 h-4" />,
+      isExternal: true
+    },
+    {
+      label: 'Blog',
+      path: '/blog',
+      icon: <Newspaper className="w-4 h-4" />
+    },
+    {
+      label: 'Contact',
+      path: '/contact',
+      icon: <Mail className="w-4 h-4" />
+    },
+    {
+      label: 'About',
+      path: '/about',
+      icon: <Info className="w-4 h-4" />
     }
   ];
 
