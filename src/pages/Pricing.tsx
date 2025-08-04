@@ -93,7 +93,7 @@ const Pricing = () => {
           property="og:description" 
           content="Choose the perfect plan for your environment variable management needs. Free and Pro plans available."
         />
-        <meta property="og:image" content="https://envhub.net/opengraph-pricing.png"/>
+        <meta property="og:image" content="https://envhub.net/opengraph-image.png"/>
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image"/>
@@ -103,7 +103,7 @@ const Pricing = () => {
           property="twitter:description" 
           content="Choose the perfect plan for your environment variable management needs. Free and Pro plans available."
         />
-        <meta property="twitter:image" content="https://envhub.net/opengraph-pricing.png"/>
+        <meta property="twitter:image" content="https://envhub.net/opengraph-image.png"/>
 
       </Helmet>
 
