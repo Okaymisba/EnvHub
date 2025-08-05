@@ -35,7 +35,8 @@ const sections = [
     icon: CloudUpload,
     items: [
       { label: 'Overview', path: '/docs/deployment/overview#overview' },
-      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' }
+      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' },
+      { label: 'CI/CD Integration', path: '/docs/deployment/ci-cd-integration#ci-cd-integration' }
     ]
   },
   {
@@ -120,8 +121,35 @@ const deploymentSections = [
                 <SyntaxHighlighter
                     language="bash"
                     style={vscDarkPlus}
-                    customStyle={{ background: 'transparent', margin: 0, padding: 0 }}
                     wrapLongLines
+                    customStyle={{
+                      background: 'transparent',
+                      backgroundColor: 'transparent',
+                      margin: 0,
+                      padding: '0.25rem 0.5rem',
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: 'inherit',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
+                    }}
+                    codeTagProps={{
+                      style: {
+                        color: 'inherit',
+                        background: 'transparent',
+                      },
+                    }}
+                    PreTag={({ children, ...props }) => (
+                        <div {...props} style={{
+                          color: 'inherit',
+                          background: 'transparent',
+                          padding: '0 1rem',
+                          margin: 0,
+                        }}>
+                          {children}
+                        </div>
+                    )}
                 >
                   {`your-fastapi-app/
 ├── main.py           # Your FastAPI application
@@ -149,15 +177,38 @@ const deploymentSections = [
                 <SyntaxHighlighter
                     language="python"
                     style={vscDarkPlus}
+                    wrapLongLines
                     customStyle={{
                       background: 'transparent',
+                      backgroundColor: 'transparent',
                       margin: 0,
-                      padding: 0,
+                      padding: '0.25rem 0.5rem',
                       fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: 'inherit',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
                     }}
-                    wrapLongLines
+                    codeTagProps={{
+                      style: {
+                        color: 'inherit',
+                        background: 'transparent',
+                      },
+                    }}
+                    PreTag={({ children, ...props }) => (
+                        <div {...props} style={{
+                          color: 'inherit',
+                          background: 'transparent',
+                          padding: '0 1rem',
+                          margin: 0,
+                        }}>
+                          {children}
+                        </div>
+                    )}
                 >
-                  {`from fastapi import FastAPI
+                  {`
+from fastapi import FastAPI
 from pydantic import BaseModel
 from google import genai
 import os
@@ -204,15 +255,38 @@ Commit message:"""
                 <SyntaxHighlighter
                     language="dockerfile"
                     style={vscDarkPlus}
+                    wrapLongLines
                     customStyle={{
                       background: 'transparent',
+                      backgroundColor: 'transparent',
                       margin: 0,
-                      padding: 0,
+                      padding: '0.25rem 0.5rem',
                       fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: 'inherit',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
                     }}
-                    wrapLongLines
+                    codeTagProps={{
+                      style: {
+                        color: 'inherit',
+                        background: 'transparent',
+                      },
+                    }}
+                    PreTag={({ children, ...props }) => (
+                        <div {...props} style={{
+                          color: 'inherit',
+                          background: 'transparent',
+                          padding: '0 1rem',
+                          margin: 0,
+                        }}>
+                          {children}
+                        </div>
+                    )}
                 >
-                  {`# ================================
+                  {`
+# ================================
 # Stage 1 — Build envhub binary
 # ================================
 FROM python:3.12-slim AS builder
@@ -324,15 +398,38 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
                     <SyntaxHighlighter
                         language="bash"
                         style={vscDarkPlus}
+                        wrapLongLines
                         customStyle={{
                           background: 'transparent',
+                          backgroundColor: 'transparent',
                           margin: 0,
-                          padding: 0,
+                          padding: '0.25rem 0.5rem',
                           fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: '0.875rem',
+                          lineHeight: 1.5,
+                          color: 'inherit',
+                          whiteSpace: 'pre-wrap',
+                          wordBreak: 'break-word',
                         }}
-                        wrapLongLines
+                        codeTagProps={{
+                          style: {
+                            color: 'inherit',
+                            background: 'transparent',
+                          },
+                        }}
+                        PreTag={({ children, ...props }) => (
+                            <div {...props} style={{
+                              color: 'inherit',
+                              background: 'transparent',
+                              padding: '0 1rem',
+                              margin: 0,
+                            }}>
+                              {children}
+                            </div>
+                        )}
                     >
-                      {`curl -X POST https://api-for-commit-message-generator.onrender.com/generate-commit \\
+                      {`
+curl -X POST https://api-for-commit-message-generator.onrender.com/generate-commit \\
   -H "Content-Type: application/json" \\
   -d '{
     "diff": "diff --git a/file.txt b/file.txt\\nindex 123..456 100644\\n--- a/file.txt\\n+++ b/file.txt\\n@@ -1,1 +1,1 @@\\n+This is a change"
@@ -354,15 +451,38 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
                     <SyntaxHighlighter
                         language="bash"
                         style={vscDarkPlus}
+                        wrapLongLines
                         customStyle={{
                           background: 'transparent',
+                          backgroundColor: 'transparent',
                           margin: 0,
-                          padding: 0,
+                          padding: '0.25rem 0.5rem',
                           fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: '0.875rem',
+                          lineHeight: 1.5,
+                          color: 'inherit',
+                          whiteSpace: 'pre-wrap',
+                          wordBreak: 'break-word',
                         }}
-                        wrapLongLines
+                        codeTagProps={{
+                          style: {
+                            color: 'inherit',
+                            background: 'transparent',
+                          },
+                        }}
+                        PreTag={({ children, ...props }) => (
+                            <div {...props} style={{
+                              color: 'inherit',
+                              background: 'transparent',
+                              padding: '0 1rem',
+                              margin: 0,
+                            }}>
+                              {children}
+                            </div>
+                        )}
                     >
-                      {`{
+                      {`
+{
   "commit_message": "Refactor: Update file.txt content"
 }`}
                     </SyntaxHighlighter>
@@ -396,7 +516,161 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
         </div>
       </div>
     )
-  }
+  },
+  {
+    id: 'ci-cd-integration',
+    title: 'CI/CD Integration',
+    icon: CloudUpload,
+    description: 'Learn how to integrate EnvHub with your CI/CD pipeline',
+    content: (
+      <div className="space-y-6">
+        <h3 className="text-2xl font-semibold text-white">Automated Deployments with GitHub Actions</h3>
+        <p className="text-gray-300">
+          Streamline your deployment workflow by integrating EnvHub with GitHub Actions. This setup ensures your FastAPI application is automatically deployed with secure environment variable management.
+        </p>
+        
+        <div className="space-y-6">
+          <div>
+            <h4 className="text-xl font-medium text-white mb-4">GitHub Actions Workflow</h4>
+            <p className="text-gray-300 mb-4">
+              Below is a complete GitHub Actions workflow that automates the deployment of this FastAPI application to Render. This workflow:
+            </p>
+            <ul className="list-disc list-inside text-gray-300 space-y-2 mb-6">
+              <li>Automatically triggers on pushes to the main branch</li>
+              <li>Sets up Python 3.12 environment</li>
+              <li>Installs EnvHub CLI for secure secret management</li>
+              <li>Decrypts production environment variables</li>
+              <li>Deploys your application using Render's deployment webhook</li>
+            </ul>
+            
+            <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl overflow-hidden text-sm shadow-md ring-1 ring-purple-600/30">
+              <div className="bg-gray-900/50 text-gray-200 px-4 py-2 font-mono text-xs rounded-t-xl flex items-center gap-2">
+                <span className="text-gray-300">.github/workflows/deploy.yml</span>
+              </div>
+              <div className="overflow-x-auto">
+                <SyntaxHighlighter
+                    language="yaml"
+                    style={vscDarkPlus}
+                    wrapLongLines
+                    customStyle={{
+                      background: 'transparent',
+                      backgroundColor: 'transparent',
+                      margin: 0,
+                      padding: '0.75rem 1rem',
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: 'inherit',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
+                    }}
+                    codeTagProps={{
+                      style: {
+                        color: 'inherit',
+                        background: 'transparent',
+                        lineHeight: 1.5,
+                      },
+                    }}
+                    PreTag={({ children, ...props }) => (
+                        <div {...props} style={{ 
+                          color: 'inherit', 
+                          background: 'transparent',
+                          padding: '0 1rem',
+                          margin: 0,
+                        }}>
+                          {children}
+                        </div>
+                    )}
+                >
+                  {`
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  # Required EnvHub credentials for decryption
+  ENVHUB_API_KEY: \${{ secrets.ENVHUB_API_KEY }}      # API key for EnvHub authentication
+  ENVHUB_PASSWORD: \${{ secrets.ENVHUB_PASSWORD }}    # Project password for EnvHub decryption
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Python and install EnvHub CLI - these steps prepare the environment
+      # to securely fetch and deploy your application using EnvHub
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+        
+          python-version: '3.12'
+      
+      - name: Install EnvHub CLI using pipx
+        run: |
+        
+          python -m pip install --user pipx
+          python -m pipx ensurepath
+          export PATH="$PATH:$HOME/.local/bin"
+          pipx install envhub-cli
+          envhub --version
+
+      # Deploy the application
+      # This step will:
+      # 1. Decrypt production environment variables using EnvHub
+      # 2. Load the environment variables into the current shell
+      # 3. Trigger a new deployment on Render using the webhook
+      # 4. Clean up sensitive environment files after deployment
+      - name: Deploy to Render
+        run: |
+            
+          # Decrypt production environment variables and store them in .env
+          envhub decrypt-prod
+          
+          # Source the environment variables
+          set -a
+          source .env
+          set +a
+        
+          # Trigger Render deployment webhook
+          curl "$RENDER_DEPLOY_HOOK_ENVHUB"
+
+          # Clean up sensitive data
+          rm -f .env
+`}
+                </SyntaxHighlighter>
+
+              </div>
+            </div>
+
+            <div className="mt-8 p-4 bg-blue-900/20 border border-blue-800/50 rounded-lg">
+              <h4 className="text-lg font-medium text-blue-300 mb-2">Required Secrets</h4>
+              <p className="text-blue-200 text-sm mb-4">Make sure to set these secrets in your GitHub repository settings:</p>
+              <ul className="space-y-2 text-sm">
+                <li><code className="bg-blue-900/50 px-2 py-1 rounded">ENVHUB_API_KEY</code> - Your EnvHub API key</li>
+                <li><code className="bg-blue-900/50 px-2 py-1 rounded">ENVHUB_PASSWORD</code> - Your EnvHub password</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="pt-6">
+            <h4 className="text-xl font-medium text-white mb-4">How It Works</h4>
+            <ol className="list-decimal list-inside space-y-3 text-gray-300">
+              <li>The workflow is triggered on every push to the main branch</li>
+              <li>It sets up Python 3.12 environment</li>
+              <li>Installs EnvHub CLI using pipx for isolated installation</li>
+              <li>Decrypts production environment variables using <code className="bg-gray-800 px-1 py-0.5 rounded">envhub decrypt-prod</code></li>
+              <li>Sources the environment variables into the current shell</li>
+              <li>Triggers a deployment on Render using the webhook URL</li>
+              <li>Cleans up the decrypted <code className="bg-gray-800 px-1 py-0.5 rounded">.env</code> file</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    )
+  },
 ];
 
 const DeploymentDocs: React.FC<DeploymentDocsProps> = ({ initialSection = 'overview' }) => {

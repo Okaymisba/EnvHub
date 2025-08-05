@@ -81,6 +81,7 @@ const App = () => (
                         <Route path="/docs/deployment" element={<DeploymentDocs/>}/>
                         <Route path="/docs/deployment/overview" element={<DeploymentDocs initialSection="overview"/>}/>
                         <Route path="/docs/deployment/deployment-guide" element={<DeploymentDocs initialSection="deployment-guide"/>}/>
+                        <Route path="/docs/deployment/ci-cd-integration" element={<DeploymentDocs initialSection="ci-cd-integration"/>}/>
                         
                         {/* Other Pages */}
                         <Route path="/pricing" element={<Pricing/>}/>

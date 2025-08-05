@@ -59,7 +59,8 @@ const sections = [
     icon: CloudUpload,
     items: [
       { label: 'Overview', path: '/docs/deployment/overview#overview' },
-      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' }
+      { label: 'Deployment Guide', path: '/docs/deployment/deployment-guide#deployment-guide' },
+      { label: 'CI/CD Integration', path: '/docs/deployment/ci-cd-integration#ci-cd-integration' }
     ]
   },
   {
