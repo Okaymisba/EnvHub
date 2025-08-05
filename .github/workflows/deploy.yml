@@ -2,7 +2,7 @@ name: Deploy to Render
 
 on:
   push:
-    branches: [ main ]  # or master, depending on your main branch name
+    branches: [ main ]
 
 env:
   ENVHUB_API_KEY: ${{ secrets.ENVHUB_API_KEY }}
