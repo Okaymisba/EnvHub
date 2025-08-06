@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added 'CI/CD Integration' section with GitHub Actions deployment guide in DeploymentDocs and updated navigation across related docs pages.
+- Added 'API Support' to all pricing tiers on Pricing page.
 
 ## [0.5.1] - 2025-08-04
 
