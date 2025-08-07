@@ -129,21 +129,20 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         }
 
         await SupabaseService.verifyProjectPassword(project.id, decryptedPassword);
-        await SupabaseService.createEnvVersion(project.id, entries, decryptedPassword);
+        await SupabaseService.createEnvVersion(project.id, entries, decryptedPassword, isPaidUser);
         await loadProjectData();
         toast({
           title: 'Success!',
-          description: `Added ${entries.length} new environment variables securely`
+          description: `Updated ${entries.length} environment variables`
         });
       }
 
-      if (currentUserRole == 'owner') {
-
-        await SupabaseService.createEnvVersion(project.id, entries, password);
+      if (currentUserRole === 'owner') {
+        await SupabaseService.createEnvVersion(project.id, entries, password, isPaidUser);
         await loadProjectData();
         toast({
           title: 'Success!',
-          description: `Added ${entries.length} new environment variables securely`
+          description: `Updated ${entries.length} environment variables`
         });
       }
     } catch (error: any) {

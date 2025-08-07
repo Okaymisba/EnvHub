@@ -687,12 +687,13 @@ export class SupabaseService {
       .eq('id', variableId);
 
     if (error) throw error;
-}
+  }
 
   static async createEnvVersion(
     projectId: string,
     envEntries: EnvEntry[],
-    password: string
+    password: string,
+    isPaidUser: boolean = false
   ): Promise<EnvVersion> {
     // Verify project password first
     const isValidPassword = await this.verifyProjectPassword(projectId, password);
@@ -703,37 +704,77 @@ export class SupabaseService {
     // Get existing variables to combine with new ones
     const existingVariables = await this.getCurrentEnvVariables(projectId);
 
-    // Get the next version number
+    // Get the latest version
     const { data: existingVersions, error: countError } = await supabase
       .from('env_versions')
-      .select('version_number')
+      .select('id, version_number')
       .eq('project_id', projectId)
       .order('version_number', { ascending: false })
       .limit(1);
 
     if (countError) throw countError;
 
-    const nextVersionNumber = existingVersions?.length > 0
-      ? existingVersions[0].version_number + 1
-      : 1;
+    let versionId: string;
+    let versionNumber: number;
 
-    // Create version metadata with dummy encryption data (we'll store individual vars)
-    const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+    if (!isPaidUser) {
+      // For free users, update the existing version or create the first one
+      if (existingVersions?.length > 0) {
+        // Delete existing variables for this version
+        const { error: deleteError } = await supabase
+          .from('env_variables')
+          .delete()
+          .eq('version_id', existingVersions[0].id);
 
-    const { data: version, error: versionError } = await supabase
-      .from('env_versions')
-      .insert({
-        project_id: projectId,
-        version_number: nextVersionNumber,
-        variable_count: existingVariables.length + envEntries.length,
-        salt: dummyEncryption.salt,
-        nonce: dummyEncryption.nonce,
-        tag: dummyEncryption.tag
-      })
-      .select()
-      .single();
+        if (deleteError) throw deleteError;
 
-    if (versionError) throw versionError;
+        versionId = existingVersions[0].id;
+        versionNumber = existingVersions[0].version_number;
+      } else {
+        // First version for free user
+        versionNumber = 1;
+        const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+
+        const { data: version, error: versionError } = await supabase
+          .from('env_versions')
+          .insert({
+            project_id: projectId,
+            version_number: versionNumber,
+            variable_count: envEntries.length,
+            salt: dummyEncryption.salt,
+            nonce: dummyEncryption.nonce,
+            tag: dummyEncryption.tag
+          })
+          .select()
+          .single();
+
+        if (versionError) throw versionError;
+        versionId = version.id;
+      }
+    } else {
+      // For paid users, create a new version
+      versionNumber = existingVersions?.length > 0
+        ? existingVersions[0].version_number + 1
+        : 1;
+
+      const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+
+      const { data: version, error: versionError } = await supabase
+        .from('env_versions')
+        .insert({
+          project_id: projectId,
+          version_number: versionNumber,
+          variable_count: existingVariables.length + envEntries.length,
+          salt: dummyEncryption.salt,
+          nonce: dummyEncryption.nonce,
+          tag: dummyEncryption.tag
+        })
+        .select()
+        .single();
+
+      if (versionError) throw versionError;
+      versionId = version.id;
+    }
 
     // Decrypt existing variables and combine with new ones
     const allEntries = [];
@@ -761,7 +802,7 @@ export class SupabaseService {
         const encryptedValue = await CryptoUtils.encrypt(entry.value, password);
         return {
           project_id: projectId,
-          version_id: version.id,
+          version_id: versionId,
           env_name: entry.name,
           env_value_encrypted: encryptedValue.ciphertext,
           salt: encryptedValue.salt,
@@ -777,7 +818,13 @@ export class SupabaseService {
 
     if (variablesError) throw variablesError;
 
-    return version;
+    return {
+      id: versionId,
+      project_id: projectId,
+      version_number: versionNumber,
+      created_at: new Date().toISOString(),
+      variable_count: allEntries.length
+    };
   }
 
   static async decryptEnvValue(envVariable: EnvVariable, password: string): Promise<string> {
