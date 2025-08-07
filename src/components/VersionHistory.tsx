@@ -6,17 +6,18 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Download, Package } from 'lucide-react';
-import { EnvVersion, Project } from '@/types/project';
+import { Calendar, Download, Package, Lock } from 'lucide-react';
+import { Project } from '@/types/project';
 import { X } from 'lucide-react';
 
 interface VersionHistoryProps {
   isOpen: boolean;
   onClose: () => void;
-  versions: EnvVersion[];
+  versions: any[];
   project: Project;
-  onDownloadVersion: (version: EnvVersion) => void;
+  onDownloadVersion: (version: any) => void;
   loading: boolean;
+  isPaidUser: boolean;
 }
 
 export const VersionHistory: React.FC<VersionHistoryProps> = ({
@@ -25,7 +26,8 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({
   versions,
   project,
   onDownloadVersion,
-  loading
+  loading,
+  isPaidUser
 }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -36,6 +38,39 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({
       minute: '2-digit'
     });
   };
+
+  if (!isPaidUser) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="bg-black/90 border border-purple-900 shadow-2xl rounded-2xl text-white max-w-md w-full p-6">
+          <div className="text-center py-6">
+            <Lock className="mx-auto h-12 w-12 text-purple-600 mb-4" />
+            <h3 className="text-xl font-bold text-white mb-2">Upgrade Required</h3>
+            <p className="text-gray-400 mb-6">Version history is a premium feature available with Pro and Team plans.</p>
+            <div className="flex flex-col space-y-3">
+              <Button 
+                onClick={() => {
+                  onClose();
+                  // Navigate to pricing/upgrade page
+                  // window.location.href = '/pricing';
+                }}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              >
+                Upgrade to Pro
+              </Button>
+              <Button 
+                onClick={onClose}
+                variant="outline"
+                className="w-full text-gray-300 border-gray-700 hover:bg-gray-900/50"
+              >
+                Maybe Later
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

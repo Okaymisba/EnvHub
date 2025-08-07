@@ -14,10 +14,10 @@ import { ProjectSettings } from './ProjectSettings';
 import { ProjectMembers } from './ProjectMembers';
 import { SupabaseService } from '@/services/supabaseService';
 import { useToast } from '@/hooks/use-toast';
-import { PasswordUtils } from '@/utils/passwordUtils';
 import { CryptoUtils } from '@/utils/crypto';
-import {CLIGuide} from "@/components/cliGuideMarkdown.tsx";
-import {Footer} from "@/components/Footer.tsx";
+import { CLIGuide } from "@/components/cliGuideMarkdown.tsx";
+import { Footer } from "@/components/Footer.tsx";
+import { SubscriptionLimitService, type SubscriptionLimits } from '@/services/subscriptionLimitService';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -41,11 +41,14 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   const [deletePrompt, setDeletePrompt] = useState<{ variableId: string; isOpen: boolean }>({ variableId: '', isOpen: false });
   const [tempPassword, setTempPassword] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [subscriptionLimits, setSubscriptionLimits] = useState<SubscriptionLimits | null>(null);
+  const [isPaidUser, setIsPaidUser] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     loadProjectData();
     loadUserRole();
+    loadSubscriptionLimits();
   }, [project.id]);
 
   const loadUserRole = async () => {
@@ -75,6 +78,19 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadSubscriptionLimits = async () => {
+    try {
+      const limits = await SubscriptionLimitService.getSubscriptionLimitsForProject(project.id);
+      setSubscriptionLimits(limits);
+      // Check if user has a paid plan
+      const isPaid = limits.plan.toLowerCase() !== 'free';
+      setIsPaidUser(isPaid);
+    } catch (error) {
+      console.error('Failed to load subscription limits:', error);
+      setIsPaidUser(false);
     }
   };
 
@@ -342,14 +358,16 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 </div>
               </div>
             )}
-            <Button
-              onClick={() => setIsVersionHistoryOpen(true)}
-              variant="outline"
-              size="sm"
-              className="bg-black/60 border-none text-gray-300 hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 hover:text-white"
-            >
-              <History className="mr-2 h-4 w-4" />
-            </Button>
+            {isPaidUser && (
+              <Button
+                onClick={() => setIsVersionHistoryOpen(true)}
+                variant="outline"
+                size="sm"
+                className="bg-black/60 border-none text-gray-300 hover:bg-gradient-to-r hover:from-purple-900/60 hover:to-blue-900/60 hover:text-white"
+              >
+                <History className="mr-2 h-4 w-4" />
+              </Button>
+            )}
             <Button
               onClick={() => setIsSettingsOpen(true)}
               variant="outline"
@@ -385,7 +403,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                   </div>
                 ) : envVariables.length === 0 ? (
                   <div className="text-center py-8">
-                    <Plus className="mx-auto h-8 w-8 text-purple-600 mb-3" />
+                    <Plus className="mx-auto h-8 w-8 mb-3" />
                     <p className="text-gray-300">No environment variables yet</p>
                     <p className="text-gray-500 text-sm">Add your first variables using the form on the right</p>
                   </div>
@@ -591,6 +609,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           project={project}
           onDownloadVersion={handleDownloadVersion}
           loading={loading}
+          isPaidUser={isPaidUser}
         />
 
         {/* Settings Modal */}
