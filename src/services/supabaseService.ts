@@ -608,7 +608,7 @@ export class SupabaseService {
     return this.getEnvVariables(projectId, latestVersion.id);
   }
 
-  static async deleteEnvVariable(variableId: string, password: string): Promise<void> {
+  static async deleteEnvVariable(variableId: string, password: string, isPaidUser: boolean = false): Promise<void> {
     // First get the variable details
     const { data: variable, error: varError } = await supabase
       .from('env_variables')
@@ -622,48 +622,85 @@ export class SupabaseService {
     const currentVariables = await this.getCurrentEnvVariables(variable.project_id);
     const remainingVariables = currentVariables.filter(v => v.id !== variableId);
 
-    // Get the next version number
+    // Get the latest version
     const { data: existingVersions, error: countError } = await supabase
       .from('env_versions')
-      .select('version_number')
+      .select('id, version_number')
       .eq('project_id', variable.project_id)
       .order('version_number', { ascending: false })
       .limit(1);
 
     if (countError) throw countError;
 
-    const nextVersionNumber = existingVersions?.length > 0
-      ? existingVersions[0].version_number + 1
-      : 1;
+    let versionId: string;
+    let versionNumber: number;
 
-    // Create version metadata
-    const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+    if (!isPaidUser) {
+      // For free users, update the existing version
+      if (existingVersions?.length > 0) {
+        // Delete existing variables for this version
+        const { error: deleteError } = await supabase
+          .from('env_variables')
+          .delete()
+          .eq('version_id', existingVersions[0].id);
 
-    const { data: version, error: versionError } = await supabase
-      .from('env_versions')
-      .insert({
-        project_id: variable.project_id,
-        version_number: nextVersionNumber,
-        variable_count: remainingVariables.length,
-        salt: dummyEncryption.salt,
-        nonce: dummyEncryption.nonce,
-        tag: dummyEncryption.tag
-      })
-      .select()
-      .single();
+        if (deleteError) throw deleteError;
 
-    if (versionError) throw versionError;
+        versionId = existingVersions[0].id;
+        versionNumber = existingVersions[0].version_number;
+      } else {
+        // No versions exist yet (shouldn't happen for delete operation)
+        throw new Error('No existing version found');
+      }
+    } else {
+      // For paid users, create a new version
+      versionNumber = existingVersions?.length > 0
+        ? existingVersions[0].version_number + 1
+        : 1;
+
+      const dummyEncryption = await CryptoUtils.encrypt('version_metadata', password);
+
+      const { data: version, error: versionError } = await supabase
+        .from('env_versions')
+        .insert({
+          project_id: variable.project_id,
+          version_number: versionNumber,
+          variable_count: remainingVariables.length,
+          salt: dummyEncryption.salt,
+          nonce: dummyEncryption.nonce,
+          tag: dummyEncryption.tag
+        })
+        .select()
+        .single();
+
+      if (versionError) throw versionError;
+      versionId = version.id;
+    }
 
     // Create individual encrypted environment variables
     const envVariables = await Promise.all(
       remainingVariables.map(async (v) => {
+        // For free users, use the existing encrypted values
+        if (!isPaidUser) {
+          return {
+            project_id: variable.project_id,
+            version_id: versionId,
+            env_name: v.env_name,
+            env_value_encrypted: v.env_value_encrypted,
+            salt: v.salt,
+            nonce: v.nonce,
+            tag: v.tag
+          };
+        }
+        
+        // For paid users, decrypt and re-encrypt
         const decryptedValue = await this.decryptEnvValue(v, password);
         const encryptedValue = await CryptoUtils.encrypt(decryptedValue, password);
         const user = await this.getCurrentUser();
         return {
           user_id: user?.id,
           project_id: variable.project_id,
-          version_id: version.id,
+          version_id: versionId,
           env_name: v.env_name,
           env_value_encrypted: encryptedValue.ciphertext,
           salt: encryptedValue.salt,
@@ -680,13 +717,16 @@ export class SupabaseService {
 
     if (variablesError) throw variablesError;
 
-    // Delete the variable from the previous version
-    const { error } = await supabase
-      .from('env_variables')
-      .delete()
-      .eq('id', variableId);
+    // For free users, we've already deleted all variables for the version
+    if (isPaidUser) {
+      // Delete the variable from the previous version
+      const { error } = await supabase
+        .from('env_variables')
+        .delete()
+        .eq('id', variableId);
 
-    if (error) throw error;
+      if (error) throw error;
+    }
   }
 
   static async createEnvVersion(

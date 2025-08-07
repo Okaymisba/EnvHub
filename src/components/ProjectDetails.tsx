@@ -210,15 +210,6 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   };
 
   const handleDeleteVariable = async (variableId: string) => {
-    if (currentUserRole === 'user') {
-      toast({
-        title: 'Permission Denied',
-        description: 'Users can only view and decrypt variables, not delete them',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     if (!tempPassword.trim()) {
       toast({
         title: 'Password Required',
@@ -228,44 +219,47 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       return;
     }
 
-    setIsDeleting(true);
     try {
-      let passwordToUse = tempPassword;
-
+      setIsDeleting(true);
+      
       if (currentUserRole === 'admin') {
         const currentUser = await SupabaseService.getCurrentUser();
         const encryptedPassword = await SupabaseService.getEncryptedProjectPassword(project.id, currentUser.id);
 
         if (!encryptedPassword) {
-          throw new Error('No encrypted project password found for your account.');
+          toast({
+            title: 'Error',
+            description: 'No encrypted project password found for your account.',
+            variant: 'destructive'
+          });
+          return;
         }
 
-        passwordToUse = await CryptoUtils.decrypt(encryptedPassword, tempPassword);
+        const decryptedPassword = await CryptoUtils.decrypt(encryptedPassword, tempPassword);
 
-        if (!passwordToUse) {
+        if (!decryptedPassword) {
           throw new Error('Invalid password');
         }
+
+        await SupabaseService.verifyProjectPassword(project.id, decryptedPassword);
+        await SupabaseService.deleteEnvVariable(variableId, decryptedPassword, isPaidUser);
+      } else if (currentUserRole === 'owner') {
+        await SupabaseService.deleteEnvVariable(variableId, tempPassword, isPaidUser);
       }
 
-      // Verify password first
-      const isValidPassword = await SupabaseService.verifyProjectPassword(project.id, passwordToUse);
-      if (!isValidPassword) {
-        throw new Error('Invalid project password');
-      }
-
-      await SupabaseService.deleteEnvVariable(variableId, passwordToUse);
       await loadProjectData();
       setDeletePrompt({ variableId: '', isOpen: false });
       setTempPassword('');
-
+      
       toast({
-        title: 'Variable deleted',
-        description: 'Environment variable has been removed successfully'
+        title: 'Success!',
+        description: 'Environment variable deleted successfully'
       });
-    } catch (error: any) {
+    } catch (error) {
+      console.error('Delete variable error:', error);
       toast({
-        title: 'Delete failed',
-        description: error.message || 'Failed to delete variable',
+        title: 'Error',
+        description: error.message || 'Failed to delete environment variable',
         variant: 'destructive'
       });
     } finally {
