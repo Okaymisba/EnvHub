@@ -8,7 +8,7 @@ We welcome responsible security research and encourage you to report vulnerabili
 
 Please use GitHub's **private vulnerability reporting feature** for this repository:
 
-➡️ [Report a vulnerability](../../security/advisories/new)
+➡️ [Report a vulnerability](https://github.com/Okaymisba/EnvHub/security/advisories/new)
 
 This ensures your report is handled confidentially and securely within GitHub.  
 ⚠️ Do **not** open public issues or pull requests for security vulnerabilities.
