@@ -102,9 +102,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({onGetStarted}) => {
 
                     <div className="relative">
                         <div
-                            className="relative z-10 bg-slate-900/80 backdrop-blur-sm rounded-xl p-1 border border-slate-800 shadow-2xl">
-                            <div className="bg-slate-950 rounded-lg overflow-hidden border border-slate-800">
-                                <div className="bg-slate-900 p-3 flex items-center border-b border-slate-800">
+                            className="relative z-10 bg-black/80 backdrop-blur-sm rounded-xl p-1 border border-slate-800 shadow-2xl">
+                            <div className="bg-black rounded-lg overflow-hidden border border-slate-800">
+                                <div className="bg-black p-3 flex items-center border-b border-slate-800">
                                     <div className="flex space-x-2">
                                         <div className="w-3 h-3 rounded-full bg-red-500"></div>
                                         <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
