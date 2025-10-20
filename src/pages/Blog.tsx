@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Tag as TagIcon } from 'lucide-react';
@@ -50,6 +50,18 @@ const Blog = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* AdSense Ad Unit */}
+            <div className="col-span-full my-8">
+              <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-2xl p-6">
+                <ins className="adsbygoogle"
+                  style={{ display: 'block' }}
+                  data-ad-client="ca-pub-8798851790254180"
+                  data-ad-slot="6441044639"
+                  data-ad-format="auto"
+                  data-full-width-responsive="true">
+                </ins>
+              </div>
+            </div>
             {blogPosts.map((post, index) => {
               const readingTime = calculateReadingTime(post.content);
               
